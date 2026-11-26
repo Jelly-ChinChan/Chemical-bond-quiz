@@ -9,359 +9,291 @@
 
 <style>
 :root {
-  --ink:#173246;
-  --teal:#147c78;
-  --bg:#f3f6f8;
-  --muted:#667e8b;
-  --border:#d9e4e8;
+  --ink: #173246;
+  --teal: #147c78;
+  --bg: #f3f6f8;
+  --muted: #667e8b;
+  --border: #d9e4e8;
 }
-
-* {
-  box-sizing:border-box;
-}
+* { box-sizing: border-box; }
 
 body {
-  margin:0;
-  background:var(--bg);
-  color:var(--ink);
-  font-family:system-ui,"Noto Sans TC","Microsoft JhengHei",sans-serif;
-  line-height:1.7;
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  line-height: 1.7;
 }
 
 header {
-  background:linear-gradient(120deg,#173246,#176e72);
-  padding:35px 18px 54px;
-  text-align:center;
-  color:#fff;
+  background: linear-gradient(120deg,#173246,#176e72);
+  padding: 35px 18px 54px;
+  text-align: center;
+  color: #fff;
 }
-
 header h1 {
-  font-size:clamp(24px,5vw,35px);
-  margin:0;
+  font-size: clamp(24px,5vw,35px);
+  margin: 0;
 }
-
 header p {
-  margin:7px 0;
-  color:#d9eff0;
+  margin: 7px 0;
+  color: #d9eff0;
 }
 
 main {
-  max-width:1000px;
-  margin:-28px auto 40px;
-  padding:0 16px;
+  max-width: 1000px;
+  margin: -28px auto 40px;
+  padding: 0 16px;
 }
-
 .card {
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:22px;
-  margin-bottom:16px;
-  box-shadow:0 5px 22px #1231;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 16px;
+  box-shadow: 0 5px 22px #1231;
 }
 
 .student {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
-
 .field {
-  display:block;
-  font-size:14px;
-  font-weight:700;
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
 }
-
 .field input {
-  display:block;
-  width:100%;
-  margin-top:5px;
-  padding:12px;
-  border:1px solid #bed1d9;
-  border-radius:9px;
-  font:inherit;
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  padding: 12px;
+  border: 1px solid #bed1d9;
+  border-radius: 9px;
+  font: inherit;
 }
 
 .layout {
-  display:grid;
-  grid-template-columns:215px 1fr;
-  gap:16px;
-  align-items:start;
+  display: grid;
+  grid-template-columns: 215px 1fr;
+  gap: 16px;
+  align-items: start;
 }
-
 .side {
-  position:sticky;
-  top:12px;
+  position: sticky;
+  top: 12px;
 }
-
 .count {
-  display:flex;
-  justify-content:space-between;
+  display: flex;
+  justify-content: space-between;
 }
-
 .meter {
-  height:9px;
-  background:#e6edef;
-  border-radius:20px;
-  overflow:hidden;
-  margin:13px 0;
+  height: 9px;
+  background: #e6edef;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 13px 0;
 }
-
-.meter>div {
-  height:100%;
-  width:0;
-  background:var(--teal);
-  transition:.2s;
+.meter > div {
+  height: 100%;
+  width: 0;
+  background: var(--teal);
+  transition: .2s;
 }
 
 .nav {
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:7px;
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  gap: 7px;
 }
-
 .nav button {
-  border-radius:8px;
-  border:1px solid var(--border);
-  padding:7px 0;
-  background:#fff;
-  cursor:pointer;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  padding: 7px 0;
+  background: white;
+  cursor: pointer;
 }
-
 .nav button.done {
-  background:#d9f1e9;
-  border-color:#83beb3;
+  background: #d9f1e9;
+  border-color: #83beb3;
 }
-
 .nav button.active {
-  background:var(--ink);
-  color:#fff;
+  background: var(--ink);
+  color: white;
 }
 
 .tag {
-  display:inline-block;
-  border-radius:20px;
-  color:#116b66;
-  background:#e6f5f2;
-  padding:3px 10px;
-  margin-right:5px;
-  font-size:12px;
+  display: inline-block;
+  border-radius: 20px;
+  color: #116b66;
+  background: #e6f5f2;
+  padding: 3px 10px;
+  margin-right: 5px;
+  font-size: 12px;
 }
 
 h2 {
-  font-size:24px;
-  margin:16px 0;
+  font-size: 24px;
+  margin: 16px 0;
 }
-
 .stem {
-  white-space:pre-wrap;
-  font-size:17px;
-  margin-bottom:18px;
+  white-space: pre-wrap;
+  font-size: 17px;
+  margin-bottom: 18px;
 }
 
 .option {
-  display:flex;
-  gap:12px;
-  align-items:start;
-  padding:14px;
-  margin:11px 0;
-  border:1.5px solid var(--border);
-  border-radius:10px;
-  cursor:pointer;
+  display: flex;
+  gap: 12px;
+  align-items: start;
+  padding: 14px;
+  margin: 11px 0;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
 }
-
 .option.selected {
-  background:#e9f6f2;
-  border-color:var(--teal);
+  background: #e9f6f2;
+  border-color: var(--teal);
 }
-
 .option input {
-  accent-color:var(--teal);
-  margin-top:7px;
+  accent-color: var(--teal);
+  margin-top: 7px;
 }
-
-.option span {
-  flex:1;
-}
+.option span { flex: 1; }
 
 .actions {
-  display:flex;
-  flex-wrap:wrap;
-  gap:9px;
-  margin-top:20px;
-  padding-top:18px;
-  border-top:1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
 }
 
 button {
-  font:inherit;
-  cursor:pointer;
+  font: inherit;
+  cursor: pointer;
 }
-
 .btn {
-  padding:10px 17px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:#fff;
-  font-weight:700;
+  padding: 10px 17px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: white;
+  font-weight: 700;
 }
-
 .btn.primary {
-  background:var(--teal);
-  border-color:var(--teal);
-  color:#fff;
+  background: var(--teal);
+  border-color: var(--teal);
+  color: white;
 }
-
 .btn:disabled {
-  opacity:.55;
-  cursor:not-allowed;
+  opacity: .55;
+  cursor: not-allowed;
 }
 
-.hidden {
-  display:none!important;
-}
+.hidden { display: none !important; }
 
 .notice {
-  border-radius:10px;
-  background:#e7f3f1;
-  padding:12px 15px;
-  margin-bottom:16px;
+  border-radius: 10px;
+  background: #e7f3f1;
+  padding: 12px 15px;
+  margin-bottom: 16px;
 }
-
 .notice.error {
-  background:#ffebe9;
-  color:#a33e3e;
+  background: #ffebe9;
+  color: #a33e3e;
 }
-
 .notice.warn {
-  background:#fff2d8;
-  color:#7b5216;
+  background: #fff2d8;
+  color: #7b5216;
 }
 
 .big {
-  font-size:40px;
-  color:var(--teal);
-  font-weight:800;
+  font-size: 40px;
+  color: var(--teal);
+  font-weight: 800;
 }
-
 .result-info {
-  color:var(--muted);
-  font-size:14px;
+  color: var(--muted);
+  font-size: 14px;
 }
 
-.skill {
-  margin:14px 0;
-}
-
+.skill { margin: 14px 0; }
 .skill .track {
-  height:10px;
-  background:#e9eef0;
-  border-radius:9px;
-  overflow:hidden;
+  height: 10px;
+  background: #e9eef0;
+  border-radius: 9px;
+  overflow: hidden;
 }
-
 .skill .track div {
-  height:100%;
-  background:var(--teal);
+  height: 100%;
+  background: var(--teal);
 }
 
 .review {
-  padding:16px;
-  border:1px solid var(--border);
-  border-radius:12px;
-  margin:14px 0;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin: 14px 0;
 }
-
-.review h3 {
-  margin:0 0 8px;
-}
-
+.review h3 { margin: 0 0 8px; }
 .correct {
-  color:#126c54;
-  font-weight:700;
+  color: #126c54;
+  font-weight: 700;
 }
-
 .wrong {
-  color:#ab4747;
-  font-weight:700;
+  color: #ab4747;
+  font-weight: 700;
 }
-
 .explain {
-  padding:10px 12px;
-  background:#f0f7f6;
-  border-left:3px solid var(--teal);
-  margin-top:10px;
+  padding: 10px 12px;
+  background: #f0f7f6;
+  border-left: 3px solid var(--teal);
+  margin-top: 10px;
 }
 
 .scoreGrid {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 8px;
 }
-
 .scoreGrid div {
-  background:#f1f5f7;
-  text-align:center;
-  padding:12px;
-  border-radius:9px;
+  background: #f1f5f7;
+  text-align: center;
+  padding: 12px;
+  border-radius: 9px;
 }
-
 .scoreGrid strong {
-  display:block;
-  font-size:23px;
+  display: block;
+  font-size: 23px;
 }
 
 footer {
-  text-align:center;
-  padding:18px;
-  color:var(--muted);
-  font-size:13px;
+  text-align: center;
+  padding: 18px;
+  color: var(--muted);
+  font-size: 13px;
 }
 
 @media(max-width:720px) {
-  .layout {
-    grid-template-columns:1fr;
-  }
-
-  .side {
-    position:static;
-  }
-
-  .nav {
-    grid-template-columns:repeat(8,1fr);
-  }
+  .layout { grid-template-columns: 1fr; }
+  .side { position: static; }
+  .nav { grid-template-columns: repeat(8,1fr); }
 }
-
 @media(max-width:520px) {
-  .student {
-    grid-template-columns:1fr;
-  }
-
-  .card {
-    padding:16px;
-  }
-
-  h2 {
-    font-size:21px;
-  }
+  .student { grid-template-columns: 1fr; }
+  .card { padding: 16px; }
+  h2 { font-size: 21px; }
 }
-
 @media print {
   header,.student,.side,.actions,.notice,footer {
-    display:none!important;
+    display: none !important;
   }
-
-  main {
-    margin:0;
-  }
-
-  .card {
-    box-shadow:none;
-  }
-
-  .review {
-    break-inside:avoid;
-  }
+  main { margin: 0; }
+  .card { box-shadow: none; }
+  .review { break-inside: avoid; }
 }
 </style>
 </head>
@@ -375,105 +307,88 @@ footer {
 
 <main>
 
-<section class="card student">
-  <label class="field">
-    學生姓名
-    <input
-      id="student"
-      maxlength="40"
-      placeholder="請填姓名"
-      autocomplete="name">
-  </label>
-
-  <label class="field">
-    班級／座號
-    <input
-      id="classroom"
-      maxlength="40"
-      placeholder="例如：301／08">
-  </label>
-</section>
-
-<div id="notice" class="notice">
-  正在從 Google 試算表讀取題庫……
-</div>
-
-<div class="layout">
-
-  <aside class="card side">
-    <div class="count">
-      <b>作答進度</b>
-      <span id="progressText">0 / 15</span>
-    </div>
-
-    <div class="meter">
-      <div id="progressBar"></div>
-    </div>
-
-    <div class="nav" id="nav"></div>
-
-    <p style="font-size:12px;color:#667e8b">
-      綠色代表已作答；可點選題號跳題。
-      交卷後顯示答案與解析。
-    </p>
-  </aside>
-
-  <section class="card hidden" id="quizPanel">
-    <div>
-      <span class="tag" id="category"></span>
-      <span class="tag" id="type"></span>
-    </div>
-
-    <h2 id="qTitle"></h2>
-    <div class="stem" id="stem"></div>
-    <div id="options"></div>
-
-    <div class="actions">
-      <button class="btn" id="prev">上一題</button>
-      <button class="btn" id="clear">清除此題</button>
-      <button class="btn primary" id="next">下一題</button>
-      <button class="btn primary" id="submit">
-        交卷並上傳成績
-      </button>
-    </div>
+  <section class="card student">
+    <label class="field">
+      學生姓名
+      <input id="student" maxlength="40"
+             placeholder="請填姓名" autocomplete="name">
+    </label>
+    <label class="field">
+      班級／座號
+      <input id="classroom" maxlength="40"
+             placeholder="例如：301／08">
+    </label>
   </section>
 
-  <section class="card hidden" id="resultPanel">
-    <h2>化學概念診斷報告</h2>
+  <div id="notice" class="notice">
+    正在從 Google 試算表讀取題庫……
+  </div>
 
-    <div id="saveStatus" class="notice warn">
-      交卷處理中……
-    </div>
+  <div class="layout">
 
-    <div class="result-info" id="studentLabel"></div>
-    <div class="big" id="total"></div>
-    <div class="scoreGrid" id="scoreGrid"></div>
+    <aside class="card side">
+      <div class="count">
+        <b>作答進度</b>
+        <span id="progressText">0 / 15</span>
+      </div>
+      <div class="meter">
+        <div id="progressBar"></div>
+      </div>
+      <div class="nav" id="nav"></div>
+      <p style="font-size:12px;color:#667e8b">
+        綠色代表已作答；可點選題號跳題。
+        交卷後顯示答案與解析。
+      </p>
+    </aside>
 
-    <h3>五大概念得分</h3>
-    <div id="skills"></div>
+    <section class="card hidden" id="quizPanel">
+      <div>
+        <span class="tag" id="category"></span>
+        <span class="tag" id="type"></span>
+      </div>
 
-    <div class="notice" id="advice"></div>
+      <h2 id="qTitle"></h2>
+      <div class="stem" id="stem"></div>
+      <div id="options"></div>
 
-    <div class="actions">
-      <button class="btn" id="retryUpload">
-        再確認／重送紀錄
-      </button>
-      <button class="btn" id="download">
-        下載 CSV
-      </button>
-      <button class="btn" id="print">
-        列印報告
-      </button>
-      <button class="btn" id="restart">
-        重新練習
-      </button>
-    </div>
+      <div class="actions">
+        <button class="btn" id="prev">上一題</button>
+        <button class="btn" id="clear">清除此題</button>
+        <button class="btn primary" id="next">下一題</button>
+        <button class="btn primary" id="submit">
+          交卷並上傳成績
+        </button>
+      </div>
+    </section>
 
-    <h3>逐題答案與解析</h3>
-    <div id="reviews"></div>
-  </section>
-</div>
+    <section class="card hidden" id="resultPanel">
+      <h2>化學概念診斷報告</h2>
 
+      <div id="saveStatus" class="notice warn">
+        交卷處理中……
+      </div>
+
+      <div class="result-info" id="studentLabel"></div>
+      <div class="big" id="total"></div>
+      <div class="scoreGrid" id="scoreGrid"></div>
+
+      <h3>五大概念得分</h3>
+      <div id="skills"></div>
+      <div class="notice" id="advice"></div>
+
+      <div class="actions">
+        <button class="btn" id="retryUpload">
+          再確認／重送紀錄
+        </button>
+        <button class="btn" id="download">下載 CSV</button>
+        <button class="btn" id="print">列印報告</button>
+        <button class="btn" id="restart">重新練習</button>
+      </div>
+
+      <h3>逐題答案與解析</h3>
+      <div id="reviews"></div>
+    </section>
+  </div>
 </main>
 
 <footer>
@@ -491,13 +406,11 @@ footer {
 <script>
 'use strict';
 
-// =====================================
-//  Google Apps Script 完整網址
-//  已填入你的部署網址
-// =====================================
+// ======================================
+// 最新 Google Apps Script 部署網址
+// ======================================
 
-const GAS_URL =
-'https://script.google.com/macros/s/AKfycbzPDMCrr0V3t8RMxhKuzFRcCjY2Et4uNQE7DGHA8Q0ePw7ozH1QO0e3w0iuprNdoY9ybg/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbx0DR8feZzazKXrlIOjhue6RRlXdatO6-Vrgh_kclVoT4v3PaznPIkvF3r0W-7bgoijQA/exec';
 
 const STORE_KEY = 'chem_bond_simple_v1';
 const LETTERS = ['A','B','C','D','E'];
@@ -505,24 +418,22 @@ const LETTERS = ['A','B','C','D','E'];
 const el = id => document.getElementById(id);
 
 const state = {
-  questions:[],
-  version:'',
-  index:0,
-  answers:{},
-  submissionId:'',
-  confirmed:false,
-  submitting:false
+  questions: [],
+  version: '',
+  index: 0,
+  answers: {},
+  submissionId: '',
+  confirmed: false,
+  submitting: false
 };
 
-// =====================================
-//  JSONP 讀取 Apps Script
-// =====================================
+// ======================================
+// JSONP 讀取 Apps Script
+// ======================================
 
 function apiGet(action, extra={}) {
   return new Promise((resolve,reject)=>{
-
-    const callback =
-      'cb_' + Date.now() + '_' +
+    const callback = 'cb_' + Date.now() + '_' +
       Math.random().toString(36).slice(2);
 
     const script = document.createElement('script');
@@ -545,7 +456,6 @@ function apiGet(action, extra={}) {
 
     window[callback] = data => {
       if(done) return;
-
       done = true;
       clean();
       resolve(data);
@@ -553,41 +463,30 @@ function apiGet(action, extra={}) {
 
     script.onerror = () => {
       if(done) return;
-
       done = true;
       clean();
-
       reject(new Error(
-        '連線失敗，請檢查 Apps Script 網址、部署版本及權限'
+        '連線失敗，請檢查網址或權限'
       ));
     };
 
     const timer = setTimeout(()=>{
       if(done) return;
-
       done = true;
       clean();
-
       reject(new Error('讀取逾時'));
-
-    },action==='status'?7000:25000);
+    }, action==='status' ? 7000 : 25000);
 
     script.src = url.toString();
     document.head.appendChild(script);
   });
 }
 
-// =====================================
-//  基本工具
-// =====================================
-
 function makeId() {
   return crypto.randomUUID
     ? crypto.randomUUID()
-    : (
-      'qid_' + Date.now() + '_' +
-      Math.random().toString(36).slice(2)
-    );
+    : 'qid_' + Date.now() + '_' +
+      Math.random().toString(36).slice(2);
 }
 
 function notice(message,kind='') {
@@ -604,24 +503,21 @@ function selected(q) {
   return state.answers[String(q.id)] || [];
 }
 
-// =====================================
-//  保存作答進度
-// =====================================
+// ======================================
+// 保存作答進度
+// ======================================
 
 function save() {
   try {
-    localStorage.setItem(
-      STORE_KEY,
-      JSON.stringify({
-        version:state.version,
-        index:state.index,
-        answers:state.answers,
-        submissionId:state.submissionId,
-        confirmed:state.confirmed,
-        name:el('student').value,
-        classroom:el('classroom').value
-      })
-    );
+    localStorage.setItem(STORE_KEY,JSON.stringify({
+      version: state.version,
+      index: state.index,
+      answers: state.answers,
+      submissionId: state.submissionId,
+      confirmed: state.confirmed,
+      name: el('student').value,
+      classroom: el('classroom').value
+    }));
   } catch(e) {
     console.warn(e);
   }
@@ -633,7 +529,7 @@ function restore() {
       localStorage.getItem(STORE_KEY) || 'null'
     );
 
-    if(!previous || previous.version!==state.version) {
+    if(!previous || previous.version !== state.version) {
       return;
     }
 
@@ -648,50 +544,44 @@ function restore() {
     state.answers =
       previous.answers &&
       typeof previous.answers==='object'
-      ? previous.answers
-      : {};
+        ? previous.answers
+        : {};
 
-    if(
-      /^[a-zA-Z0-9_-]{15,100}$/.test(
-        previous.submissionId||''
-      )
-    ){
-      state.submissionId=previous.submissionId;
+    if(/^[a-zA-Z0-9_-]{15,100}$/.test(
+      previous.submissionId || ''
+    )) {
+      state.submissionId = previous.submissionId;
     }
 
-    state.confirmed=!!previous.confirmed;
+    state.confirmed = !!previous.confirmed;
+    el('student').value = previous.name || '';
+    el('classroom').value = previous.classroom || '';
 
-    el('student').value=previous.name||'';
-    el('classroom').value=previous.classroom||'';
-
-  }catch(e){
+  } catch(e) {
     console.warn(e);
   }
 }
 
-// =====================================
-//  題號導航
-// =====================================
+// ======================================
+// 題號導航
+// ======================================
 
 function renderNav() {
-  let answered=0;
-
+  let answered = 0;
   el('nav').replaceChildren();
 
   state.questions.forEach((q,i)=>{
-    const has=selected(q).length>0;
-
+    const has = selected(q).length > 0;
     if(has) answered++;
 
-    const b=document.createElement('button');
-
-    b.textContent=q.id;
-    b.className=
+    const b = document.createElement('button');
+    b.textContent = q.id;
+    b.className =
       (has?'done ':'') +
       (i===state.index?'active':'');
 
-    b.onclick=()=>{
-      state.index=i;
+    b.onclick = ()=>{
+      state.index = i;
       save();
       renderQuestion();
     };
@@ -699,141 +589,117 @@ function renderNav() {
     el('nav').appendChild(b);
   });
 
-  el('progressText').textContent=
-    answered+' / '+state.questions.length;
+  el('progressText').textContent =
+    answered + ' / ' + state.questions.length;
 
-  el('progressBar').style.width=
-    (answered/state.questions.length*100)+'%';
+  el('progressBar').style.width =
+    (answered/state.questions.length*100) + '%';
 }
 
-// =====================================
-//  顯示題目與選項
-// =====================================
+// ======================================
+// 題目及選項
+// ======================================
 
 function renderQuestion() {
   el('resultPanel').classList.add('hidden');
   el('quizPanel').classList.remove('hidden');
 
-  const q=state.questions[state.index];
+  const q = state.questions[state.index];
 
-  el('category').textContent=q.skill;
-  el('type').textContent=
+  el('category').textContent = q.skill;
+  el('type').textContent =
     q.type==='single'?'單選':'多選';
 
-  el('qTitle').textContent=
-    '第 '+q.id+' 題｜'+q.title;
+  el('qTitle').textContent =
+    '第 ' + q.id + ' 題｜' + q.title;
 
-  el('stem').textContent=q.stem;
+  el('stem').textContent = q.stem;
   el('options').replaceChildren();
 
   q.options.forEach((option,i)=>{
-    const letter=LETTERS[i];
-    const checked=selected(q).includes(letter);
+    const letter = LETTERS[i];
+    const checked = selected(q).includes(letter);
 
-    const label=document.createElement('label');
+    const label = document.createElement('label');
+    label.className = 'option' +
+      (checked?' selected':'');
 
-    label.className=
-      'option'+(checked?' selected':'');
+    const input = document.createElement('input');
+    input.type = q.type==='single'?'radio':'checkbox';
+    input.name = 'q'+q.id;
+    input.checked = checked;
 
-    const input=document.createElement('input');
-
-    input.type=
-      q.type==='single'?'radio':'checkbox';
-
-    input.name='q'+q.id;
-    input.checked=checked;
-
-    input.onchange=()=>{
-      if(q.type==='single'){
-        state.answers[String(q.id)]=[letter];
-
-      }else{
-        state.answers[String(q.id)]=
-          input.checked
+    input.onchange = ()=>{
+      if(q.type==='single') {
+        state.answers[String(q.id)] = [letter];
+      } else {
+        state.answers[String(q.id)] = input.checked
           ? [...new Set([...selected(q),letter])]
           : selected(q).filter(x=>x!==letter);
       }
 
-      state.confirmed=false;
-
+      state.confirmed = false;
       save();
       renderQuestion();
     };
 
-    const span=document.createElement('span');
-
-    span.textContent=
-      '('+letter+') '+option;
+    const span = document.createElement('span');
+    span.textContent = '('+letter+') '+option;
 
     label.append(input,span);
     el('options').appendChild(label);
   });
 
-  el('prev').disabled=state.index===0;
-
-  el('next').disabled=
+  el('prev').disabled = state.index===0;
+  el('next').disabled =
     state.index===state.questions.length-1;
 
   renderNav();
 }
 
-// =====================================
-//  學測型自動計分
-//  單選：全對 2 分
-//  多選：錯 1 選項 1.2 分
-//        錯 2 選項 0.4 分
-// =====================================
+// ======================================
+// 學測型多選部分給分
+// ======================================
 
 function grade() {
-  let total=0;
-  let exact=0;
-  let partial=0;
-
-  const skills={};
-  const details=[];
+  let total=0, exact=0, partial=0;
+  const skills={}, details=[];
 
   state.questions.forEach(q=>{
-    const picked=selected(q);
+    const picked = selected(q);
 
-    const errors=LETTERS.filter(c=>
+    const errors = LETTERS.filter(c=>
       picked.includes(c)!==q.answer.includes(c)
     ).length;
 
-    let pts=0;
+    let pts = 0;
 
-    if(!picked.length){
-      pts=0;
-
-    }else if(errors===0){
-      pts=2;
-
-    }else if(q.type==='single'){
-      pts=0;
-
-    }else if(errors===1){
-      pts=1.2;
-
-    }else if(errors===2){
-      pts=0.4;
+    if(!picked.length) {
+      pts = 0;
+    } else if(errors===0) {
+      pts = 2;
+    } else if(q.type==='single') {
+      pts = 0;
+    } else if(errors===1) {
+      pts = 1.2;
+    } else if(errors===2) {
+      pts = 0.4;
     }
 
-    total+=pts;
+    total += pts;
 
-    if(pts===2){
-      exact++;
-    }else if(pts>0){
-      partial++;
-    }
+    if(pts===2) exact++;
+    else if(pts>0) partial++;
 
-    if(!skills[q.skill]){
+    if(!skills[q.skill]) {
       skills[q.skill]={earned:0,max:0};
     }
 
-    skills[q.skill].earned=+(
+    skills[q.skill].earned = +(
       skills[q.skill].earned+pts
     ).toFixed(1);
 
-    skills[q.skill].max+=2;
+    skills[q.skill].max += 2;
 
     details.push({q,picked,pts});
   });
@@ -841,17 +707,15 @@ function grade() {
   return {
     total:+total.toFixed(1),
     max:state.questions.length*2,
-    exact,
-    partial,
+    exact,partial,
     zero:state.questions.length-exact-partial,
-    skills,
-    details
+    skills,details
   };
 }
 
-// =====================================
-//  成績分析
-// =====================================
+// ======================================
+// 顯示成績與弱點分析
+// ======================================
 
 function renderResults(statusText='',confirmed=false) {
   const g=grade();
@@ -859,22 +723,18 @@ function renderResults(statusText='',confirmed=false) {
   el('quizPanel').classList.add('hidden');
   el('resultPanel').classList.remove('hidden');
 
-  el('saveStatus').className=
-    'notice '+(confirmed?'':'warn');
+  el('saveStatus').className =
+    'notice ' + (confirmed?'':'warn');
 
-  el('saveStatus').textContent=
-    statusText ||
-    (
-      confirmed
-      ? '已經確認：成績寫入 Google 試算表'
-      : '正在確認試算表是否收到成績……'
-    );
+  el('saveStatus').textContent = statusText ||
+    (confirmed
+      ? '已確認：成績寫入 Google 試算表'
+      : '正在確認試算表是否收到成績……');
 
-  el('studentLabel').textContent=
-    el('classroom').value+
-    '　'+el('student').value;
+  el('studentLabel').textContent =
+    el('classroom').value+'　'+el('student').value;
 
-  el('total').textContent=
+  el('total').textContent =
     g.total+' / '+g.max+' 分';
 
   el('scoreGrid').replaceChildren();
@@ -886,14 +746,9 @@ function renderResults(statusText='',confirmed=false) {
   ].forEach(([label,num])=>{
     const d=document.createElement('div');
     const strong=document.createElement('strong');
-
     strong.textContent=num;
 
-    d.append(
-      strong,
-      document.createTextNode(label)
-    );
-
+    d.append(strong,document.createTextNode(label));
     el('scoreGrid').appendChild(d);
   });
 
@@ -904,35 +759,28 @@ function renderResults(statusText='',confirmed=false) {
     d.className='skill';
 
     const t=document.createElement('div');
-
-    t.textContent=
-      name+'：'+s.earned+'/'+s.max+
+    t.textContent=name+'：'+s.earned+'/'+s.max+
       '（'+Math.round(s.earned/s.max*100)+'%）';
 
     const bar=document.createElement('div');
     bar.className='track';
 
     const fill=document.createElement('div');
-
-    fill.style.width=
-      (s.earned/s.max*100)+'%';
+    fill.style.width=(s.earned/s.max*100)+'%';
 
     bar.appendChild(fill);
     d.append(t,bar);
-
     el('skills').appendChild(d);
   });
 
   const weak=Object.entries(g.skills)
     .filter(([_,s])=>s.earned/s.max<.8)
-    .sort(
-      (a,b)=>
-        a[1].earned/a[1].max-
-        b[1].earned/b[1].max
+    .sort((a,b)=>
+      a[1].earned/a[1].max-
+      b[1].earned/b[1].max
     );
 
-  el('advice').textContent=
-    weak.length
+  el('advice').textContent=weak.length
     ? '建議加強：'+
       weak.map(x=>x[0]).slice(0,3).join('、')
     : '五大化學概念得分率均達 80% 以上。';
@@ -944,22 +792,16 @@ function renderResults(statusText='',confirmed=false) {
     d.className='review';
 
     const h=document.createElement('h3');
-
-    h.textContent=
-      '第 '+q.id+' 題｜'+q.title;
+    h.textContent='第 '+q.id+' 題｜'+q.title;
 
     const p=document.createElement('p');
-
-    p.className=
-      pts===2?'correct':'wrong';
-
+    p.className=pts===2?'correct':'wrong';
     p.textContent=
       '得分：'+pts+'/2；你的答案：'+
       (picked.join('、')||'未作答')+
       '；正解：'+q.answer.split('').join('、');
 
     const e=document.createElement('div');
-
     e.className='explain';
     e.textContent='解析：'+q.explain;
 
@@ -972,54 +814,46 @@ function renderResults(statusText='',confirmed=false) {
   );
 }
 
-// =====================================
-//  跨網域上傳 Google 試算表
-// =====================================
+// ======================================
+// 跨網域表單上傳
+// ======================================
 
 function postToSheet(payload) {
-  // 使用原生 HTML 表單提交
-  // 避開跨網域 fetch 的 CORS 限制
-  // 後續再以 JSONP 查詢紀錄確認寫入
-
   const form=document.createElement('form');
-
   form.method='POST';
   form.action=GAS_URL;
   form.target='quizUploadFrame';
   form.style.display='none';
 
   const input=document.createElement('input');
-
   input.type='hidden';
   input.name='payload';
   input.value=JSON.stringify(payload);
 
   form.appendChild(input);
   document.body.appendChild(form);
-
   form.submit();
   form.remove();
 }
 
-// =====================================
-//  確認成績寫入
-// =====================================
+// ======================================
+// 確認資料已寫入
+// ======================================
 
 const sleep=ms=>
   new Promise(resolve=>setTimeout(resolve,ms));
 
 async function waitForRecord(id) {
-  for(let i=0;i<15;i++){
+  for(let i=0;i<15;i++) {
     await sleep(i===0?900:1700);
 
-    try{
+    try {
       const result=await apiGet('status',{id});
 
-      if(result.ok && result.found){
+      if(result.ok&&result.found) {
         return result;
       }
-
-    }catch(err){
+    } catch(err) {
       console.warn(
         '確認第 '+(i+1)+' 次失敗',
         err.message
@@ -1030,9 +864,9 @@ async function waitForRecord(id) {
   return null;
 }
 
-// =====================================
-//  學生交卷
-// =====================================
+// ======================================
+// 交卷
+// ======================================
 
 async function submit() {
   if(state.submitting) return;
@@ -1040,11 +874,8 @@ async function submit() {
   const name=el('student').value.trim();
   const classroom=el('classroom').value.trim();
 
-  if(!name || !classroom){
-    notice(
-      '請先填學生姓名與班級座號。',
-      'error'
-    );
+  if(!name||!classroom) {
+    notice('請先填學生姓名與班級座號。','error');
     return;
   }
 
@@ -1060,7 +891,6 @@ async function submit() {
   if(!confirm(msg)) return;
 
   state.submitting=true;
-
   el('submit').disabled=true;
   el('student').disabled=true;
   el('classroom').disabled=true;
@@ -1079,76 +909,62 @@ async function submit() {
     answers:state.answers
   };
 
-  try{
+  try {
     postToSheet(payload);
 
     const check=await waitForRecord(
       state.submissionId
     );
 
-    if(check){
+    if(check) {
       state.confirmed=true;
       save();
 
       const g=grade();
-
       const consistent=
         Number(check.score)===g.total;
 
       renderResults(
         consistent
-        ? '已確認：成績成功寫入教師 Google 試算表。'
-        : '已確認寫入，但前後端分數不同，請通知教師核對。',
+          ? '已確認：成績成功寫入教師 Google 試算表。'
+          : '已確認寫入，但前後端分數不同，請通知教師核對。',
         true
       );
 
-    }else{
+    } else {
       renderResults(
         '尚未能確認成績已存入。請按「再確認／重送紀錄」，或請教師查看試算表。'
       );
     }
 
-  }catch(err){
+  } catch(err) {
     renderResults(
-      '提交出現問題：'+
-      err.message+
+      '提交出現問題：'+err.message+
       '。請再確認／重送。'
     );
 
-  }finally{
+  } finally {
     state.submitting=false;
     el('submit').disabled=false;
   }
 }
 
-// =====================================
-//  重送紀錄
-// =====================================
-
 async function retryUpload() {
   if(state.confirmed) return;
-
   await submit();
 }
 
-// =====================================
-//  下載 CSV
-// =====================================
+// ======================================
+// 匯出 CSV
+// ======================================
 
 function downloadCsv() {
   const g=grade();
-
-  const rows=[
-    ['題號','概念','選項','正解','得分']
-  ];
+  const rows=[['題號','概念','選項','正解','得分']];
 
   g.details.forEach(({q,picked,pts})=>{
     rows.push([
-      q.id,
-      q.skill,
-      picked.join(''),
-      q.answer,
-      pts
+      q.id,q.skill,picked.join(''),q.answer,pts
     ]);
   });
 
@@ -1167,40 +983,31 @@ function downloadCsv() {
   );
 
   const a=document.createElement('a');
-
   a.href=url;
   a.download='化學鍵測驗成績.csv';
   a.click();
 
-  setTimeout(
-    ()=>URL.revokeObjectURL(url),
-    1000
-  );
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
-// =====================================
-//  載入題庫
-//  已修正之前錯誤的網址判斷
-// =====================================
+// ======================================
+// 載入 Google 試算表題庫
+// ======================================
 
 async function load() {
-
-  if(GAS_URL.includes('貼上你的部署ID')){
-    notice(
-      '請先把 GAS_URL 設定成 Apps Script 網址。',
-      'error'
-    );
+  if(GAS_URL.includes('貼上你的部署ID')) {
+    notice('請先設定 GAS_URL','error');
     return;
   }
 
-  try{
+  try {
     const data=await apiGet('quiz');
 
     if(
       !data.ok ||
       !Array.isArray(data.questions) ||
       !data.questions.length
-    ){
+    ) {
       throw new Error(data.error||'題庫為空');
     }
 
@@ -1211,37 +1018,34 @@ async function load() {
     restore();
     hideNotice();
 
-    if(state.confirmed){
+    if(state.confirmed) {
       el('student').disabled=true;
       el('classroom').disabled=true;
 
       renderNav();
-
       renderResults(
         '這是此瀏覽器上次已確認送出的作答紀錄。',
         true
       );
-
-    }else{
+    } else {
       renderQuestion();
     }
 
-  }catch(err){
+  } catch(err) {
     notice(
-      '載入失敗：'+
-      err.message+
+      '載入失敗：'+err.message+
       '。請檢查 Apps Script 部署設定。',
       'error'
     );
   }
 }
 
-// =====================================
-//  按鈕事件
-// =====================================
+// ======================================
+// 按鈕事件
+// ======================================
 
 el('prev').onclick=()=>{
-  if(state.index>0){
+  if(state.index>0) {
     state.index--;
     save();
     renderQuestion();
@@ -1249,7 +1053,7 @@ el('prev').onclick=()=>{
 };
 
 el('next').onclick=()=>{
-  if(state.index<state.questions.length-1){
+  if(state.index<state.questions.length-1) {
     state.index++;
     save();
     renderQuestion();
@@ -1260,7 +1064,6 @@ el('clear').onclick=()=>{
   delete state.answers[
     String(state.questions[state.index].id)
   ];
-
   save();
   renderQuestion();
 };
@@ -1273,9 +1076,7 @@ el('print').onclick=()=>window.print();
 el('restart').onclick=()=>{
   if(!confirm(
     '確定重新開始？舊成績不會從試算表刪除。'
-  )){
-    return;
-  }
+  )) return;
 
   state.answers={};
   state.index=0;
@@ -1292,7 +1093,7 @@ el('restart').onclick=()=>{
 el('student').addEventListener('input',save);
 el('classroom').addEventListener('input',save);
 
-// 啟動網頁
+// 網頁啟動
 load();
 
 </script>

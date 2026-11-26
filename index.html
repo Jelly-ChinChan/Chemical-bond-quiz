@@ -1,1024 +1,263 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>化學鍵與物質結構｜學測概念診斷</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>化學鍵與物質結構｜15 題學測診斷</title>
 <style>
-:root {
-  --dark: #142b40;
-  --teal: #16867f;
-  --light: #edf7f5;
-  --bg: #f3f6f9;
-  --line: #dbe5ea;
-  --text: #263a48;
-  --muted: #6c808d;
-  --red: #b94f4f;
-}
-
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  font-family: "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.7;
-}
-
-header {
-  background: linear-gradient(120deg, #142b40, #176d70);
-  color: white;
-  padding: 34px 20px 55px;
-  text-align: center;
-}
-
-header h1 {
-  font-size: clamp(25px, 5vw, 36px);
-  margin: 8px 0;
-}
-
-header p { color: #d5e9ed; margin: 5px 0; }
-
-main {
-  max-width: 1050px;
-  margin: -28px auto 50px;
-  padding: 0 15px;
-}
-
-.card {
-  background: white;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 8px 25px #1b34400c;
-}
-
-.student-info {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-label.field {
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-input[type="text"] {
-  margin-top: 6px;
-  padding: 12px;
-  width: 100%;
-  border: 1px solid #c8d7dc;
-  border-radius: 9px;
-  font-size: 16px;
-}
-
-.layout {
-  display: grid;
-  grid-template-columns: 235px minmax(0, 1fr);
-  gap: 18px;
-  align-items: start;
-}
-
-.sidebar { position: sticky; top: 15px; }
-
-.progress {
-  background: #e6edf0;
-  height: 10px;
-  border-radius: 15px;
-  margin: 15px 0 8px;
-  overflow: hidden;
-}
-
-#progressBar {
-  height: 100%;
-  width: 0%;
-  background: var(--teal);
-  transition: width .2s;
-}
-
-.numbers {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 7px;
-  margin-top: 17px;
-}
-
-.num {
-  padding: 9px 0;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #fff;
-  cursor: pointer;
-}
-
-.num.answered {
-  background: #d9f1ed;
-  border-color: #80bfb8;
-}
-
-.num.current {
-  background: var(--dark);
-  color: white;
-}
-
-.tag {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 20px;
-  background: var(--light);
-  color: #14796e;
-  font-size: 13px;
-  margin: 4px 5px 4px 0;
-}
-
-#questionTitle {
-  font-size: 24px;
-  line-height: 1.5;
-  margin: 15px 0;
-}
-
-#questionStem {
-  font-size: 17px;
-  margin: 15px 0 20px;
-}
-
-.chem-formula {
-  padding: 12px;
-  margin: 12px 0;
-  background: #f0f6f8;
-  border-left: 3px solid var(--teal);
-  overflow-wrap: anywhere;
-}
-
-.option {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 14px;
-  margin: 10px 0;
-  border: 1.5px solid var(--line);
-  border-radius: 11px;
-  cursor: pointer;
-}
-
-.option.selected {
-  background: var(--light);
-  border-color: var(--teal);
-}
-
-.option input {
-  margin-top: 7px;
-  accent-color: var(--teal);
-}
-
-.option span { flex: 1; }
-
-.actions {
-  display: flex;
-  gap: 9px;
-  flex-wrap: wrap;
-  margin-top: 25px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
-}
-
-button {
-  font: inherit;
-  cursor: pointer;
-}
-
-.btn {
-  border: 1px solid var(--line);
-  border-radius: 9px;
-  background: white;
-  padding: 10px 17px;
-  font-weight: bold;
-  min-height: 44px;
-}
-
-.btn.primary {
-  background: var(--teal);
-  color: white;
-  border-color: var(--teal);
-}
-
-.btn.dark {
-  background: var(--dark);
-  color: white;
-  border-color: var(--dark);
-}
-
-button:disabled {
-  opacity: .45;
-  cursor: not-allowed;
-}
-
-.hidden { display: none !important; }
-
-#message {
-  padding: 12px;
-  margin-bottom: 16px;
-  border-radius: 10px;
-  background: #e6f2f1;
-  color: #196b66;
-}
-
-#message.error {
-  background: #ffefee;
-  color: var(--red);
-}
-
-.score {
-  color: #128077;
-  font-size: 44px;
-  font-weight: bold;
-}
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin: 20px 0;
-}
-
-.stat {
-  background: #f4f7f9;
-  padding: 15px;
-  border-radius: 10px;
-  text-align: center;
-}
-
-.stat strong {
-  display: block;
-  font-size: 25px;
-}
-
-.skill {
-  margin: 18px 0;
-}
-
-.skillbar {
-  height: 10px;
-  background: #e6edf0;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.skillbar div {
-  height: 100%;
-  background: var(--teal);
-}
-
-.review {
-  border: 1px solid var(--line);
-  padding: 18px;
-  border-radius: 12px;
-  margin-top: 15px;
-}
-
-.explanation {
-  background: #f3f8f8;
-  border-left: 3px solid var(--teal);
-  padding: 12px;
-  margin-top: 12px;
-}
-
-.correct { color: #128065; }
-.wrong { color: var(--red); }
-
-footer {
-  text-align: center;
-  color: var(--muted);
-  font-size: 12px;
-  padding: 25px;
-}
-
-@media(max-width: 760px) {
-  .layout { grid-template-columns: 1fr; }
-  .sidebar { position: static; }
-  .numbers { grid-template-columns: repeat(8, 1fr); }
-}
-
-@media(max-width: 520px) {
-  .student-info { grid-template-columns: 1fr; }
-  .card { padding: 17px; }
-  .stats { gap: 6px; }
-  .stat { padding: 10px; }
-  .stat strong { font-size: 21px; }
-}
-
-@media print {
-  header, .sidebar, .student-info, .actions, footer {
-    display: none !important;
-  }
-  main { margin: 0; }
-  .card { box-shadow: none; }
-  .review { break-inside: avoid; }
-}
+:root{--ink:#173246;--teal:#147c78;--bg:#f3f6f8;--muted:#667e8b;--border:#d9e4e8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,"Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.7}
+header{background:linear-gradient(120deg,#173246,#176e72);padding:35px 18px 54px;text-align:center;color:#fff}
+header h1{font-size:clamp(24px,5vw,35px);margin:0}header p{margin:7px 0;color:#d9eff0}
+main{max-width:1000px;margin:-28px auto 40px;padding:0 16px}.card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:16px;box-shadow:0 5px 22px #1231}
+.student{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:block;font-size:14px;font-weight:700}.field input{display:block;width:100%;margin-top:5px;padding:12px;border:1px solid #bed1d9;border-radius:9px;font:inherit}
+.layout{display:grid;grid-template-columns:215px 1fr;gap:16px;align-items:start}.side{position:sticky;top:12px}.count{display:flex;justify-content:space-between}.meter{height:9px;background:#e6edef;border-radius:20px;overflow:hidden;margin:13px 0}.meter>div{height:100%;width:0;background:var(--teal);transition:.2s}.nav{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.nav button{border-radius:8px;border:1px solid var(--border);padding:7px 0;background:#fff;cursor:pointer}.nav button.done{background:#d9f1e9;border-color:#83beb3}.nav button.active{background:var(--ink);color:#fff}
+.tag{display:inline-block;border-radius:20px;color:#116b66;background:#e6f5f2;padding:3px 10px;margin-right:5px;font-size:12px}h2{font-size:24px;margin:16px 0}.stem{white-space:pre-wrap;font-size:17px;margin-bottom:18px}.option{display:flex;gap:12px;align-items:start;padding:14px;margin:11px 0;border:1.5px solid var(--border);border-radius:10px;cursor:pointer}.option.selected{background:#e9f6f2;border-color:var(--teal)}.option input{accent-color:var(--teal);margin-top:7px}.option span{flex:1}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px;padding-top:18px;border-top:1px solid var(--border)}button{font:inherit;cursor:pointer}.btn{padding:10px 17px;border:1px solid var(--border);border-radius:10px;background:#fff;font-weight:700}.btn.primary{background:var(--teal);border-color:var(--teal);color:#fff}.btn:disabled{opacity:.55;cursor:not-allowed}.hidden{display:none!important}.notice{border-radius:10px;background:#e7f3f1;padding:12px 15px;margin-bottom:16px}.notice.error{background:#ffebe9;color:#a33e3e}.notice.warn{background:#fff2d8;color:#7b5216}
+.big{font-size:40px;color:var(--teal);font-weight:800}.result-info{color:var(--muted);font-size:14px}.skill{margin:14px 0}.skill .track{height:10px;background:#e9eef0;border-radius:9px;overflow:hidden}.skill .track div{height:100%;background:var(--teal)}.review{padding:16px;border:1px solid var(--border);border-radius:12px;margin:14px 0}.review h3{margin:0 0 8px}.correct{color:#126c54;font-weight:700}.wrong{color:#ab4747;font-weight:700}.explain{padding:10px 12px;background:#f0f7f6;border-left:3px solid var(--teal);margin-top:10px}.scoreGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.scoreGrid div{background:#f1f5f7;text-align:center;padding:12px;border-radius:9px}.scoreGrid strong{display:block;font-size:23px}footer{text-align:center;padding:18px;color:var(--muted);font-size:13px}
+@media(max-width:720px){.layout{grid-template-columns:1fr}.side{position:static}.nav{grid-template-columns:repeat(8,1fr)}}@media(max-width:520px){.student{grid-template-columns:1fr}.card{padding:16px}h2{font-size:21px}}@media print{header,.student,.side,.actions,.notice,footer{display:none!important}main{margin:0}.card{box-shadow:none}.review{break-inside:avoid}}
 </style>
 </head>
-
 <body>
-
-<header>
-  <h1>化學鍵 × 物質結構</h1>
-  <p>115 學測化學補強｜概念診斷測驗</p>
-  <p>15 題｜30 分｜單選與多選｜自動批改</p>
-</header>
-
+<header><h1>化學鍵與物質結構</h1><p>學測化學補強｜15 題互動診斷｜滿分 30 分</p></header>
 <main>
-
-<section class="card student-info">
-  <label class="field">
-    學生姓名
-    <input id="student" type="text" maxlength="40"
-           placeholder="請輸入姓名">
-  </label>
-
-  <label class="field">
-    班級／座號
-    <input id="classroom" type="text" maxlength="40"
-           placeholder="例如：301／08">
-  </label>
-</section>
-
-<div id="message">正在讀取題庫……</div>
-
-<div class="layout" id="layout">
-
-  <aside class="card sidebar">
-    <strong>作答進度</strong>
-    <p id="progressText">0 / 15</p>
-    <div class="progress">
-      <div id="progressBar"></div>
-    </div>
-    <div id="numbers" class="numbers"></div>
-    <p style="font-size:12px;color:#6c808d">
-      綠色表示已作答。點選題號可以跳題。
-      交卷後才會顯示答案與解析。
-    </p>
-  </aside>
-
-  <section class="card hidden" id="quizView">
-    <div>
-      <span class="tag" id="unit"></span>
-      <span class="tag" id="skill"></span>
-      <span class="tag" id="type"></span>
-    </div>
-
-    <h2 id="questionTitle"></h2>
-    <div id="questionStem"></div>
-    <div id="options"></div>
-
-    <div class="actions">
-      <button class="btn" id="prev">上一題</button>
-      <button class="btn" id="clear">清除本題</button>
-      <button class="btn primary" id="next">下一題</button>
-      <button class="btn dark" id="submit">交卷並計分</button>
-    </div>
+  <section class="card student">
+    <label class="field">學生姓名<input id="student" maxlength="40" placeholder="請填姓名" autocomplete="name"></label>
+    <label class="field">班級／座號<input id="classroom" maxlength="40" placeholder="例如：301／08"></label>
   </section>
-
-  <section class="card hidden" id="resultView">
-    <h2>化學概念診斷報告</h2>
-
-    <div id="studentResult"></div>
-    <div class="score" id="totalScore"></div>
-    <div id="scoreMode"></div>
-
-    <div class="stats">
-      <div class="stat">
-        <strong id="exactCount">0</strong>
-        完全答對
+  <div id="notice" class="notice">正在從 Google 試算表讀取題庫……</div>
+  <div class="layout">
+    <aside class="card side"><div class="count"><b>作答進度</b><span id="progressText">0 / 15</span></div><div class="meter"><div id="progressBar"></div></div><div class="nav" id="nav"></div><p style="font-size:12px;color:#667e8b">綠色代表已作答；可點選題號跳題。交卷後顯示答案與解析。</p></aside>
+    <section class="card hidden" id="quizPanel">
+      <div><span class="tag" id="category"></span><span class="tag" id="type"></span></div>
+      <h2 id="qTitle"></h2><div class="stem" id="stem"></div><div id="options"></div>
+      <div class="actions">
+        <button class="btn" id="prev">上一題</button>
+        <button class="btn" id="clear">清除此題</button>
+        <button class="btn primary" id="next">下一題</button>
+        <button class="btn primary" id="submit">交卷並上傳成績</button>
       </div>
-      <div class="stat">
-        <strong id="partialCount">0</strong>
-        部分得分
+    </section>
+    <section class="card hidden" id="resultPanel">
+      <h2>化學概念診斷報告</h2>
+      <div id="saveStatus" class="notice warn">交卷處理中……</div>
+      <div class="result-info" id="studentLabel"></div>
+      <div class="big" id="total"></div>
+      <div class="scoreGrid" id="scoreGrid"></div>
+      <h3>五大概念得分</h3><div id="skills"></div>
+      <div class="notice" id="advice"></div>
+      <div class="actions">
+        <button class="btn" id="retryUpload">再確認／重送紀錄</button>
+        <button class="btn" id="download">下載 CSV</button>
+        <button class="btn" id="print">列印報告</button>
+        <button class="btn" id="restart">重新練習</button>
       </div>
-      <div class="stat">
-        <strong id="wrongCount">0</strong>
-        零分／未答
-      </div>
-    </div>
-
-    <h3>各化學概念掌握度</h3>
-    <div id="skillStats"></div>
-    <div class="explanation" id="suggestion"></div>
-
-    <div class="actions">
-      <button class="btn primary" id="exportCsv">
-        匯出成績 CSV
-      </button>
-      <button class="btn" id="printReport">
-        列印報告
-      </button>
-      <button class="btn" id="retryWrong">
-        重練未全對題目
-      </button>
-      <button class="btn" id="restart">
-        全部重新作答
-      </button>
-    </div>
-
-    <h3>逐題答案與解析</h3>
-    <div id="reviews"></div>
-  </section>
-
-</div>
+      <h3>逐題答案與解析</h3><div id="reviews"></div>
+    </section>
+  </div>
 </main>
-
-<footer>
-  化學鍵與物質結構｜學測化學補強測驗
-</footer>
-
+<footer>題庫、答案公開供練習使用；成績僅儲存在教師的私人試算表。</footer>
+<iframe name="quizUploadFrame" id="quizUploadFrame" hidden title="成績提交"></iframe>
 <script>
-"use strict";
+'use strict';
+// ★ 唯一需要修改的地方：貼上你的 Apps Script 網頁應用程式 /exec 網址
+const GAS_URL = 'https://script.google.com/macros/s/貼上你的部署ID/exec';
+const STORE_KEY = 'chem_bond_simple_v1';
+const LETTERS = ['A','B','C','D','E'];
+const el = id => document.getElementById(id);
+const state = {questions:[],version:'',index:0,answers:{},submissionId:'',confirmed:false,submitting:false};
 
-// ★★★ 請改成你的 Cloudflare Worker 網址 ★★★
-const API_BASE =
-  "https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev";
-
-const API = API_BASE.replace(/\/$/, "");
-const STORAGE_KEY = "chem_bond_quiz_v4";
-const LETTERS = ["A", "B", "C", "D", "E"];
-
-const $ = id => document.getElementById(id);
-
-const state = {
-  quiz: null,
-  index: 0,
-  answers: {},
-  student: "",
-  classroom: "",
-  submissionId: "",
-  result: null,
-  submitting: false
-};
-
-function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/g, c => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[c]);
+// JSONP: 直接讀 Apps Script 公開題庫與寫入狀態；不需要 CORS 代理。
+function apiGet(action, extra={}) {
+  return new Promise((resolve,reject)=>{
+    const callback = 'cb_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+    const script = document.createElement('script');
+    const url = new URL(GAS_URL);
+    url.searchParams.set('action',action);
+    url.searchParams.set('callback',callback);
+    Object.entries(extra).forEach(([k,v])=>url.searchParams.set(k,v));
+    let done = false;
+    const clean = () => { clearTimeout(timer); script.remove(); delete window[callback]; };
+    window[callback] = data => { if(done)return;done=true;clean();resolve(data); };
+    script.onerror = () => {if(done)return;done=true;clean();reject(new Error('連線失敗，請檢查網址或權限'));};
+    const timer=setTimeout(()=>{if(done)return;done=true;clean();reject(new Error('讀取逾時'));},action==='status'?7000:25000);
+    script.src=url.toString();
+    document.head.appendChild(script);
+  });
 }
-
-function makeId() {
-  if (window.crypto && crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-  return "Q" + Date.now().toString(36) +
-    "_" + Math.random().toString(36).slice(2) +
-    "_" + Math.random().toString(36).slice(2);
+function makeId(){return crypto.randomUUID ? crypto.randomUUID() : ('qid_'+Date.now()+'_'+Math.random().toString(36).slice(2));}
+function notice(message,kind='') {el('notice').textContent=message;el('notice').className='notice '+kind;el('notice').classList.remove('hidden');}
+function hideNotice(){el('notice').classList.add('hidden');}
+function selected(q){return state.answers[String(q.id)]||[];}
+function save(){
+  try {localStorage.setItem(STORE_KEY,JSON.stringify({version:state.version,index:state.index,answers:state.answers,submissionId:state.submissionId,confirmed:state.confirmed,name:el('student').value,classroom:el('classroom').value}));}catch(e){console.warn(e);}
 }
-
-function questions() {
-  return state.quiz.questions;
+function restore(){
+  try{
+    const previous=JSON.parse(localStorage.getItem(STORE_KEY)||'null');
+    if(!previous||previous.version!==state.version)return;
+    state.index=Math.max(0,Math.min(state.questions.length-1,Number(previous.index)||0));
+    state.answers=previous.answers&&typeof previous.answers==='object'?previous.answers:{};
+    if(/^[a-zA-Z0-9_-]{15,100}$/.test(previous.submissionId||''))state.submissionId=previous.submissionId;
+    state.confirmed=!!previous.confirmed;
+    el('student').value=previous.name||'';
+    el('classroom').value=previous.classroom||'';
+  }catch(e){console.warn(e);}
 }
-
-function answer(q) {
-  return state.answers[q.id] || [];
+function renderNav(){
+  let answered=0;el('nav').replaceChildren();
+  state.questions.forEach((q,i)=>{
+    const has=selected(q).length>0;if(has)answered++;
+    const b=document.createElement('button');b.textContent=q.id;
+    b.className=(has?'done ':'')+(i===state.index?'active':'');
+    b.onclick=()=>{state.index=i;save();renderQuestion();};
+    el('nav').appendChild(b);
+  });
+  el('progressText').textContent=answered+' / '+state.questions.length;
+  el('progressBar').style.width=(answered/state.questions.length*100)+'%';
 }
-
-function save() {
-  if (!state.quiz) return;
-
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      version: state.quiz.version,
-      index: state.index,
-      answers: state.answers,
-      student: state.student,
-      classroom: state.classroom,
-      submissionId: state.submissionId,
-      result: state.result
-    }));
-  } catch (e) {
-    console.warn("無法儲存本機作答", e);
-  }
-}
-
-function restore() {
-  try {
-    const old = JSON.parse(localStorage.getItem(STORAGE_KEY));
-
-    if (!old || old.version !== state.quiz.version) return;
-
-    state.student = old.student || "";
-    state.classroom = old.classroom || "";
-
-    state.index = Math.min(
-      Math.max(Number(old.index) || 0, 0),
-      questions().length - 1
-    );
-
-    state.submissionId =
-      /^[a-zA-Z0-9_-]{15,100}$/.test(old.submissionId || "")
-      ? old.submissionId
-      : makeId();
-
-    for (const q of questions()) {
-      const selected = old.answers?.[q.id];
-
-      if (!Array.isArray(selected)) continue;
-
-      let cleaned = [...new Set(
-        selected.filter(x => LETTERS.includes(x))
-      )];
-
-      if (q.type === "single") cleaned = cleaned.slice(0, 1);
-
-      state.answers[q.id] = cleaned;
-    }
-
-    if (
-      old.result &&
-      Array.isArray(old.result.results) &&
-      old.result.results.length === questions().length
-    ) {
-      state.result = old.result;
-    }
-  } catch (e) {
-    console.warn("無法還原作答", e);
-  }
-}
-
-function showMessage(text, error = false) {
-  $("message").textContent = text;
-  $("message").classList.toggle("error", error);
-  $("message").classList.remove("hidden");
-}
-
-function hideMessage() {
-  $("message").classList.add("hidden");
-}
-
-function renderNavigation() {
-  const box = $("numbers");
-  box.replaceChildren();
-
-  const total = questions().length;
-  let completed = 0;
-
-  questions().forEach((q, i) => {
-    const answered = answer(q).length > 0;
-    if (answered) completed++;
-
-    const b = document.createElement("button");
-    b.type = "button";
-    b.className =
-      "num" +
-      (answered ? " answered" : "") +
-      (i === state.index ? " current" : "");
-
-    b.textContent = q.id;
-    b.onclick = () => {
-      state.index = i;
-      save();
-      renderQuestion();
+function renderQuestion(){
+  el('resultPanel').classList.add('hidden');el('quizPanel').classList.remove('hidden');
+  const q=state.questions[state.index];
+  el('category').textContent=q.skill;el('type').textContent=q.type==='single'?'單選':'多選';
+  el('qTitle').textContent='第 '+q.id+' 題｜'+q.title;
+  el('stem').textContent=q.stem;
+  el('options').replaceChildren();
+  q.options.forEach((option,i)=>{
+    const letter=LETTERS[i], checked=selected(q).includes(letter);
+    const label=document.createElement('label');label.className='option'+(checked?' selected':'');
+    const input=document.createElement('input');input.type=q.type==='single'?'radio':'checkbox';
+    input.name='q'+q.id;input.checked=checked;
+    input.onchange=()=>{
+      if(q.type==='single')state.answers[String(q.id)]=[letter];
+      else state.answers[String(q.id)]=input.checked?[...new Set([...selected(q),letter])]:selected(q).filter(x=>x!==letter);
+      state.confirmed=false;save();renderQuestion();
     };
-
-    box.appendChild(b);
+    const span=document.createElement('span');span.textContent='('+letter+') '+option;
+    label.append(input,span);el('options').appendChild(label);
   });
-
-  $("progressText").textContent =
-    completed + " / " + total;
-
-  $("progressBar").style.width =
-    (completed / total * 100) + "%";
+  el('prev').disabled=state.index===0;
+  el('next').disabled=state.index===state.questions.length-1;
+  renderNav();
 }
-
-function selectOption(q, letter, checked) {
-  if (state.submitting || state.result) return;
-
-  let current = answer(q);
-
-  if (q.type === "single") {
-    state.answers[q.id] = [letter];
-  } else {
-    state.answers[q.id] = checked
-      ? [...new Set([...current, letter])]
-      : current.filter(x => x !== letter);
-  }
-
-  save();
-  renderQuestion();
-}
-
-function renderQuestion() {
-  $("quizView").classList.remove("hidden");
-  $("resultView").classList.add("hidden");
-
-  const q = questions()[state.index];
-
-  $("unit").textContent = q.unit;
-  $("skill").textContent = q.skill;
-
-  $("type").textContent =
-    q.type === "single" ? "單選題" : "多選題";
-
-  $("questionTitle").textContent =
-    "第 " + q.id + " 題｜" + q.title;
-
-  $("questionStem").innerHTML = q.stem;
-
-  const box = $("options");
-  box.replaceChildren();
-
-  q.options.forEach((option, i) => {
-    const letter = LETTERS[i];
-    const checked = answer(q).includes(letter);
-
-    const label = document.createElement("label");
-    label.className = "option" + (checked ? " selected" : "");
-
-    const input = document.createElement("input");
-    input.type = q.type === "single" ? "radio" : "checkbox";
-    input.name = "question_" + q.id;
-    input.value = letter;
-    input.checked = checked;
-
-    input.onchange = () =>
-      selectOption(q, letter, input.checked);
-
-    const text = document.createElement("span");
-    text.innerHTML = "<b>(" + letter + ")</b> " + option;
-
-    label.append(input, text);
-    box.appendChild(label);
+function grade(){
+  let total=0,exact=0,partial=0;const skills={},details=[];
+  state.questions.forEach(q=>{
+    const picked=selected(q);
+    const errors=LETTERS.filter(c=>picked.includes(c)!==q.answer.includes(c)).length;
+    const pts=!picked.length?0:errors===0?2:q.type==='single'?0:errors===1?1.2:errors===2?.4:0;
+    total+=pts;if(pts===2)exact++;else if(pts>0)partial++;
+    if(!skills[q.skill])skills[q.skill]={earned:0,max:0};
+    skills[q.skill].earned=+(skills[q.skill].earned+pts).toFixed(1);
+    skills[q.skill].max+=2;
+    details.push({q,picked,pts});
   });
-
-  $("prev").disabled = state.index === 0;
-  $("next").classList.toggle(
-    "hidden", state.index === questions().length - 1
-  );
-
-  renderNavigation();
+  return {total:+total.toFixed(1),max:state.questions.length*2,exact,partial,zero:state.questions.length-exact-partial,skills,details};
 }
-
-async function submitQuiz() {
-  if (state.submitting || state.result) return;
-
-  state.student = $("student").value.trim();
-  state.classroom = $("classroom").value.trim();
-
-  if (!state.student || !state.classroom) {
-    showMessage("請填寫學生姓名與班級／座號。", true);
-    return;
-  }
-
-  const missing = questions()
-    .filter(q => answer(q).length === 0)
-    .map(q => q.id);
-
-  let message = "確定交卷並上傳成績嗎？";
-
-  if (missing.length) {
-    message =
-      "以下題目尚未作答：" + missing.join("、") +
-      "。未作答以 0 分計算，確定交卷嗎？";
-  }
-
-  if (!confirm(message)) return;
-
-  state.submitting = true;
-  $("submit").disabled = true;
-  showMessage("正在交卷及計算成績……");
-
-  save();
-
-  try {
-    const response = await fetch(API + "/submit", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        version: state.quiz.version,
-        submissionId: state.submissionId,
-        student: state.student,
-        classroom: state.classroom,
-        answers: state.answers
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok || !data.ok) {
-      throw new Error(data.error || "交卷失敗");
-    }
-
-    state.result = data.result;
-    save();
-    hideMessage();
-    renderResult();
-
-    window.scrollTo({top: 0, behavior: "smooth"});
-  } catch (error) {
-    showMessage("交卷失敗：" + error.message, true);
-  } finally {
-    state.submitting = false;
-    $("submit").disabled = false;
-  }
-}
-
-function getResult(id) {
-  return state.result.results.find(x => x.id === id);
-}
-
-function renderResult() {
-  const r = state.result;
-
-  $("quizView").classList.add("hidden");
-  $("resultView").classList.remove("hidden");
-
-  $("studentResult").textContent =
-    r.classroom + "　" + r.student;
-
-  $("totalScore").textContent =
-    r.score + " / " + r.maxScore + " 分";
-
-  $("scoreMode").textContent =
-    r.scoringMode === "partial"
-    ? "計分方式：學測型多選部分給分"
-    : "計分方式：全對才得分";
-
-  $("exactCount").textContent = r.exactCount;
-  $("partialCount").textContent = r.partialCount;
-  $("wrongCount").textContent = r.wrongCount;
-
-  const skillsBox = $("skillStats");
-  skillsBox.replaceChildren();
-
-  for (const s of r.skillStats) {
-    const row = document.createElement("div");
-    row.className = "skill";
-
-    const name = document.createElement("div");
-    name.textContent =
-      s.name + "｜" + s.points + "/" + s.max +
-      " 分（" + Math.round(s.rate * 100) + "%）";
-
-    const bar = document.createElement("div");
-    bar.className = "skillbar";
-
-    const fill = document.createElement("div");
-    fill.style.width =
-      Math.max(0, Math.min(100, s.rate * 100)) + "%";
-
-    bar.appendChild(fill);
-    row.append(name, bar);
-    skillsBox.appendChild(row);
-  }
-
-  const weak = [...r.skillStats]
-    .filter(s => s.rate < 0.8)
-    .sort((a, b) => a.rate - b.rate);
-
-  $("suggestion").textContent = weak.length
-    ? "建議優先補強：" +
-      weak.slice(0, 3).map(x => x.name).join("、")
-    : "各觀念得分率都達 80% 以上，表現穩定！";
-
-  const reviews = $("reviews");
-  reviews.replaceChildren();
-
-  for (const q of questions()) {
-    const item = getResult(q.id);
-    const div = document.createElement("article");
-    div.className = "review";
-
-    const heading = document.createElement("h4");
-    heading.textContent =
-      "第 " + q.id + " 題｜" + q.title;
-
-    const mark = document.createElement("p");
-    mark.className = item.score === 2 ? "correct" : "wrong";
-    mark.textContent = "本題得分：" + item.score + " / 2";
-
-    const selected = document.createElement("p");
-    selected.textContent =
-      "你的答案：" +
-      (item.selected.join("、") || "未作答");
-
-    const correct = document.createElement("p");
-    correct.className = "correct";
-    correct.textContent =
-      "正確答案：" + item.correct.split("").join("、");
-
-    const explanation = document.createElement("div");
-    explanation.className = "explanation";
-    explanation.innerHTML =
-      "<strong>解析：</strong>" + item.explain;
-
-    const detail = document.createElement("details");
-    const summary = document.createElement("summary");
-    summary.textContent = "查看完整選項";
-
-    detail.appendChild(summary);
-
-    q.options.forEach((opt, i) => {
-      const letter = LETTERS[i];
-      const line = document.createElement("p");
-
-      line.innerHTML =
-        "<b>(" + letter + ")</b> " + opt;
-
-      if (item.correct.includes(letter)) {
-        line.className = "correct";
-      }
-
-      detail.appendChild(line);
-    });
-
-    div.append(
-      heading, mark, selected, correct,
-      explanation, detail
-    );
-
-    reviews.appendChild(div);
-  }
-}
-
-function exportCsv() {
-  if (!state.result) return;
-
-  const r = state.result;
-
-  const rows = [[
-    "班級座號", "姓名", "題號", "題目",
-    "作答", "正確答案", "得分"
-  ]];
-
-  for (const q of questions()) {
-    const item = getResult(q.id);
-
-    rows.push([
-      r.classroom,
-      r.student,
-      q.id,
-      q.title,
-      item.selected.join(""),
-      item.correct,
-      item.score
-    ]);
-  }
-
-  rows.push(["", "", "", "總分", "", "", r.score]);
-
-  const csv = "\ufeff" + rows.map(row =>
-    row.map(value =>
-      '"' + String(value ?? "")
-        .replace(/"/g, '""') + '"'
-    ).join(",")
-  ).join("\r\n");
-
-  const blob = new Blob([csv], {
-    type: "text/csv;charset=utf-8"
+function renderResults(statusText='',confirmed=false){
+  const g=grade();el('quizPanel').classList.add('hidden');el('resultPanel').classList.remove('hidden');
+  el('saveStatus').className='notice '+(confirmed?'':'warn');
+  el('saveStatus').textContent=statusText||(confirmed?'已經確認：成績寫入 Google 試算表':'正在確認試算表是否收到成績……');
+  el('studentLabel').textContent=el('classroom').value+'　'+el('student').value;
+  el('total').textContent=g.total+' / '+g.max+' 分';
+  el('scoreGrid').replaceChildren();
+  [['完全正確',g.exact],['部分給分',g.partial],['零分／未答',g.zero]].forEach(([label,num])=>{
+    const d=document.createElement('div');const strong=document.createElement('strong');strong.textContent=num;d.append(strong,document.createTextNode(label));el('scoreGrid').appendChild(d);
   });
-
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-
-  a.href = url;
-  a.download = "化學鍵測驗成績.csv";
-
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-
-  URL.revokeObjectURL(url);
+  el('skills').replaceChildren();
+  Object.entries(g.skills).forEach(([name,s])=>{
+    const d=document.createElement('div');d.className='skill';
+    const t=document.createElement('div');t.textContent=name+'：'+s.earned+'/'+s.max+'（'+Math.round(s.earned/s.max*100)+'%）';
+    const bar=document.createElement('div');bar.className='track';
+    const fill=document.createElement('div');fill.style.width=(s.earned/s.max*100)+'%';bar.appendChild(fill);d.append(t,bar);el('skills').appendChild(d);
+  });
+  const weak=Object.entries(g.skills).filter(([_,s])=>s.earned/s.max<.8).sort((a,b)=>a[1].earned/a[1].max-b[1].earned/b[1].max);
+  el('advice').textContent=weak.length?'建議加強：'+weak.map(x=>x[0]).slice(0,3).join('、'):'五大化學概念得分率均達 80% 以上。';
+  el('reviews').replaceChildren();
+  g.details.forEach(({q,picked,pts})=>{
+    const d=document.createElement('section');d.className='review';
+    const h=document.createElement('h3');h.textContent='第 '+q.id+' 題｜'+q.title;
+    const p=document.createElement('p');p.className=pts===2?'correct':'wrong';p.textContent='得分：'+pts+'/2；你的答案：'+(picked.join('、')||'未作答')+'；正解：'+q.answer.split('').join('、');
+    const e=document.createElement('div');e.className='explain';e.textContent='解析：'+q.explain;
+    d.append(h,p,e);el('reviews').appendChild(d);
+  });
+  el('retryUpload').classList.toggle('hidden',confirmed);
 }
-
-function restartQuiz(onlyWrong = false) {
-  if (!state.result) return;
-
-  if (!confirm("確定重新作答？再次交卷會建立新的作答紀錄。")) {
-    return;
-  }
-
-  if (onlyWrong) {
-    const wrongIds = state.result.results
-      .filter(x => x.score < 2)
-      .map(x => x.id);
-
-    if (!wrongIds.length) {
-      alert("全部題目都正確，沒有錯題需要重練。");
-      return;
-    }
-
-    for (const id of wrongIds) {
-      delete state.answers[id];
-    }
-
-    const first = questions().findIndex(
-      q => wrongIds.includes(q.id)
-    );
-
-    state.index = Math.max(0, first);
-  } else {
-    state.answers = {};
-    state.index = 0;
-  }
-
-  state.result = null;
-  state.submissionId = makeId();
-
-  save();
-  hideMessage();
-  renderQuestion();
+function postToSheet(payload){
+  // 以原生 HTML 表單提交，避開跨網域 fetch 的 CORS 限制。
+  // iframe 的內容無法跨網域讀取；之後以 JSONP 查詢交卷ID驗證是否寫入。
+  const form=document.createElement('form');form.method='POST';form.action=GAS_URL;form.target='quizUploadFrame';form.style.display='none';
+  const input=document.createElement('input');input.type='hidden';input.name='payload';input.value=JSON.stringify(payload);
+  form.appendChild(input);document.body.appendChild(form);form.submit();form.remove();
 }
-
-async function loadQuiz() {
-  try {
-    if (API_BASE.includes("YOUR-WORKER")) {
-      throw new Error(
-        "請先修改 HTML 的 API_BASE 為你的 Worker 網址"
-      );
-    }
-
-    const response = await fetch(API + "/quiz", {
-      cache: "no-store"
-    });
-
-    const data = await response.json();
-
-    if (!response.ok || !data.ok) {
-      throw new Error(data.error || "讀取失敗");
-    }
-
-    if (!data.quiz || !data.quiz.questions.length) {
-      throw new Error("題庫沒有啟用的題目");
-    }
-
-    state.quiz = data.quiz;
-    state.submissionId = makeId();
-
-    restore();
-
-    $("student").value = state.student;
-    $("classroom").value = state.classroom;
-
-    hideMessage();
-
-    if (state.result) {
-      renderNavigation();
-      renderResult();
-    } else {
-      renderQuestion();
-    }
-
-  } catch (error) {
-    showMessage("載入失敗：" + error.message, true);
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+async function waitForRecord(id){
+  for(let i=0;i<15;i++){
+    await sleep(i===0?900:1700);
+    try{
+      const result=await apiGet('status',{id});
+      if(result.ok&&result.found)return result;
+    }catch(err){console.warn('確認第 '+(i+1)+' 次失敗',err.message);}
   }
+  return null;
 }
-
-$("student").addEventListener("input", e => {
-  state.student = e.target.value;
-  save();
-});
-
-$("classroom").addEventListener("input", e => {
-  state.classroom = e.target.value;
-  save();
-});
-
-$("prev").onclick = () => {
-  if (state.index > 0) {
-    state.index--;
-    save();
-    renderQuestion();
-  }
-};
-
-$("next").onclick = () => {
-  if (state.index < questions().length - 1) {
-    state.index++;
-    save();
-    renderQuestion();
-  }
-};
-
-$("clear").onclick = () => {
-  delete state.answers[questions()[state.index].id];
-  save();
-  renderQuestion();
-};
-
-$("submit").onclick = submitQuiz;
-$("exportCsv").onclick = exportCsv;
-$("printReport").onclick = () => window.print();
-$("retryWrong").onclick = () => restartQuiz(true);
-$("restart").onclick = () => restartQuiz(false);
-
-loadQuiz();
+async function submit(){
+  if(state.submitting)return;
+  const name=el('student').value.trim(),classroom=el('classroom').value.trim();
+  if(!name||!classroom){notice('請先填學生姓名與班級座號。','error');return;}
+  const missing=state.questions.filter(q=>!selected(q).length).map(q=>q.id);
+  const msg=missing.length?'未作答題號：'+missing.join('、')+'。未答以 0 分計，確定交卷？':'確定交卷並上傳成績？';
+  if(!confirm(msg))return;
+  state.submitting=true;el('submit').disabled=true;el('student').disabled=true;el('classroom').disabled=true;
+  hideNotice();renderResults('交卷已送出，正在向 Google 試算表確認寫入……');
+  // 已確認過的交卷不可再修改；新一次練習會換一個ID。
+  const payload={id:state.submissionId,name,classroom,version:state.version,answers:state.answers};
+  try{
+    postToSheet(payload);
+    const check=await waitForRecord(state.submissionId);
+    if(check){
+      state.confirmed=true;save();
+      const g=grade();
+      const consistent=Number(check.score)===g.total;
+      renderResults(consistent?'已確認：成績成功寫入教師 Google 試算表。':'已確認寫入，但前後端分數不同，請通知教師核對。',true);
+    }else{
+      renderResults('尚未能確認成績已存入。請按「再確認／重送紀錄」，或請教師查看試算表。');
+    }
+  }catch(err){renderResults('提交出現問題：'+err.message+'。請再確認／重送。');}
+  finally{state.submitting=false;el('submit').disabled=false;}
+}
+async function retryUpload(){
+  if(state.confirmed)return;
+  // 同交卷ID可重送；Apps Script 會自動防止重複紀錄。
+  await submit();
+}
+function downloadCsv(){
+  const g=grade();const rows=[['題號','概念','選項','正解','得分']];
+  g.details.forEach(({q,picked,pts})=>rows.push([q.id,q.skill,picked.join(''),q.answer,pts]));
+  rows.push(['總分','','','',g.total]);
+  const csv='\ufeff'+rows.map(row=>row.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+  const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  const a=document.createElement('a');a.href=url;a.download='化學鍵測驗成績.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+async function load(){
+  if(GAS_URL.includes('貼上你的部署ID')){notice('請先把 index.html 的 GAS_URL 換成 Apps Script /exec 網址。','error');return;}
+  try{
+    const data=await apiGet('quiz');
+    if(!data.ok||!Array.isArray(data.questions)||!data.questions.length)throw new Error(data.error||'題庫為空');
+    state.questions=data.questions;state.version=data.version;state.submissionId=makeId();restore();hideNotice();
+    if(state.confirmed){el('student').disabled=true;el('classroom').disabled=true;renderNav();renderResults('這是此瀏覽器上次已確認送出的作答紀錄。',true);}
+    else{renderQuestion();}
+  }catch(err){notice('載入失敗：'+err.message+'。請檢查 Apps Script 部署設定。','error');}
+}
+el('prev').onclick=()=>{if(state.index>0){state.index--;save();renderQuestion();}};
+el('next').onclick=()=>{if(state.index<state.questions.length-1){state.index++;save();renderQuestion();}};
+el('clear').onclick=()=>{delete state.answers[String(state.questions[state.index].id)];save();renderQuestion();};
+el('submit').onclick=submit;el('retryUpload').onclick=retryUpload;
+el('download').onclick=downloadCsv;el('print').onclick=()=>window.print();
+el('restart').onclick=()=>{if(!confirm('確定重新開始？舊成績不會從試算表刪除。'))return;state.answers={};state.index=0;state.confirmed=false;state.submissionId=makeId();el('student').disabled=false;el('classroom').disabled=false;save();renderQuestion();};
+el('student').addEventListener('input',save);el('classroom').addEventListener('input',save);
+load();
 </script>
-
 </body>
 </html>

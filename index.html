@@ -241,7 +241,7 @@ function downloadCsv(){
   const a=document.createElement('a');a.href=url;a.download='化學鍵測驗成績.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 async function load(){
-  if(GAS_URL.includes('貼上你的部署ID')){notice('請先把 index.html 的 GAS_URL 換成 Apps Script /exec 網址。','error');return;}
+  if(GAS_URL.includes('https://script.google.com/macros/s/AKfycbzPDMCrr0V3t8RMxhKuzFRcCjY2Et4uNQE7DGHA8Q0ePw7ozH1QO0e3w0iuprNdoY9ybg/exec')){notice('請先把 index.html 的 GAS_URL 換成 Apps Script /exec 網址。','error');return;}
   try{
     const data=await apiGet('quiz');
     if(!data.ok||!Array.isArray(data.questions)||!data.questions.length)throw new Error(data.error||'題庫為空');

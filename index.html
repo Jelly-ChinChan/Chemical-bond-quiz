@@ -27,12 +27,15 @@
 <div aria-live="polite" class="app-message" id="app-message" role="status">正在連線並載入題目…</div><div class="layout" id="test-layout"><aside class="sidebar panel"><div class="side-head"><strong>作答進度</strong><small id="progress-count">0 / 15</small></div><div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div><div class="progress-label" id="progress-label">尚未開始作答</div><div aria-label="跳題導覽" class="number-grid" id="question-nav"></div><div class="side-legend"><div class="leg"><span class="dot answered"></span>已作答</div><div class="leg"><span class="dot now"></span>目前題目</div><div class="leg"><span class="dot"></span>未作答</div></div><div class="sidebar-tip">單選題只能選一個答案；多選題可選擇多個。所有題目都可返回修改，交卷後才會顯示正解與解析。</div></aside>
 <section aria-live="polite" class="quiz-card panel hidden" id="quiz-view"><div class="section-head"><span class="unit" id="q-unit"></span><span class="count" id="q-count"></span></div><h2 class="q-title" id="q-title"></h2><div class="q-tags"><span class="tag" id="q-skill"></span><span class="tag" id="q-type"></span></div><div class="stem" id="q-stem"></div><div class="instruction" id="q-instruction"></div><div class="options" id="q-options"></div><div class="nav"><button class="btn" id="prev" type="button">← 上一題</button><div class="nav-right"><button class="btn" id="clear" type="button">清除本題</button><button class="btn primary" id="next" type="button">下一題 →</button><button class="btn dark hidden" id="submit" type="button">交卷並計分</button></div></div></section>
 <section aria-live="polite" class="result-card panel hidden hidden" id="results-view"><div class="result-top"><div><div class="eyebrow">DIAGNOSTIC REPORT</div><h2>概念診斷報告</h2><p class="result-intro" id="result-student"></p></div><div><div class="score" id="result-score">0<small> / 30 分</small></div><div class="score-caption" id="result-method">學測型部分給分</div></div></div><div class="stat-row"><div class="stat"><b id="exact-count">0</b><small>完全答對</small></div><div class="stat"><b id="partial-count">0</b><small>部分得分</small></div><div class="stat"><b id="wrong-count">0</b><small>零分／未答</small></div></div><div class="diagnosis"><h3>五大觀念掌握度</h3><div class="diagnosis-note">依各題主要考點分類，橫條為該主題的得分比例。</div><div id="skill-bars"></div><div class="suggest" id="recommendation"></div></div><div class="result-actions"><button class="btn primary" id="export" type="button">↓ 匯出成績 CSV</button><button class="btn" id="print" type="button">列印報告</button><button class="btn" id="retry-wrong" type="button">重練未全對題</button><button class="btn" id="retake" type="button">全部重新作答</button></div><div class="review-head"><h3>逐題答案與解析</h3><div class="filters"><button class="filter active" data-filter="all" type="button">全部</button><button class="filter" data-filter="wrong" type="button">未全對</button><button class="filter" data-filter="correct" type="button">完全答對</button></div></div><div class="review-list" id="review-list"></div></section></div>
-<div class="privacy-note">教師說明：這是 Google Apps Script 網頁版，學生答案由伺服器計分，成績寫入教師的私有 Google 試算表。請勿公開分享試算表權限。</div><div class="footer-note">化學鍵與物質結構｜學測概念診斷 · 作答草稿僅保留於目前裝置</div>
+<div class="privacy-note">教師說明：這是 GitHub Pages 與 Google Apps Script 分離版，學生答案由伺服器計分，成績寫入教師的私有 Google 試算表。請勿公開分享試算表權限。</div><div class="footer-note">化學鍵與物質結構｜學測概念診斷 · 作答草稿僅保留於目前裝置</div>
 </main>
 
 <script>"use strict";
 const LETTERS = ['A','B','C','D','E'];
-const KEY = 'chem_bond_quiz_gas_v2';
+const KEY = 'chem_bond_quiz_github_v3';
+// 部署後，只需要將下方文字改成你的 Cloudflare Worker 公開網址（不要加 /quiz）。
+const API_BASE = 'https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev';
+const API = API_BASE.replace(/\/$/, '');
 const $ = id => document.getElementById(id);
 const state = {quiz:null, index:0, answers:{}, student:'', classroom:'', submissionId:'', result:null, activeOnly:null, submitting:false};
 const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -52,20 +55,46 @@ function renderNavigation(){const el=$('question-nav');el.replaceChildren();allQ
 function choose(q,letter,checked){if(state.submitting||state.result)return;const cur=answer(q);state.answers[q.id]=q.type==='single'?[letter]:checked?[...new Set([...cur,letter])]:cur.filter(ch=>ch!==letter);save();renderQuestion()}
 function renderQuestion(){if(state.result){renderResult();return;}$('quiz-view').classList.remove('hidden');$('results-view').classList.add('hidden');$('test-layout').classList.remove('results-mode');const q=allQuestions()[state.index];$('q-unit').textContent=q.unit;$('q-count').textContent=`${q.id} / ${allQuestions().length}`;$('q-title').textContent=`第 ${q.id} 題｜${q.title}`;$('q-skill').textContent=q.skill;$('q-type').textContent=q.type==='single'?'單選題 · 2 分':'多選題 · 2 分';$('q-type').className='tag '+(q.type==='single'?'single':'multi');$('q-stem').innerHTML=q.stem;$('q-instruction').textContent=q.type==='single'?'請選擇一個最適當的選項。':'請選出所有正確選項（可能不只一項）。';const box=$('q-options');box.replaceChildren();q.options.forEach((opt,i)=>{const letter=LETTERS[i],label=document.createElement('label');label.className='opt'+(answer(q).includes(letter)?' chosen':'');const input=document.createElement('input');input.type=q.type==='single'?'radio':'checkbox';input.name='question_'+q.id;input.checked=answer(q).includes(letter);input.value=letter;input.setAttribute('aria-label',letter+' 選項：'+stripHtml(opt));input.onchange=()=>choose(q,letter,input.checked);const span=document.createElement('span');span.className='letter';span.textContent=letter;const txt=document.createElement('span');txt.className='opt-text';txt.innerHTML=opt;label.append(input,span,txt);box.appendChild(label)});const ids=currentIndexes(),idx=ids.indexOf(state.index);$('prev').disabled=idx<=0;$('next').classList.toggle('hidden',idx===ids.length-1);$('submit').classList.toggle('hidden',idx!==ids.length-1);renderNavigation()}
 function showError(err){status('連線或儲存失敗：'+(err?.message||String(err))+'。請檢查網路並重試。',true)}
-function finish(){if(state.submitting || state.result)return;state.student=$('student').value.trim();state.classroom=$('classroom').value.trim();if(!state.student || !state.classroom){status('交卷前，請完整填寫姓名與班級／座號。',true);$('student').focus();return;}const missed=allQuestions().filter(q=>!isAnswered(q)).map(q=>q.id);const message=missed.length?`尚有 ${missed.length} 題未作答（第 ${missed.join('、')} 題），將以 0 分計算。確定交卷並上傳成績嗎？`:'確定交卷並將成績存入老師的 Google 試算表嗎？';if(!confirm(message))return;state.submitting=true;$('submit').disabled=true;status('正在計分並儲存至 Google 試算表…');save();google.script.run.withSuccessHandler(result=>{state.submitting=false;state.result=result;save();hideStatus();renderResult();window.scrollTo({top:0,behavior:'smooth'})}).withFailureHandler(err=>{state.submitting=false;$('submit').disabled=false;showError(err)}).submitQuiz({version:state.quiz.version,submissionId:state.submissionId,student:state.student,classroom:state.classroom,answers:state.answers});}
+async function finish(){
+  if(state.submitting || state.result)return;
+  state.student=$('student').value.trim();state.classroom=$('classroom').value.trim();
+  if(!state.student || !state.classroom){status('交卷前，請完整填寫姓名與班級／座號。',true);$('student').focus();return;}
+  const missed=allQuestions().filter(q=>!isAnswered(q)).map(q=>q.id);
+  const message=missed.length?`尚有 ${missed.length} 題未作答（第 ${missed.join('、')} 題），將以 0 分計算。確定交卷並上傳成績嗎？`:'確定交卷並將成績存入老師的 Google 試算表嗎？';
+  if(!confirm(message))return;
+  state.submitting=true;$('submit').disabled=true;
+  status('正在交卷、伺服器計分與儲存成績…');save();
+  try {
+    const response=await fetch(API+'/submit',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({version:state.quiz.version,submissionId:state.submissionId,student:state.student,classroom:state.classroom,answers:state.answers})
+    });
+    const data=await response.json();
+    if(!response.ok || !data.ok)throw new Error(data.error || '交卷失敗');
+    state.result=data.result;save();hideStatus();renderResult();window.scrollTo({top:0,behavior:'smooth'});
+  } catch(err) {showError(err);}
+  finally {state.submitting=false;$('submit').disabled=false;}
+}
 function resultById(id){return state.result.results.find(r=>r.id===id)}
 function renderResult(){const r=state.result;$('quiz-view').classList.add('hidden');$('results-view').classList.remove('hidden');$('test-layout').classList.add('results-mode');$('result-score').innerHTML=`${nfmt(r.score)}<small> / ${r.maxScore} 分</small>`;$('result-method').textContent=r.scoringMode==='partial'?'學測型部分給分':'全對才給分';$('result-student').textContent=`${r.classroom}　${r.student}　｜　交卷已儲存`;$('exact-count').textContent=r.exactCount;$('partial-count').textContent=r.partialCount;$('wrong-count').textContent=r.wrongCount;$('skill-bars').innerHTML=r.skillStats.map(s=>`<div class="skill-row"><div class="skill-text"><span>${escapeHtml(s.name)}</span><span>${nfmt(s.points)} / ${s.max} 分（${Math.round(s.rate*100)}%）</span></div><div class="skillbar"><span style="width:${Math.max(0,Math.min(100,s.rate*100))}%"></span></div></div>`).join('');const weak=[...r.skillStats].filter(s=>s.rate<.8).sort((a,b)=>a.rate-b.rate);$('recommendation').innerHTML=weak.length?`<strong>建議優先補強：</strong>${weak.slice(0,3).map(s=>escapeHtml(s.name)).join('、')}。先重練未全對的題目，特別留意離子化合物中也可能存在共價鍵。`:'<strong>表現穩定！</strong>五項能力得分率都達 80% 以上，可以再挑戰跨單元題。';applyFilter(document.querySelector('.filter.active')?.dataset.filter||'all')}
 function applyFilter(f){document.querySelectorAll('.filter').forEach(btn=>btn.classList.toggle('active',btn.dataset.filter===f));const el=$('review-list');el.replaceChildren();const qs=allQuestions().filter(q=>f==='all'||(f==='correct'?resultById(q.id).score===2:resultById(q.id).score<2));if(!qs.length){el.textContent='此分類目前沒有題目。';return;}qs.forEach(q=>{const r=resultById(q.id),earned=r.score;const item=document.createElement('article');item.className='review-item';const opts=q.options.map((o,i)=>{const l=LETTERS[i],picked=r.selected.includes(l),right=r.correct.includes(l),klass=picked&&!right?'false-option':right?'true-option':'',flag=right?' ✓ 正確選項':picked?' ✕ 誤選':'';return `<li class="${klass}"><strong>${l}.</strong> ${o}${flag}</li>`}).join('');item.innerHTML=`<div class="review-summary"><strong>第 ${q.id} 題｜${escapeHtml(q.title)}</strong><span class="earned ${earned===0?'zero':earned<2?'low':''}">${nfmt(earned)} / 2</span></div><p class="answer-line">你的答案：<b>${r.selected.length?r.selected.join('、'):'未作答'}</b>　正確答案：<b style="color:#13775e">${r.correct.split('').join('、')}</b></p><div class="explanation"><b>解析：</b>${r.explain}</div><details class="review-detail"><summary>查看 A～E 完整選項與判斷</summary><ul>${opts}</ul></details>`;el.appendChild(item)})}
 function downloadCsv(){if(!state.result)return;const cols=['班級座號','姓名','交卷時間','題號','單元','主題','題型','學生作答','正確答案','得分','滿分'];const rows=[cols];for(const q of allQuestions()){const r=resultById(q.id);rows.push([state.result.classroom,state.result.student,state.result.submittedAt,q.id,q.unit,q.skill,q.type==='single'?'單選':'多選',r.selected.join(''),r.correct,r.score,2]);}rows.push(['','','','總分','','','','','',state.result.score,30]);const csv='\ufeff'+rows.map(a=>a.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const anchor=document.createElement('a');anchor.href=url;anchor.download=`化學鍵診斷_${(state.student||'學生').replace(/[\\/:*?"<>|\s]/g,'_')}.csv`;document.body.append(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 function restart(onlyWrong){if(!state.result)return;const wrong=allQuestions().map((q,i)=>({q,i})).filter(x=>resultById(x.q.id).score<2).map(x=>x.i);if(onlyWrong&&!wrong.length){alert('沒有需要重練的題目。');return;}if(!confirm(onlyWrong?'保留完全答對題目的答案，只重練未全對題目？重練交卷會新增一筆紀錄。':'清除所有答案並重新開始？再次交卷會新增一筆紀錄。'))return;if(onlyWrong){wrong.forEach(i=>delete state.answers[allQuestions()[i].id]);state.index=wrong[0];state.activeOnly=wrong;}else{state.answers={};state.index=0;state.activeOnly=null;}state.result=null;state.submissionId=genId();save();hideStatus();renderQuestion();window.scrollTo({top:0,behavior:'smooth'})}
 $('student').oninput=e=>{state.student=e.target.value;save()};$('classroom').oninput=e=>{state.classroom=e.target.value;save()};$('prev').onclick=()=>{const a=currentIndexes(),i=a.indexOf(state.index);if(i>0)jumpTo(a[i-1])};$('next').onclick=()=>{const a=currentIndexes(),i=a.indexOf(state.index);if(i<a.length-1)jumpTo(a[i+1])};$('clear').onclick=()=>{delete state.answers[allQuestions()[state.index].id];save();renderQuestion()};$('submit').onclick=finish;$('export').onclick=downloadCsv;$('print').onclick=()=>window.print();$('retry-wrong').onclick=()=>restart(true);$('retake').onclick=()=>restart(false);document.querySelectorAll('.filter').forEach(b=>b.onclick=()=>applyFilter(b.dataset.filter));
-if(!(typeof google!=='undefined' && google.script && google.script.run)){
-  status('此檔必須透過 Google Apps Script 部署後開啟，直接開啟本機 HTML 不會連接成績系統。',true);
-} else {
-  google.script.run.withSuccessHandler(data=>{
-    if(!data?.questions?.length){status('沒有取得題目，請檢查 Code.gs 題庫。',true);return;}
-    state.quiz=data;state.submissionId=genId();restore();$('student').value=state.student;$('classroom').value=state.classroom;$('scoring-display').textContent=data.scoringMode==='partial'?'學測型多選部分給分':'全對才得分';hideStatus();if(state.result)renderResult();else renderQuestion();
-  }).withFailureHandler(showError).getQuiz();
+async function startQuiz(){
+  try {
+    if(API_BASE.includes('YOUR-WORKER')) throw new Error('請先把 Index.html 的 API_BASE 改成自己的 Cloudflare Worker 網址。');
+    const response=await fetch(API+'/quiz',{cache:'no-store'});
+    const data=await response.json();
+    if(!response.ok || !data.ok)throw new Error(data.error || '無法取得題庫');
+    if(!data.quiz?.questions?.length)throw new Error('題庫沒有啟用的題目。');
+    state.quiz=data.quiz;
+    state.submissionId=genId();restore();
+    $('student').value=state.student;$('classroom').value=state.classroom;
+    $('scoring-display').textContent=data.quiz.scoringMode==='partial'?'學測型多選部分給分':'全對才得分';
+    hideStatus();if(state.result)renderResult();else renderQuestion();
+  } catch(err) {showError(err);}
 }
+startQuiz();
 </script></body>
 </html>

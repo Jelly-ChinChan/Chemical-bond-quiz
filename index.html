@@ -1,1101 +1,850 @@
 
-<!doctype html>
-<html lang="zh-Hant">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+/**
+ * 化學鍵測驗：成績與錯題紀錄、教師登入後台
+ * 請從 bond quiz 試算表的「擴充功能 → Apps Script」建立。
+ * 15 題直接放在 GitHub index.html，不須讀取題庫 API。
+ */
 
-<title>化學鍵與物質結構｜15 題學測診斷</title>
+const CFG = Object.freeze({
+  spreadsheetId: '',
+  version: 'bond-quiz-15-2026-11-v1',
+  scoreSheet: '測驗成績',
+  wrongSheet: '錯題明細',
+  overviewSheet: '教師總覽',
+  statisticsSheet: '錯題統計'
+});
 
-<style>
-:root {
-  --ink: #173246;
-  --teal: #147c78;
-  --bg: #f3f6f8;
-  --muted: #667e8b;
-  --border: #d9e4e8;
-}
-* { box-sizing: border-box; }
+const ALPHABET = ['A', 'B', 'C', 'D', 'E'];
 
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: system-ui, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-  line-height: 1.7;
-}
+const ANSWER_KEY = [
+  {id:1, type:'single', skill:'化學鍵與路易斯結構', title:'電子組態與化學鍵', answer:'C'},
+  {id:2, type:'multiple', skill:'化學鍵與路易斯結構', title:'路易斯結構與鍵結電子對', answer:'ABD'},
+  {id:3, type:'multiple', skill:'化學鍵與路易斯結構', title:'離子化合物一定只有離子鍵嗎？', answer:'BDE'},
+  {id:4, type:'single', skill:'晶體性質與導電性', title:'晶體性質與導電性', answer:'B'},
+  {id:5, type:'multiple', skill:'晶體性質與導電性', title:'氧與硫的鍵結與電解質', answer:'ACE'},
+  {id:6, type:'single', skill:'化學反應與計量', title:'碳化鈣反應式配平', answer:'B'},
+  {id:7, type:'multiple', skill:'化學反應與計量', title:'碳化鈣與莫耳計量', answer:'ACD'},
+  {id:8, type:'single', skill:'化學鍵與路易斯結構', title:'乙炔的路易斯結構', answer:'C'},
+  {id:9, type:'multiple', skill:'酸鹼與電解質', title:'KOH 的離子鍵與共價鍵', answer:'BCE'},
+  {id:10, type:'single', skill:'酸鹼與電解質', title:'KOH 的 pH 計算', answer:'D'},
+  {id:11, type:'multiple', skill:'奈米材料與氧化還原', title:'奈米金的氧化還原與鍵結', answer:'ACD'},
+  {id:12, type:'single', skill:'奈米材料與氧化還原', title:'奈米金原子數估算', answer:'D'},
+  {id:13, type:'multiple', skill:'晶體性質與導電性', title:'四種物質的導電機制', answer:'ACE'},
+  {id:14, type:'multiple', skill:'化學鍵與路易斯結構', title:'分子與離子晶體比較', answer:'AD'},
+  {id:15, type:'multiple', skill:'化學鍵與路易斯結構', title:'化學鍵綜合實驗', answer:'BCE'}
+];
 
-header {
-  background: linear-gradient(120deg,#173246,#176e72);
-  padding: 35px 18px 54px;
-  text-align: center;
-  color: #fff;
-}
-header h1 {
-  font-size: clamp(24px,5vw,35px);
-  margin: 0;
-}
-header p {
-  margin: 7px 0;
-  color: #d9eff0;
-}
+const SCORE_HEADERS = [
+  '交卷ID','時間','班級','座號','姓名',
+  '總分','滿分','完全正確題數','部分給分題數',
+  '零分題數','錯題號碼','概念得分JSON',
+  '答案JSON','題庫版本','作答指紋'
+];
 
-main {
-  max-width: 1000px;
-  margin: -28px auto 40px;
-  padding: 0 16px;
-}
-.card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 22px;
-  margin-bottom: 16px;
-  box-shadow: 0 5px 22px #1231;
-}
+const WRONG_HEADERS = [
+  '交卷ID','時間','班級','座號','姓名',
+  '題號','題目','考點','本題得分',
+  '學生選項','正確選項','錯誤類型',
+  '完整題幹','選項A','選項B','選項C',
+  '選項D','選項E','詳解'
+];
 
-.student {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-.field {
-  display: block;
-  font-size: 14px;
-  font-weight: 700;
-}
-.field input {
-  display: block;
-  width: 100%;
-  margin-top: 5px;
-  padding: 12px;
-  border: 1px solid #bed1d9;
-  border-radius: 9px;
-  font: inherit;
+function db_() {
+  const ss = CFG.spreadsheetId
+    ? SpreadsheetApp.openById(CFG.spreadsheetId)
+    : SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) throw new Error('找不到 bond quiz 試算表。');
+  return ss;
 }
 
-.layout {
-  display: grid;
-  grid-template-columns: 215px 1fr;
-  gap: 16px;
-  align-items: start;
-}
-.side {
-  position: sticky;
-  top: 12px;
-}
-.count {
-  display: flex;
-  justify-content: space-between;
-}
-.meter {
-  height: 9px;
-  background: #e6edef;
-  border-radius: 20px;
-  overflow: hidden;
-  margin: 13px 0;
-}
-.meter > div {
-  height: 100%;
-  width: 0;
-  background: var(--teal);
-  transition: .2s;
-}
+function sheet_(name, headers) {
+  const ss = db_();
+  let sh = ss.getSheetByName(name);
+  if (!sh) sh = ss.insertSheet(name);
 
-.nav {
-  display: grid;
-  grid-template-columns: repeat(5,1fr);
-  gap: 7px;
-}
-.nav button {
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  padding: 7px 0;
-  background: white;
-  cursor: pointer;
-}
-.nav button.done {
-  background: #d9f1e9;
-  border-color: #83beb3;
-}
-.nav button.active {
-  background: var(--ink);
-  color: white;
-}
-
-.tag {
-  display: inline-block;
-  border-radius: 20px;
-  color: #116b66;
-  background: #e6f5f2;
-  padding: 3px 10px;
-  margin-right: 5px;
-  font-size: 12px;
-}
-
-h2 {
-  font-size: 24px;
-  margin: 16px 0;
-}
-.stem {
-  white-space: pre-wrap;
-  font-size: 17px;
-  margin-bottom: 18px;
-}
-
-.option {
-  display: flex;
-  gap: 12px;
-  align-items: start;
-  padding: 14px;
-  margin: 11px 0;
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  cursor: pointer;
-}
-.option.selected {
-  background: #e9f6f2;
-  border-color: var(--teal);
-}
-.option input {
-  accent-color: var(--teal);
-  margin-top: 7px;
-}
-.option span { flex: 1; }
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 9px;
-  margin-top: 20px;
-  padding-top: 18px;
-  border-top: 1px solid var(--border);
-}
-
-button {
-  font: inherit;
-  cursor: pointer;
-}
-.btn {
-  padding: 10px 17px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: white;
-  font-weight: 700;
-}
-.btn.primary {
-  background: var(--teal);
-  border-color: var(--teal);
-  color: white;
-}
-.btn:disabled {
-  opacity: .55;
-  cursor: not-allowed;
-}
-
-.hidden { display: none !important; }
-
-.notice {
-  border-radius: 10px;
-  background: #e7f3f1;
-  padding: 12px 15px;
-  margin-bottom: 16px;
-}
-.notice.error {
-  background: #ffebe9;
-  color: #a33e3e;
-}
-.notice.warn {
-  background: #fff2d8;
-  color: #7b5216;
-}
-
-.big {
-  font-size: 40px;
-  color: var(--teal);
-  font-weight: 800;
-}
-.result-info {
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.skill { margin: 14px 0; }
-.skill .track {
-  height: 10px;
-  background: #e9eef0;
-  border-radius: 9px;
-  overflow: hidden;
-}
-.skill .track div {
-  height: 100%;
-  background: var(--teal);
-}
-
-.review {
-  padding: 16px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  margin: 14px 0;
-}
-.review h3 { margin: 0 0 8px; }
-.correct {
-  color: #126c54;
-  font-weight: 700;
-}
-.wrong {
-  color: #ab4747;
-  font-weight: 700;
-}
-.explain {
-  padding: 10px 12px;
-  background: #f0f7f6;
-  border-left: 3px solid var(--teal);
-  margin-top: 10px;
-}
-
-.scoreGrid {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 8px;
-}
-.scoreGrid div {
-  background: #f1f5f7;
-  text-align: center;
-  padding: 12px;
-  border-radius: 9px;
-}
-.scoreGrid strong {
-  display: block;
-  font-size: 23px;
-}
-
-footer {
-  text-align: center;
-  padding: 18px;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-@media(max-width:720px) {
-  .layout { grid-template-columns: 1fr; }
-  .side { position: static; }
-  .nav { grid-template-columns: repeat(8,1fr); }
-}
-@media(max-width:520px) {
-  .student { grid-template-columns: 1fr; }
-  .card { padding: 16px; }
-  h2 { font-size: 21px; }
-}
-@media print {
-  header,.student,.side,.actions,.notice,footer {
-    display: none !important;
-  }
-  main { margin: 0; }
-  .card { box-shadow: none; }
-  .review { break-inside: avoid; }
-}
-</style>
-</head>
-
-<body>
-
-<header>
-  <h1>化學鍵與物質結構</h1>
-  <p>學測化學補強｜15 題互動診斷｜滿分 30 分</p>
-</header>
-
-<main>
-
-  <section class="card student">
-    <label class="field">
-      學生姓名
-      <input id="student" maxlength="40"
-             placeholder="請填姓名" autocomplete="name">
-    </label>
-    <label class="field">
-      班級／座號
-      <input id="classroom" maxlength="40"
-             placeholder="例如：301／08">
-    </label>
-  </section>
-
-  <div id="notice" class="notice">
-    正在從 Google 試算表讀取題庫……
-  </div>
-
-  <div class="layout">
-
-    <aside class="card side">
-      <div class="count">
-        <b>作答進度</b>
-        <span id="progressText">0 / 15</span>
-      </div>
-      <div class="meter">
-        <div id="progressBar"></div>
-      </div>
-      <div class="nav" id="nav"></div>
-      <p style="font-size:12px;color:#667e8b">
-        綠色代表已作答；可點選題號跳題。
-        交卷後顯示答案與解析。
-      </p>
-    </aside>
-
-    <section class="card hidden" id="quizPanel">
-      <div>
-        <span class="tag" id="category"></span>
-        <span class="tag" id="type"></span>
-      </div>
-
-      <h2 id="qTitle"></h2>
-      <div class="stem" id="stem"></div>
-      <div id="options"></div>
-
-      <div class="actions">
-        <button class="btn" id="prev">上一題</button>
-        <button class="btn" id="clear">清除此題</button>
-        <button class="btn primary" id="next">下一題</button>
-        <button class="btn primary" id="submit">
-          交卷並上傳成績
-        </button>
-      </div>
-    </section>
-
-    <section class="card hidden" id="resultPanel">
-      <h2>化學概念診斷報告</h2>
-
-      <div id="saveStatus" class="notice warn">
-        交卷處理中……
-      </div>
-
-      <div class="result-info" id="studentLabel"></div>
-      <div class="big" id="total"></div>
-      <div class="scoreGrid" id="scoreGrid"></div>
-
-      <h3>五大概念得分</h3>
-      <div id="skills"></div>
-      <div class="notice" id="advice"></div>
-
-      <div class="actions">
-        <button class="btn" id="retryUpload">
-          再確認／重送紀錄
-        </button>
-        <button class="btn" id="download">下載 CSV</button>
-        <button class="btn" id="print">列印報告</button>
-        <button class="btn" id="restart">重新練習</button>
-      </div>
-
-      <h3>逐題答案與解析</h3>
-      <div id="reviews"></div>
-    </section>
-  </div>
-</main>
-
-<footer>
-  題庫、答案公開供練習使用；
-  成績僅儲存在教師的私人試算表。
-</footer>
-
-<iframe
-  name="quizUploadFrame"
-  id="quizUploadFrame"
-  hidden
-  title="成績提交">
-</iframe>
-
-<script>
-'use strict';
-
-// ======================================
-// 最新 Google Apps Script 部署網址
-// ======================================
-
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbx0DR8feZzazKXrlIOjhue6RRlXdatO6-Vrgh_kclVoT4v3PaznPIkvF3r0W-7bgoijQA/exec';
-
-const STORE_KEY = 'chem_bond_simple_v1';
-const LETTERS = ['A','B','C','D','E'];
-
-const el = id => document.getElementById(id);
-
-const state = {
-  questions: [],
-  version: '',
-  index: 0,
-  answers: {},
-  submissionId: '',
-  confirmed: false,
-  submitting: false
-};
-
-// ======================================
-// JSONP 讀取 Apps Script
-// ======================================
-
-function apiGet(action, extra={}) {
-  return new Promise((resolve,reject)=>{
-    const callback = 'cb_' + Date.now() + '_' +
-      Math.random().toString(36).slice(2);
-
-    const script = document.createElement('script');
-    const url = new URL(GAS_URL);
-
-    url.searchParams.set('action',action);
-    url.searchParams.set('callback',callback);
-
-    Object.entries(extra).forEach(([k,v])=>{
-      url.searchParams.set(k,v);
-    });
-
-    let done = false;
-
-    const clean = () => {
-      clearTimeout(timer);
-      script.remove();
-      delete window[callback];
-    };
-
-    window[callback] = data => {
-      if(done) return;
-      done = true;
-      clean();
-      resolve(data);
-    };
-
-    script.onerror = () => {
-      if(done) return;
-      done = true;
-      clean();
-      reject(new Error(
-        '連線失敗，請檢查網址或權限'
-      ));
-    };
-
-    const timer = setTimeout(()=>{
-      if(done) return;
-      done = true;
-      clean();
-      reject(new Error('讀取逾時'));
-    }, action==='status' ? 7000 : 25000);
-
-    script.src = url.toString();
-    document.head.appendChild(script);
-  });
-}
-
-function makeId() {
-  return crypto.randomUUID
-    ? crypto.randomUUID()
-    : 'qid_' + Date.now() + '_' +
-      Math.random().toString(36).slice(2);
-}
-
-function notice(message,kind='') {
-  el('notice').textContent = message;
-  el('notice').className = 'notice ' + kind;
-  el('notice').classList.remove('hidden');
-}
-
-function hideNotice() {
-  el('notice').classList.add('hidden');
-}
-
-function selected(q) {
-  return state.answers[String(q.id)] || [];
-}
-
-// ======================================
-// 保存作答進度
-// ======================================
-
-function save() {
-  try {
-    localStorage.setItem(STORE_KEY,JSON.stringify({
-      version: state.version,
-      index: state.index,
-      answers: state.answers,
-      submissionId: state.submissionId,
-      confirmed: state.confirmed,
-      name: el('student').value,
-      classroom: el('classroom').value
-    }));
-  } catch(e) {
-    console.warn(e);
-  }
-}
-
-function restore() {
-  try {
-    const previous = JSON.parse(
-      localStorage.getItem(STORE_KEY) || 'null'
-    );
-
-    if(!previous || previous.version !== state.version) {
-      return;
+  if (sh.getLastRow() === 0) {
+    sh.getRange(1,1,1,headers.length)
+      .setValues([headers])
+      .setFontWeight('bold')
+      .setBackground('#dff2ed');
+    sh.setFrozenRows(1);
+  } else {
+    const existing = sh.getRange(
+      1,1,1,headers.length
+    ).getDisplayValues()[0];
+    if (existing.join('|') !== headers.join('|')) {
+      throw new Error(
+        '工作表「' + name + '」的欄位與新版不符。'
+      );
     }
-
-    state.index = Math.max(
-      0,
-      Math.min(
-        state.questions.length-1,
-        Number(previous.index)||0
-      )
-    );
-
-    state.answers =
-      previous.answers &&
-      typeof previous.answers==='object'
-        ? previous.answers
-        : {};
-
-    if(/^[a-zA-Z0-9_-]{15,100}$/.test(
-      previous.submissionId || ''
-    )) {
-      state.submissionId = previous.submissionId;
-    }
-
-    state.confirmed = !!previous.confirmed;
-    el('student').value = previous.name || '';
-    el('classroom').value = previous.classroom || '';
-
-  } catch(e) {
-    console.warn(e);
   }
+  return sh;
 }
 
-// ======================================
-// 題號導航
-// ======================================
+function setupQuiz() {
+  sheet_(CFG.scoreSheet, SCORE_HEADERS);
+  sheet_(CFG.wrongSheet, WRONG_HEADERS);
+  prepareReports_();
+  Logger.log('初始化成功：四張成績與統計工作表已建立。');
+}
 
-function renderNav() {
-  let answered = 0;
-  el('nav').replaceChildren();
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('化學測驗管理')
+    .addItem('設定／修改教師登入密碼',
+             'setTeacherPassword')
+    .addItem('建立／更新教師報表',
+             'setupQuiz')
+    .addToUi();
+}
 
-  state.questions.forEach((q,i)=>{
-    const has = selected(q).length > 0;
-    if(has) answered++;
+function prepareReports_() {
+  const ss = db_();
+  const overview = ss.getSheetByName(
+    CFG.overviewSheet
+  ) || ss.insertSheet(CFG.overviewSheet);
 
-    const b = document.createElement('button');
-    b.textContent = q.id;
-    b.className =
-      (has?'done ':'') +
-      (i===state.index?'active':'');
+  overview.getRange('A1')
+    .setValue('化學鍵與物質結構｜教師總覽')
+    .setFontWeight('bold')
+    .setFontSize(16);
 
-    b.onclick = ()=>{
-      state.index = i;
-      save();
-      renderQuestion();
-    };
+  overview.getRange('A3:A6').setValues([
+    ['累計交卷'],
+    ['平均成績（30分）'],
+    ['累計未全對題次'],
+    ['最高分']
+  ]);
 
-    el('nav').appendChild(b);
+  overview.getRange('B3')
+    .setFormula("=COUNTA('測驗成績'!A2:A)");
+  overview.getRange('B4')
+    .setFormula("=IFERROR(AVERAGE('測驗成績'!F2:F),0)");
+  overview.getRange('B5')
+    .setFormula("=COUNTA('錯題明細'!A2:A)");
+  overview.getRange('B6')
+    .setFormula("=IFERROR(MAX('測驗成績'!F2:F),0)");
+
+  overview.setColumnWidth(1,300);
+  overview.setColumnWidth(2,160);
+
+  const stat = ss.getSheetByName(
+    CFG.statisticsSheet
+  ) || ss.insertSheet(CFG.statisticsSheet);
+
+  stat.clearContents();
+
+  stat.getRange(1,1,1,7).setValues([[
+    '題號','題目','概念','交卷人次',
+    '未全對人次','完全答對率','未全對率'
+  ]]);
+
+  stat.getRange(1,1,1,7)
+    .setFontWeight('bold')
+    .setBackground('#dff2ed');
+  stat.setFrozenRows(1);
+
+  const rows = ANSWER_KEY.map((q,i) => {
+    const r = i + 2;
+    return [
+      q.id, q.title, q.skill,
+      "=COUNTA('測驗成績'!$A$2:$A)",
+      "=COUNTIF('錯題明細'!$F$2:$F,A"+r+")",
+      '=IF(D'+r+'=0,"",1-E'+r+'/D'+r+')',
+      '=IF(D'+r+'=0,"",E'+r+'/D'+r+')'
+    ];
   });
 
-  el('progressText').textContent =
-    answered + ' / ' + state.questions.length;
-
-  el('progressBar').style.width =
-    (answered/state.questions.length*100) + '%';
+  stat.getRange(2,1,rows.length,7).setValues(rows);
+  stat.getRange(2,6,rows.length,2)
+    .setNumberFormat('0.0%');
+  stat.setColumnWidth(2,270);
+  stat.setColumnWidth(3,240);
 }
 
-// ======================================
-// 題目及選項
-// ======================================
+function json_(obj, callback) {
+  const body = JSON.stringify(obj)
+    .replace(/</g,'\\u003c');
 
-function renderQuestion() {
-  el('resultPanel').classList.add('hidden');
-  el('quizPanel').classList.remove('hidden');
+  if (callback) {
+    if (!/^cb_[A-Za-z0-9_]{1,80}$/.test(callback)) {
+      return ContentService
+        .createTextOutput(JSON.stringify({
+          ok:false,
+          error:'callback 格式錯誤'
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
 
-  const q = state.questions[state.index];
+    return ContentService
+      .createTextOutput(callback+'('+body+');')
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
 
-  el('category').textContent = q.skill;
-  el('type').textContent =
-    q.type==='single'?'單選':'多選';
+  return ContentService
+    .createTextOutput(body)
+    .setMimeType(ContentService.MimeType.JSON);
+}
 
-  el('qTitle').textContent =
-    '第 ' + q.id + ' 題｜' + q.title;
+// GET 不公開教師資料；只有驗證憑證才能取得。
+function doGet(e) {
+  const p = (e && e.parameter) || {};
+  const action = String(p.action || 'health');
 
-  el('stem').textContent = q.stem;
-  el('options').replaceChildren();
+  try {
+    if (action === 'health') {
+      return json_({
+        ok:true,
+        service:'score-and-wrong-with-teacher-login',
+        message:'成績接收與教師驗證服務正常',
+        version:CFG.version
+      },p.callback);
+    }
 
-  q.options.forEach((option,i)=>{
-    const letter = LETTERS[i];
-    const checked = selected(q).includes(letter);
+    if (action === 'status') {
+      const id = String(p.id || '');
 
-    const label = document.createElement('label');
-    label.className = 'option' +
-      (checked?' selected':'');
-
-    const input = document.createElement('input');
-    input.type = q.type==='single'?'radio':'checkbox';
-    input.name = 'q'+q.id;
-    input.checked = checked;
-
-    input.onchange = ()=>{
-      if(q.type==='single') {
-        state.answers[String(q.id)] = [letter];
-      } else {
-        state.answers[String(q.id)] = input.checked
-          ? [...new Set([...selected(q),letter])]
-          : selected(q).filter(x=>x!==letter);
+      if (!/^[A-Za-z0-9_-]{15,100}$/.test(id)) {
+        throw new Error('無效交卷ID');
       }
 
-      state.confirmed = false;
-      save();
-      renderQuestion();
-    };
+      const sh = sheet_(CFG.scoreSheet,SCORE_HEADERS);
+      const found = sh.getLastRow()>1
+        ? sh.getRange(2,1,sh.getLastRow()-1,1)
+            .createTextFinder(id)
+            .matchEntireCell(true)
+            .findNext()
+        : null;
 
-    const span = document.createElement('span');
-    span.textContent = '('+letter+') '+option;
+      return json_({
+        ok:true,
+        recorded:!!found
+      },p.callback);
+    }
 
-    label.append(input,span);
-    el('options').appendChild(label);
-  });
+    if (action === 'loginStatus') {
+      const id = String(p.id || '');
 
-  el('prev').disabled = state.index===0;
-  el('next').disabled =
-    state.index===state.questions.length-1;
+      if (!/^[A-Za-z0-9_-]{15,100}$/.test(id)) {
+        throw new Error('登入識別碼格式錯誤');
+      }
 
-  renderNav();
+      const cache = CacheService.getScriptCache();
+      const key = 'login:'+id;
+      const raw = cache.get(key);
+
+      if (!raw) {
+        return json_({
+          ok:true,
+          found:false
+        },p.callback);
+      }
+
+      cache.remove(key);
+      return json_({
+        found:true,
+        ...JSON.parse(raw)
+      },p.callback);
+    }
+
+    if (action === 'teacherData') {
+      const token = String(p.token || '');
+
+      if (!validTeacherSession_(token)) {
+        throw new Error(
+          '教師登入憑證無效或已過期，請重新登入。'
+        );
+      }
+
+      const report = getTeacherDashboardData();
+
+      return json_({
+        ok:true,
+        report
+      },p.callback);
+    }
+
+    throw new Error('不支援的請求');
+
+  } catch(err) {
+    return json_({
+      ok:false,
+      error:String(err.message || err)
+    },p.callback);
+  }
 }
 
-// ======================================
-// 學測型多選部分給分
-// ======================================
+function doPost(e) {
+  try {
+    const raw = (
+      e && e.parameter && e.parameter.payload
+    ) || '';
 
-function grade() {
-  let total=0, exact=0, partial=0;
-  const skills={}, details=[];
+    if (!raw || raw.length > 70000) {
+      throw new Error('請求內容過大或為空');
+    }
 
-  state.questions.forEach(q=>{
-    const picked = selected(q);
+    const p = JSON.parse(raw);
 
-    const errors = LETTERS.filter(c=>
-      picked.includes(c)!==q.answer.includes(c)
+    if (p.action === 'teacherLogin') {
+      return json_({
+        ok:true,
+        accepted:teacherLogin_(p)
+      });
+    }
+
+    if (p.action === 'teacherLogout') {
+      return json_({
+        ok:true,
+        revoked:teacherLogout_(p)
+      });
+    }
+
+    const id = storeAttempt_(p);
+
+    return json_({
+      ok:true,
+      submissionId:id
+    });
+
+  } catch(err) {
+    console.error(err.stack || err);
+
+    return json_({
+      ok:false,
+      error:String(err.message || err)
+    });
+  }
+}
+
+// 在試算表選單中設定教師密碼。
+function setTeacherPassword() {
+  const ui = SpreadsheetApp.getUi();
+
+  const response = ui.prompt(
+    '設定教師後台密碼',
+    '請輸入至少 12 字元的專用教師密碼（勿使用 Google 帳號密碼）。',
+    ui.ButtonSet.OK_CANCEL
+  );
+
+  if (response.getSelectedButton() !== ui.Button.OK) {
+    return;
+  }
+
+  const password = response.getResponseText();
+
+  if (password.length<12 || password.length>128) {
+    throw new Error('教師密碼須為 12～128 字元。');
+  }
+
+  const salt = Utilities.getUuid()+Utilities.getUuid();
+  const hash = hashTeacherPassword_(salt,password);
+
+  PropertiesService.getScriptProperties().setProperties({
+    TEACHER_SALT:salt,
+    TEACHER_HASH:hash
+  });
+
+  ui.alert('密碼設定完成，請部署新版本。');
+}
+
+function hashTeacherPassword_(salt,password) {
+  const bytes = Utilities.computeDigest(
+    Utilities.DigestAlgorithm.SHA_256,
+    salt+':'+password,
+    Utilities.Charset.UTF_8
+  );
+
+  return bytes.map(x =>
+    ((x+256)%256).toString(16).padStart(2,'0')
+  ).join('');
+}
+
+function sameHash_(a,b) {
+  if (!a || !b || a.length!==b.length) return false;
+
+  let diff=0;
+
+  for (let i=0;i<a.length;i++) {
+    diff |= a.charCodeAt(i)^b.charCodeAt(i);
+  }
+  return diff===0;
+}
+
+// 教師密碼驗證：產生一小時的登入憑證。
+function teacherLogin_(p) {
+  const id = String(p.loginId || '');
+
+  if (!/^[A-Za-z0-9_-]{15,100}$/.test(id)) {
+    throw new Error('登入識別碼格式錯誤');
+  }
+
+  const pwd = String(p.password || '');
+  const props = PropertiesService.getScriptProperties();
+  const salt = props.getProperty('TEACHER_SALT');
+  const stored = props.getProperty('TEACHER_HASH');
+
+  const cache = CacheService.getScriptCache();
+  const lock = LockService.getScriptLock();
+
+  lock.waitLock(10000);
+
+  try {
+    const failKey = 'teacher-login-fails';
+    const fails = Number(cache.get(failKey) || 0);
+    let response;
+
+    if (!salt || !stored) {
+      response = {
+        ok:false,
+        authenticated:false,
+        error:'尚未設定教師密碼，請先執行 setTeacherPassword()。'
+      };
+
+    } else if (fails>=25) {
+      response = {
+        ok:false,
+        authenticated:false,
+        error:'登入失敗次數過多，請 10 分鐘後再試。'
+      };
+
+    } else if (
+      pwd.length<12 || pwd.length>128 ||
+      !sameHash_(hashTeacherPassword_(salt,pwd),stored)
+    ) {
+      cache.put(failKey,String(fails+1),600);
+      response = {
+        ok:false,
+        authenticated:false,
+        error:'教師密碼不正確。'
+      };
+
+    } else {
+      cache.remove(failKey);
+
+      const token = (
+        Utilities.getUuid()+Utilities.getUuid()
+      ).replace(/-/g,'');
+
+      cache.put('session:'+token,'1',3600);
+
+      response = {
+        ok:true,
+        authenticated:true,
+        token
+      };
+    }
+
+    cache.put(
+      'login:'+id,
+      JSON.stringify(response),
+      120
+    );
+
+    return true;
+
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function validTeacherSession_(token) {
+  if (!/^[a-fA-F0-9]{64}$/.test(token)) return false;
+
+  return CacheService.getScriptCache()
+    .get('session:'+token)==='1';
+}
+
+function teacherLogout_(p) {
+  const token = String(p.token || '');
+
+  if (!/^[a-fA-F0-9]{64}$/.test(token)) {
+    return false;
+  }
+
+  CacheService.getScriptCache()
+    .remove('session:'+token);
+
+  return true;
+}
+
+function clean_(v,max,label) {
+  if (typeof v!=='string') {
+    throw new Error(label+'格式不符');
+  }
+
+  const x=v.replace(/[\u0000-\u001F\u007F]/g,'')
+           .trim();
+
+  if (!x || x.length>max) {
+    throw new Error(label+'未填或超過字數限制');
+  }
+
+  return x;
+}
+
+function safe_(v) {
+  return /^[\s]*[=+\-@]/.test(v)?"'"+v:v;
+}
+
+function grade_(answers) {
+  if (!answers || typeof answers!=='object' ||
+      Array.isArray(answers)) {
+    throw new Error('缺少答案');
+  }
+
+  if (Object.keys(answers).some(k =>
+      !ANSWER_KEY.some(q=>String(q.id)===k))) {
+    throw new Error('答案包含不存在的題號');
+  }
+
+  let total=0,full=0,partial=0;
+  const skills={},detail=[];
+
+  ANSWER_KEY.forEach(q=>{
+    const selected = answers[String(q.id)] || [];
+
+    if (!Array.isArray(selected) ||
+        selected.length>5 ||
+        selected.some(x=>!ALPHABET.includes(x)) ||
+        new Set(selected).size!==selected.length ||
+        (q.type==='single' && selected.length>1)) {
+      throw new Error('第'+q.id+'題作答格式錯誤');
+    }
+
+    const errors = ALPHABET.filter(c=>
+      selected.includes(c)!==q.answer.includes(c)
     ).length;
 
-    let pts = 0;
+    const pts = !selected.length ? 0 :
+      errors===0 ? 2 :
+      q.type==='single' ? 0 :
+      errors===1 ? 1.2 :
+      errors===2 ? 0.4 : 0;
 
-    if(!picked.length) {
-      pts = 0;
-    } else if(errors===0) {
-      pts = 2;
-    } else if(q.type==='single') {
-      pts = 0;
-    } else if(errors===1) {
-      pts = 1.2;
-    } else if(errors===2) {
-      pts = 0.4;
-    }
+    total+=pts;
 
-    total += pts;
+    if (pts===2) full++;
+    else if (pts>0) partial++;
 
-    if(pts===2) exact++;
-    else if(pts>0) partial++;
+    const cat=skills[q.skill] ||
+      (skills[q.skill]={score:0,max:0});
 
-    if(!skills[q.skill]) {
-      skills[q.skill]={earned:0,max:0};
-    }
+    cat.score=+(cat.score+pts).toFixed(1);
+    cat.max+=2;
 
-    skills[q.skill].earned = +(
-      skills[q.skill].earned+pts
-    ).toFixed(1);
-
-    skills[q.skill].max += 2;
-
-    details.push({q,picked,pts});
+    detail.push({
+      q,
+      selected:selected.slice().sort(),
+      points:pts
+    });
   });
 
   return {
     total:+total.toFixed(1),
-    max:state.questions.length*2,
-    exact,partial,
-    zero:state.questions.length-exact-partial,
-    skills,details
+    full,
+    partial,
+    zero:ANSWER_KEY.length-full-partial,
+    skills,
+    detail
   };
 }
 
-// ======================================
-// 顯示成績與弱點分析
-// ======================================
+function storeAttempt_(p) {
+  if (!p || typeof p!=='object') {
+    throw new Error('缺少交卷內容');
+  }
 
-function renderResults(statusText='',confirmed=false) {
-  const g=grade();
+  const id=String(p.submissionId || '');
 
-  el('quizPanel').classList.add('hidden');
-  el('resultPanel').classList.remove('hidden');
+  if (!/^[A-Za-z0-9_-]{15,100}$/.test(id)) {
+    throw new Error('交卷識別碼不正確');
+  }
 
-  el('saveStatus').className =
-    'notice ' + (confirmed?'':'warn');
-
-  el('saveStatus').textContent = statusText ||
-    (confirmed
-      ? '已確認：成績寫入 Google 試算表'
-      : '正在確認試算表是否收到成績……');
-
-  el('studentLabel').textContent =
-    el('classroom').value+'　'+el('student').value;
-
-  el('total').textContent =
-    g.total+' / '+g.max+' 分';
-
-  el('scoreGrid').replaceChildren();
-
-  [
-    ['完全正確',g.exact],
-    ['部分給分',g.partial],
-    ['零分／未答',g.zero]
-  ].forEach(([label,num])=>{
-    const d=document.createElement('div');
-    const strong=document.createElement('strong');
-    strong.textContent=num;
-
-    d.append(strong,document.createTextNode(label));
-    el('scoreGrid').appendChild(d);
-  });
-
-  el('skills').replaceChildren();
-
-  Object.entries(g.skills).forEach(([name,s])=>{
-    const d=document.createElement('div');
-    d.className='skill';
-
-    const t=document.createElement('div');
-    t.textContent=name+'：'+s.earned+'/'+s.max+
-      '（'+Math.round(s.earned/s.max*100)+'%）';
-
-    const bar=document.createElement('div');
-    bar.className='track';
-
-    const fill=document.createElement('div');
-    fill.style.width=(s.earned/s.max*100)+'%';
-
-    bar.appendChild(fill);
-    d.append(t,bar);
-    el('skills').appendChild(d);
-  });
-
-  const weak=Object.entries(g.skills)
-    .filter(([_,s])=>s.earned/s.max<.8)
-    .sort((a,b)=>
-      a[1].earned/a[1].max-
-      b[1].earned/b[1].max
+  if (p.version!==CFG.version) {
+    throw new Error(
+      '測驗版本不同，請同步更新 HTML 與 Apps Script'
     );
+  }
 
-  el('advice').textContent=weak.length
-    ? '建議加強：'+
-      weak.map(x=>x[0]).slice(0,3).join('、')
-    : '五大化學概念得分率均達 80% 以上。';
+  const cls=clean_(p.className,20,'班級');
+  const seat=clean_(p.seat,8,'座號');
+  const name=clean_(p.name,40,'姓名');
+  const g=grade_(p.answers);
 
-  el('reviews').replaceChildren();
-
-  g.details.forEach(({q,picked,pts})=>{
-    const d=document.createElement('section');
-    d.className='review';
-
-    const h=document.createElement('h3');
-    h.textContent='第 '+q.id+' 題｜'+q.title;
-
-    const p=document.createElement('p');
-    p.className=pts===2?'correct':'wrong';
-    p.textContent=
-      '得分：'+pts+'/2；你的答案：'+
-      (picked.join('、')||'未作答')+
-      '；正解：'+q.answer.split('').join('、');
-
-    const e=document.createElement('div');
-    e.className='explain';
-    e.textContent='解析：'+q.explain;
-
-    d.append(h,p,e);
-    el('reviews').appendChild(d);
+  const fingerprint=JSON.stringify({
+    cls,seat,name,
+    answers:p.answers,
+    version:p.version
   });
 
-  el('retryUpload').classList.toggle(
-    'hidden',confirmed
-  );
-}
+  const wrongSent=Array.isArray(p.wrong)?p.wrong:[];
 
-// ======================================
-// 跨網域表單上傳
-// ======================================
+  if (wrongSent.length>ANSWER_KEY.length) {
+    throw new Error('錯題數量不合理');
+  }
 
-function postToSheet(payload) {
-  const form=document.createElement('form');
-  form.method='POST';
-  form.action=GAS_URL;
-  form.target='quizUploadFrame';
-  form.style.display='none';
+  const wrongMap=new Map();
 
-  const input=document.createElement('input');
-  input.type='hidden';
-  input.name='payload';
-  input.value=JSON.stringify(payload);
-
-  form.appendChild(input);
-  document.body.appendChild(form);
-  form.submit();
-  form.remove();
-}
-
-// ======================================
-// 確認資料已寫入
-// ======================================
-
-const sleep=ms=>
-  new Promise(resolve=>setTimeout(resolve,ms));
-
-async function waitForRecord(id) {
-  for(let i=0;i<15;i++) {
-    await sleep(i===0?900:1700);
-
-    try {
-      const result=await apiGet('status',{id});
-
-      if(result.ok&&result.found) {
-        return result;
-      }
-    } catch(err) {
-      console.warn(
-        '確認第 '+(i+1)+' 次失敗',
-        err.message
-      );
+  wrongSent.forEach(w=>{
+    if (!w ||
+        !Number.isInteger(w.id) ||
+        wrongMap.has(w.id)) {
+      throw new Error('錯題資料格式錯誤');
     }
+    wrongMap.set(w.id,w);
+  });
+
+  const misses=g.detail.filter(d=>d.points<2);
+
+  if (misses.length!==wrongMap.size ||
+      misses.some(d=>!wrongMap.has(d.q.id))) {
+    throw new Error(
+      '錯題明細與作答答案不一致'
+    );
   }
 
-  return null;
-}
-
-// ======================================
-// 交卷
-// ======================================
-
-async function submit() {
-  if(state.submitting) return;
-
-  const name=el('student').value.trim();
-  const classroom=el('classroom').value.trim();
-
-  if(!name||!classroom) {
-    notice('請先填學生姓名與班級座號。','error');
-    return;
-  }
-
-  const missing=state.questions
-    .filter(q=>!selected(q).length)
-    .map(q=>q.id);
-
-  const msg=missing.length
-    ? '未作答題號：'+missing.join('、')+
-      '。未答以 0 分計，確定交卷？'
-    : '確定交卷並上傳成績？';
-
-  if(!confirm(msg)) return;
-
-  state.submitting=true;
-  el('submit').disabled=true;
-  el('student').disabled=true;
-  el('classroom').disabled=true;
-
-  hideNotice();
-
-  renderResults(
-    '交卷已送出，正在向 Google 試算表確認寫入……'
-  );
-
-  const payload={
-    id:state.submissionId,
-    name,
-    classroom,
-    version:state.version,
-    answers:state.answers
-  };
+  const lock=LockService.getScriptLock();
+  lock.waitLock(30000);
 
   try {
-    postToSheet(payload);
+    const sh=sheet_(CFG.scoreSheet,SCORE_HEADERS);
+    const wrongSh=sheet_(CFG.wrongSheet,WRONG_HEADERS);
 
-    const check=await waitForRecord(
-      state.submissionId
-    );
+    const hit=sh.getLastRow()>1
+      ? sh.getRange(2,1,sh.getLastRow()-1,1)
+          .createTextFinder(id)
+          .matchEntireCell(true)
+          .findNext()
+      : null;
 
-    if(check) {
-      state.confirmed=true;
-      save();
-
-      const g=grade();
-      const consistent=
-        Number(check.score)===g.total;
-
-      renderResults(
-        consistent
-          ? '已確認：成績成功寫入教師 Google 試算表。'
-          : '已確認寫入，但前後端分數不同，請通知教師核對。',
-        true
-      );
-
-    } else {
-      renderResults(
-        '尚未能確認成績已存入。請按「再確認／重送紀錄」，或請教師查看試算表。'
+    if (hit && sh.getRange(hit.getRow(),15)
+                  .getValue()!==fingerprint) {
+      throw new Error(
+        '這個交卷識別碼已被不同答案使用'
       );
     }
 
-  } catch(err) {
-    renderResults(
-      '提交出現問題：'+err.message+
-      '。請再確認／重送。'
+    const now=hit
+      ? sh.getRange(hit.getRow(),2).getValue()
+      : new Date();
+
+    const rows=misses.map(d=>{
+      const w=wrongMap.get(d.q.id);
+
+      const stem=typeof w.stem==='string'
+        ? w.stem.slice(0,1500):'';
+
+      const options=Array.isArray(w.options) &&
+        w.options.length===5
+        ? w.options.map(x=>String(x).slice(0,500))
+        : ['','','','',''];
+
+      const explain=typeof w.explain==='string'
+        ? w.explain.slice(0,800):'';
+
+      const missing=ALPHABET.filter(c=>
+        d.q.answer.includes(c) &&
+        !d.selected.includes(c)
+      );
+
+      const extra=ALPHABET.filter(c=>
+        d.selected.includes(c) &&
+        !d.q.answer.includes(c)
+      );
+
+      const kind=!d.selected.length
+        ? '未作答'
+        : '漏選 '+(missing.join('')||'無')+
+          '；誤選 '+(extra.join('')||'無');
+
+      return [
+        id,now,
+        safe_(cls),safe_(seat),safe_(name),
+        d.q.id,d.q.title,d.q.skill,d.points,
+        d.selected.join(''),d.q.answer,kind,
+        safe_(stem),...options.map(safe_),
+        safe_(explain)
+      ];
+    });
+
+    // 重送相同交卷 ID 時只補齊缺漏的錯題。
+    const existingWrong=new Set();
+
+    if (wrongSh.getLastRow()>1) {
+      wrongSh.getRange(
+        2,1,wrongSh.getLastRow()-1,6
+      ).getValues().forEach(r=>{
+        if (String(r[0])===id) {
+          existingWrong.add(Number(r[5]));
+        }
+      });
+    }
+
+    const missingRows=rows.filter(r=>
+      !existingWrong.has(Number(r[5]))
     );
+
+    if (missingRows.length) {
+      wrongSh.getRange(
+        wrongSh.getLastRow()+1,
+        1,
+        missingRows.length,
+        WRONG_HEADERS.length
+      ).setValues(missingRows);
+    }
+
+    if (!hit) {
+      sh.appendRow([
+        id,now,
+        safe_(cls),safe_(seat),safe_(name),
+        g.total,30,g.full,g.partial,g.zero,
+        misses.map(d=>d.q.id).join(','),
+        JSON.stringify(g.skills),
+        JSON.stringify(p.answers),
+        p.version,
+        fingerprint
+      ]);
+    }
+
+    SpreadsheetApp.flush();
+    return id;
 
   } finally {
-    state.submitting=false;
-    el('submit').disabled=false;
+    lock.releaseLock();
   }
 }
 
-async function retryUpload() {
-  if(state.confirmed) return;
-  await submit();
-}
+// 僅提供已登入教師的錯題統計。
+function getTeacherDashboardData() {
+  const sh=sheet_(CFG.scoreSheet,SCORE_HEADERS);
+  const ws=sheet_(CFG.wrongSheet,WRONG_HEADERS);
 
-// ======================================
-// 匯出 CSV
-// ======================================
+  const attempts=sh.getLastRow()>1
+    ? sh.getRange(
+        2,1,sh.getLastRow()-1,SCORE_HEADERS.length
+      ).getValues()
+    : [];
 
-function downloadCsv() {
-  const g=grade();
-  const rows=[['題號','概念','選項','正解','得分']];
+  const wrong=ws.getLastRow()>1
+    ? ws.getRange(
+        2,1,ws.getLastRow()-1,WRONG_HEADERS.length
+      ).getValues()
+    : [];
 
-  g.details.forEach(({q,picked,pts})=>{
-    rows.push([
-      q.id,q.skill,picked.join(''),q.answer,pts
-    ]);
+  const topicMap={};
+
+  ANSWER_KEY.forEach(q=>{
+    topicMap[q.id]={
+      id:q.id,
+      title:q.title,
+      skill:q.skill,
+      attempts:attempts.length,
+      wrong:0,
+      partial:0,
+      zero:0
+    };
   });
 
-  rows.push(['總分','','','',g.total]);
-
-  const csv='\ufeff'+rows.map(row=>
-    row.map(x=>
-      '"'+String(x).replace(/"/g,'""')+'"'
-    ).join(',')
-  ).join('\r\n');
-
-  const url=URL.createObjectURL(
-    new Blob([csv],{
-      type:'text/csv;charset=utf-8'
-    })
-  );
-
-  const a=document.createElement('a');
-  a.href=url;
-  a.download='化學鍵測驗成績.csv';
-  a.click();
-
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-
-// ======================================
-// 載入 Google 試算表題庫
-// ======================================
-
-async function load() {
-  if(GAS_URL.includes('貼上你的部署ID')) {
-    notice('請先設定 GAS_URL','error');
-    return;
+  for (const r of wrong) {
+    const s=topicMap[Number(r[5])];
+    if (s) {
+      s.wrong++;
+      if (Number(r[8])>0) s.partial++;
+      else s.zero++;
+    }
   }
 
-  try {
-    const data=await apiGet('quiz');
-
-    if(
-      !data.ok ||
-      !Array.isArray(data.questions) ||
-      !data.questions.length
-    ) {
-      throw new Error(data.error||'題庫為空');
-    }
-
-    state.questions=data.questions;
-    state.version=data.version;
-    state.submissionId=makeId();
-
-    restore();
-    hideNotice();
-
-    if(state.confirmed) {
-      el('student').disabled=true;
-      el('classroom').disabled=true;
-
-      renderNav();
-      renderResults(
-        '這是此瀏覽器上次已確認送出的作答紀錄。',
-        true
-      );
-    } else {
-      renderQuestion();
-    }
-
-  } catch(err) {
-    notice(
-      '載入失敗：'+err.message+
-      '。請檢查 Apps Script 部署設定。',
-      'error'
+  const questions=Object.values(topicMap)
+    .map(t=>({
+      ...t,
+      wrongRate:t.attempts
+        ? t.wrong/t.attempts
+        : 0
+    }))
+    .sort((a,b)=>
+      b.wrongRate-a.wrongRate || a.id-b.id
     );
-  }
+
+  const lastAttempts=attempts
+    .slice(-500).reverse()
+    .map(r=>({
+      id:r[0],
+      time:formatDate_(r[1]),
+      className:r[2],
+      seat:r[3],
+      name:r[4],
+      score:Number(r[5]),
+      full:Number(r[7]),
+      partial:Number(r[8]),
+      zero:Number(r[9]),
+      wrongIds:String(r[10]||'')
+    }));
+
+  const lastWrong=wrong
+    .slice(-1500).reverse()
+    .map(r=>({
+      id:r[0],
+      time:formatDate_(r[1]),
+      className:r[2],
+      seat:r[3],
+      name:r[4],
+      questionId:Number(r[5]),
+      title:r[6],
+      skill:r[7],
+      points:Number(r[8]),
+      selected:r[9],
+      correct:r[10],
+      kind:r[11],
+      stem:r[12],
+      options:r.slice(13,18),
+      explain:r[18]
+    }));
+
+  const avg=attempts.length
+    ? Math.round(
+        attempts.reduce(
+          (a,r)=>a+Number(r[5]||0),0
+        )/attempts.length*10
+      )/10
+    : 0;
+
+  const unique=new Set(
+    attempts.map(r=>
+      String(r[2])+'|'+
+      String(r[3])+'|'+
+      String(r[4])
+    )
+  ).size;
+
+  const classes=[
+    ...new Set(attempts.map(r=>String(r[2])))
+  ].sort();
+
+  return {
+    overview:{
+      attempts:attempts.length,
+      uniqueStudents:unique,
+      average:avg,
+      wrongCount:wrong.length
+    },
+    classes,
+    questions,
+    attempts:lastAttempts,
+    wrong:lastWrong,
+    limits:{
+      attempts:500,
+      wrong:1500
+    }
+  };
 }
 
-// ======================================
-// 按鈕事件
-// ======================================
-
-el('prev').onclick=()=>{
-  if(state.index>0) {
-    state.index--;
-    save();
-    renderQuestion();
-  }
-};
-
-el('next').onclick=()=>{
-  if(state.index<state.questions.length-1) {
-    state.index++;
-    save();
-    renderQuestion();
-  }
-};
-
-el('clear').onclick=()=>{
-  delete state.answers[
-    String(state.questions[state.index].id)
-  ];
-  save();
-  renderQuestion();
-};
-
-el('submit').onclick=submit;
-el('retryUpload').onclick=retryUpload;
-el('download').onclick=downloadCsv;
-el('print').onclick=()=>window.print();
-
-el('restart').onclick=()=>{
-  if(!confirm(
-    '確定重新開始？舊成績不會從試算表刪除。'
-  )) return;
-
-  state.answers={};
-  state.index=0;
-  state.confirmed=false;
-  state.submissionId=makeId();
-
-  el('student').disabled=false;
-  el('classroom').disabled=false;
-
-  save();
-  renderQuestion();
-};
-
-el('student').addEventListener('input',save);
-el('classroom').addEventListener('input',save);
-
-// 網頁啟動
-load();
-
-</script>
-</body>
-</html>
+function formatDate_(value) {
+  return value instanceof Date
+    ? Utilities.formatDate(
+        value,
+        Session.getScriptTimeZone(),
+        'yyyy-MM-dd HH:mm'
+      )
+    : String(value);
+}

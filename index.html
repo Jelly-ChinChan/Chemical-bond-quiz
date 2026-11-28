@@ -15,32 +15,31 @@
   --ink:#203c49;
   --muted:#637984;
   --line:#dbe5e9;
-  --green:#0b806d;
-  --red:#b44545;
+  --green:#08754d;
+  --red:#c62828;
 }
 *{box-sizing:border-box}
 body{
   margin:0;
-  background:var(--bg);
   color:var(--ink);
+  background:var(--bg);
   font-family:system-ui,"Noto Sans TC",
     "Microsoft JhengHei",sans-serif;
-  line-height:1.6;
+  line-height:1.65;
 }
 button,input,select{font:inherit}
 button{cursor:pointer}
 button:disabled{opacity:.55;cursor:not-allowed}
 .hidden{display:none!important}
 header{
+  text-align:center;
   background:linear-gradient(115deg,#153950,#0d7777);
   color:white;
-  padding:20px 14px 31px;
-  text-align:center;
+  padding:19px 12px 30px;
 }
 header h1{
-  margin:0 0 5px;
   font-size:clamp(23px,4vw,32px);
-  line-height:1.35;
+  margin:0 0 4px;
 }
 header p{
   margin:0;
@@ -52,7 +51,7 @@ main{
   margin:-15px auto 35px;
   padding:0 14px;
 }
-.panel{
+.card{
   background:white;
   border:1px solid var(--line);
   border-radius:16px;
@@ -60,51 +59,52 @@ main{
   margin-bottom:15px;
   box-shadow:0 5px 20px #1539500e;
 }
-h2{font-size:22px;margin:0 0 12px}
+h2{font-size:23px;margin:0 0 12px}
 h3{font-size:18px}
 .small{font-size:12px;color:var(--muted)}
 .btn{
-  padding:10px 15px;
-  min-height:43px;
   border:1px solid var(--line);
-  border-radius:10px;
   background:white;
   color:var(--ink);
-  font-weight:650;
+  border-radius:10px;
+  padding:10px 15px;
+  min-height:44px;
+  font-weight:700;
 }
-.btn.primary{
+.primary{
   background:var(--teal);
-  color:white;
   border-color:var(--teal);
+  color:white;
 }
 .actions{
   display:flex;
   flex-wrap:wrap;
   gap:9px;
+  border-top:1px solid var(--line);
   padding-top:16px;
   margin-top:18px;
-  border-top:1px solid var(--line);
 }
 .notice{
+  background:#e5f3ef;
   padding:12px 14px;
-  margin-bottom:14px;
-  background:#e6f3f0;
   border-radius:10px;
+  margin-bottom:14px;
 }
-.notice.warning{
-  background:#fff2db;
-  color:#795218;
+.notice.warn{
+  background:#fff1d9;
+  color:#805313;
 }
 .notice.error{
-  background:#ffebea;
-  color:#a13939;
+  background:#ffe9e9;
+  color:#a63b3b;
 }
 input[type=text],
-input[type=password],select{
+input[type=password],
+select{
   width:100%;
   min-height:43px;
   border:1px solid #bbccd3;
-  padding:10px 11px;
+  padding:10px;
   border-radius:9px;
   background:white;
   color:var(--ink);
@@ -116,17 +116,11 @@ label.field{
   font-weight:650;
   font-size:14px;
 }
-footer{
-  text-align:center;
-  font-size:12px;
-  color:var(--muted);
-  padding:14px;
-}
 
 /* 首頁 */
 .roles{
   max-width:760px;
-  margin:10px auto 0;
+  margin:10px auto;
   text-align:center;
 }
 .roles h2{font-size:23px}
@@ -137,38 +131,37 @@ footer{
   margin-top:15px;
 }
 .role{
-  background:#f6fbfc;
-  border:2px solid var(--line);
-  color:var(--navy);
-  border-radius:14px;
-  padding:22px 12px;
-  min-height:140px;
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   gap:5px;
+  min-height:140px;
+  background:#f7fbfc;
+  color:var(--navy);
+  border:2px solid var(--line);
+  border-radius:14px;
+  padding:20px 8px;
 }
-.role:hover,.role:focus-visible{
-  border-color:var(--teal);
-  background:#eaf7f4;
-}
+.role:hover{border-color:var(--teal)}
 .role .emoji{font-size:35px}
 .role strong{font-size:21px}
 .role span:last-child{font-size:13px}
 .modebar{
   display:flex;
-  gap:12px;
   align-items:center;
-  padding:10px;
+  gap:12px;
   background:white;
   border-radius:12px;
+  padding:10px;
   margin-bottom:14px;
 }
-.modebar strong{font-size:15px}
-#teacherLoginPanel{max-width:550px;margin:0 auto}
+#teacherLoginPanel{
+  max-width:550px;
+  margin:0 auto;
+}
 
-/* 學生區 */
+/* 學生測驗 */
 .studentFields{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -189,8 +182,8 @@ footer{
   margin:11px 0;
 }
 .progress div{
-  width:0;
   height:100%;
+  width:0;
   background:var(--teal);
 }
 .numbergrid{
@@ -234,12 +227,15 @@ footer{
   background:#eaf8f3;
   border-color:var(--teal);
 }
-.option input{margin-top:7px;accent-color:var(--teal)}
+.option input{
+  margin-top:7px;
+  accent-color:var(--teal);
+}
 .option span{flex:1}
 .bigscore{
-  color:var(--teal);
   font-size:39px;
   font-weight:800;
+  color:var(--teal);
 }
 .metrics{
   display:grid;
@@ -253,7 +249,10 @@ footer{
   padding:12px 6px;
   text-align:center;
 }
-.metric strong{display:block;font-size:24px}
+.metric strong{
+  display:block;
+  font-size:24px;
+}
 .skill{margin:15px 0}
 .track{
   height:10px;
@@ -272,14 +271,15 @@ footer{
   margin:12px 0;
 }
 .review h3{margin:0}
-.correct{color:var(--green);font-weight:650}
-.wrong{color:var(--red);font-weight:650}
+.correct{color:var(--green);font-weight:750}
+.wrong{color:var(--red);font-weight:750}
 .explain{
   background:#eff8f6;
-  border-left:3px solid var(--teal);
+  border-left:4px solid var(--teal);
   padding:10px;
   margin-top:10px;
 }
+.review details{margin-top:10px}
 
 /* 教師後台 */
 .teacherHeading{
@@ -288,12 +288,11 @@ footer{
   justify-content:space-between;
   gap:12px;
 }
-.teacherHeading h2{margin:0}
 .teacherCards{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:10px;
-  margin-bottom:20px;
+  margin-bottom:18px;
 }
 .teacherCard{
   background:#f1f6f7;
@@ -320,8 +319,8 @@ footer{
 }
 .teacherTabs{
   display:flex;
-  gap:8px;
   flex-wrap:wrap;
+  gap:8px;
   margin:14px 0;
 }
 .teacherTabs .active{
@@ -333,9 +332,9 @@ footer{
   max-height:490px;
 }
 table{
-  border-collapse:collapse;
-  min-width:640px;
   width:100%;
+  min-width:640px;
+  border-collapse:collapse;
   font-size:13px;
 }
 th,td{
@@ -355,10 +354,12 @@ th{
   padding:13px;
   margin:10px 0;
 }
-.detail summary{cursor:pointer;font-weight:650}
-.detail p{white-space:pre-wrap}
+.detail summary{
+  cursor:pointer;
+  font-weight:700;
+}
 
-/* 答對率圖表 */
+/* 長條圖 */
 .chartControls{
   display:flex;
   flex-wrap:wrap;
@@ -367,102 +368,71 @@ th{
 }
 .chartControls label{
   display:flex;
-  flex-direction:column;
-  gap:4px;
   flex:1;
-  min-width:140px;
+  flex-direction:column;
+  gap:5px;
+  min-width:145px;
   font-size:13px;
+}
+.chartNote{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:12px;
 }
 .chartRow{
   display:grid;
-  grid-template-columns:145px minmax(0,1fr) 82px;
-  gap:9px;
+  grid-template-columns:minmax(120px,175px) minmax(0,1fr) 82px;
+  gap:10px;
   align-items:center;
-  padding:9px 0;
-  border-bottom:1px solid #edf1f3;
+  border-bottom:1px solid #edf1f2;
+  padding:11px 0;
 }
 .chartLabel{
-  min-width:0;
   display:flex;
-  flex-direction:column;
   align-items:flex-start;
-  gap:3px;
+  flex-direction:column;
+  gap:4px;
 }
 .qButton{
-  padding:4px 9px;
-  border:1px solid #a8d8d1;
-  border-radius:8px;
-  background:#e8f7f2;
-  color:#0a7168;
-  font-size:13px;
-  font-weight:700;
-}
-.qButton.open{
+  background:#0b8c80;
   color:white;
-  background:var(--teal);
+  border:0;
+  border-radius:9px;
+  padding:5px 9px;
+  font-size:13px;
+  font-weight:800;
 }
+.qButton.open{background:#15556d}
 .ability{
   font-size:11px;
-  color:#647f88;
+  color:var(--muted);
   line-height:1.4;
-  overflow-wrap:anywhere;
 }
 .chartTrack{
-  height:18px;
-  background:#e7eef1;
-  border-radius:5px;
+  background:#e8eef0;
+  border-radius:7px;
+  height:17px;
   overflow:hidden;
 }
 .chartFill{
   height:100%;
-  background:#0d8b82;
-  border-radius:5px;
+  background:#118f82;
+  border-radius:7px;
 }
 .chartValue{
   text-align:right;
-  font-weight:650;
-  font-size:12px;
-}
-.chartNote{
-  color:var(--muted);
-  font-size:12px;
-  margin:10px 0;
+  font-size:13px;
+  font-weight:700;
 }
 
-/* 題目在該長條圖下方展開 */
+/* 每題下方展開區 */
 .questionDetail{
   grid-column:1/-1;
-  background:#f8fcfb;
-  border:1px solid #b8ddd7;
-  border-radius:12px;
-  padding:15px;
-  margin:3px 0 10px;
-}
-.questionDetail h3{
-  font-size:17px;
-  margin:0 0 10px;
-}
-.questionDetail .qdStem{
-  white-space:pre-wrap;
-  margin:12px 0;
-}
-.questionDetail .qdOption{
-  padding:8px 10px;
-  border:1px solid #e0e9e9;
-  border-radius:8px;
-  margin:6px 0;
-  font-size:14px;
-}
-.questionDetail .qdOption.correct{
-  background:#e7f7ed;
-  border-color:#a8d7b7;
-}
-.questionDetail .qdExplain{
-  background:#eaf7f4;
-  border-left:3px solid var(--teal);
-  padding:10px;
-  font-size:13px;
-  margin-top:10px;
+  background:#fbfdfc;
+  border:1px solid #b8ddd2;
+  border-radius:14px;
+  padding:16px;
+  margin:4px 0 8px;
 }
 .qdTop{
   display:flex;
@@ -470,58 +440,143 @@ th{
   align-items:flex-start;
   gap:10px;
 }
+.qdTop h3{
+  color:var(--navy);
+  margin:0 0 6px;
+  font-size:20px;
+}
 .qdClose{
+  width:42px;
+  height:42px;
+  flex:0 0 auto;
   border:1px solid var(--line);
-  border-radius:7px;
   background:white;
-  padding:3px 12px;
-  font-size:18px;
+  border-radius:11px;
+  font-size:26px;
+}
+.qdStem{
+  font-size:16px;
+  white-space:pre-wrap;
+  margin:18px 0;
+  line-height:1.8;
+}
+.qdOption{
+  border:1.5px solid #e0e7e9;
+  border-radius:12px;
+  padding:12px 14px;
+  margin:9px 0;
+  background:white;
+  font-size:15px;
+  line-height:1.7;
+}
+.qdOption.isCorrect{
+  background:#eaf8ee;
+  border-color:#71c89b;
+  color:#087344;
+  font-weight:700;
+}
+.qdOption.isWrong{
+  background:#fff0f0;
+  border-color:#e35b5b;
+  color:#c62828;
+  font-weight:700;
+}
+.qdTag{
+  display:inline-block;
+  font-size:11px;
+  font-weight:800;
+  border-radius:20px;
+  padding:2px 8px;
+  margin-top:5px;
+}
+.qdTag.green{
+  background:#d6f1e0;
+  color:#087344;
+}
+.qdTag.red{
+  background:#ffdede;
+  color:#bd2626;
+}
+.qdAnswer{
+  margin:12px 0;
+  padding:9px 12px;
+  border-radius:9px;
+  background:#f1f6f7;
+  line-height:1.7;
+  font-size:14px;
+}
+.qdExplain{
+  background:#eff8f6;
+  border-left:4px solid var(--teal);
+  padding:12px;
+  border-radius:7px;
+  margin-top:15px;
+  font-size:14px;
+  line-height:1.8;
+}
+.qdWarning{
+  color:#8a651b;
+  background:#fff5db;
+  padding:9px 12px;
+  border-radius:9px;
+  margin:12px 0;
+  font-size:13px;
+}
+.answerWrong{
+  color:var(--red);
+  font-weight:800;
+}
+.answerRight{
+  color:var(--green);
+  font-weight:800;
+}
+.answerMissing{
+  color:#aa6617;
+  font-weight:750;
 }
 
 /* 手機 */
-@media(max-width:750px){
-  header{padding:12px 12px 23px}
-  header h1{font-size:23px}
-  header p{font-size:12px}
-  main{margin:-10px auto 15px;padding:0 12px}
-  .roles{margin:0 auto;padding:15px}
-  .roles h2{font-size:21px;margin-bottom:4px}
-  .roles .small{margin:0}
-  .rolegrid{gap:9px;margin-top:13px}
-  .role{
-    padding:12px 5px;
-    min-height:123px;
-    gap:3px;
-  }
-  .role .emoji{font-size:29px}
-  .role strong{font-size:18px}
-  .role span:last-child{font-size:12px}
+@media(max-width:760px){
   .layout{grid-template-columns:1fr}
   .sidebar{position:static}
   .numbergrid{grid-template-columns:repeat(8,1fr)}
   .studentFields{grid-template-columns:1fr}
   .filtergrid{grid-template-columns:1fr 1fr}
+  .role{min-height:125px;padding:13px 6px}
+  .role .emoji{font-size:29px}
+  .role strong{font-size:18px}
+  .roles{padding:15px}
+  .roles h2{font-size:21px}
 }
-@media(max-width:520px){
-  .panel{padding:15px}
+@media(max-width:550px){
+  .card{padding:15px}
+  .filtergrid{grid-template-columns:1fr}
   .chartRow{
-    grid-template-columns:105px minmax(0,1fr) 65px;
+    grid-template-columns:107px minmax(0,1fr) 67px;
     gap:7px;
   }
-  .ability{font-size:10px}
   .chartValue{font-size:11px}
-  .teacherCard strong{font-size:24px}
-  .teacherCard span{font-size:11px}
-  .filtergrid{grid-template-columns:1fr}
-  .questionDetail{padding:11px}
+  .ability{font-size:10px}
+  .qdTop h3{font-size:17px}
+  .questionDetail{padding:13px}
+  .qdOption{font-size:14px}
+  .teacherHeading{
+    align-items:flex-start;
+    flex-direction:column;
+  }
 }
 @media print{
-  header,footer,.sidebar,.actions,.modebar,
-  .teacherTabs,.filtergrid,.chartControls{
+  header,.sidebar,.modebar,.actions,footer{
     display:none!important;
   }
   main{margin:0}
   .review{break-inside:avoid}
+}
+footer{
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
+  padding:15px;
 }
 </style>
 </head>
@@ -529,15 +584,14 @@ th{
 <body>
 <header>
   <h1>化學鍵與物質結構</h1>
-  <p>學測化學補強｜15 題診斷｜滿分 30 分</p>
+  <p>學測化學補強｜15 題診斷｜每題 2 分｜滿分 30 分</p>
 </header>
 
 <main>
 
-<!-- 選擇身分 -->
-<section class="panel roles" id="roles">
+<section id="roles" class="card roles">
   <h2>請選擇您的身分</h2>
-  <p class="small">學生直接作答，教師需輸入密碼。</p>
+  <p class="small">學生直接作答，教師輸入專用密碼。</p>
   <div class="rolegrid">
     <button class="role" id="studentRole">
       <span class="emoji">🎓</span>
@@ -547,27 +601,26 @@ th{
     <button class="role" id="teacherRole">
       <span class="emoji">📊</span>
       <strong>我是教師</strong>
-      <span>登入錯題分析後台</span>
+      <span>登入教師錯題分析</span>
     </button>
   </div>
 </section>
 
-<!-- 返回 -->
-<div class="modebar hidden" id="modebar">
+<div id="modebar" class="modebar hidden">
   <button class="btn" id="back">← 返回身分選擇</button>
   <strong id="modeLabel"></strong>
 </div>
 
-<!-- 教師登入 -->
-<section class="panel hidden" id="teacherLoginPanel">
+<section id="teacherLoginPanel" class="card hidden">
   <h2>教師身分驗證</h2>
   <p class="small">
-    密碼由 Google Apps Script 驗證。
+    密碼交由 Google Apps Script 驗證。
   </p>
   <label class="field">
     教師密碼
-    <input type="password" id="teacherPassword"
-      maxlength="128" autocomplete="current-password"
+    <input id="teacherPassword"
+      type="password"
+      maxlength="128"
       placeholder="請輸入教師密碼">
   </label>
   <div class="actions">
@@ -575,222 +628,206 @@ th{
       登入教師後台
     </button>
   </div>
-  <div id="loginMsg" class="notice warning hidden"
-       role="status"></div>
-  <div class="small">
-    若連線中斷，系統會嘗試重新連接 Google 服務。
-  </div>
+  <div id="loginMsg" class="notice warn hidden"></div>
 </section>
 
-<!-- 學生 -->
 <div id="studentApp" class="hidden">
-
-<section class="panel studentFields">
-  <label class="field">班級
-    <input id="className" type="text"
-      maxlength="20" placeholder="例如 301">
-  </label>
-  <label class="field">座號
-    <input id="seat" type="text"
-      maxlength="8" placeholder="例如 08">
-  </label>
-  <label class="field">學生姓名
-    <input id="studentName" type="text"
-      maxlength="40" placeholder="請輸入姓名">
-  </label>
-</section>
-
-<div class="notice" id="studentNotice">
-  題庫已內嵌，可以直接開始作答。
-</div>
-
-<div class="layout">
-  <aside class="panel sidebar">
-    <strong>作答進度</strong>
-    <span id="progressText">0 / 15</span>
-    <div class="progress">
-      <div id="progressFill"></div>
-    </div>
-    <div class="numbergrid" id="numbergrid"></div>
-    <p class="small">
-      綠色代表已作答，可點題號跳題。
-    </p>
-  </aside>
-
-  <section class="panel" id="quizPanel">
-    <span id="skill" class="tag"></span>
-    <span id="qtype" class="tag"></span>
-    <h2 id="questionTitle"></h2>
-    <div class="stem" id="questionStem"></div>
-    <div id="options"></div>
-
-    <div class="actions">
-      <button class="btn" id="prev">上一題</button>
-      <button class="btn" id="clear">清除此題</button>
-      <button class="btn primary" id="next">下一題</button>
-      <button class="btn primary" id="submit">
-        交卷並記錄成績
-      </button>
-    </div>
+  <section class="card studentFields">
+    <label class="field">班級
+      <input id="className" type="text"
+        maxlength="20" placeholder="例如 301">
+    </label>
+    <label class="field">座號
+      <input id="seat" type="text"
+        maxlength="8" placeholder="例如 08">
+    </label>
+    <label class="field">學生姓名
+      <input id="studentName" type="text"
+        maxlength="40" placeholder="請輸入姓名">
+    </label>
   </section>
 
-  <section class="panel hidden" id="resultPanel">
-    <h2>化學概念診斷報告</h2>
-    <div id="saveStatus" class="notice warning"></div>
-    <p id="studentLabel"></p>
-    <div id="totalScore" class="bigscore"></div>
-    <div id="metrics" class="metrics"></div>
+  <div class="notice" id="studentNotice">
+    題目已內嵌，可以直接開始作答。
+  </div>
 
-    <h3>五大概念得分</h3>
-    <div id="skillStats"></div>
-    <div id="advice" class="notice"></div>
+  <div class="layout">
+    <aside class="card sidebar">
+      <strong>作答進度</strong>
+      <span id="progressText">0 / 15</span>
+      <div class="progress">
+        <div id="progressFill"></div>
+      </div>
+      <div class="numbergrid" id="numbergrid"></div>
+      <p class="small">綠色代表已作答，可直接點題號。</p>
+    </aside>
 
-    <div class="actions">
-      <button class="btn primary" id="retry">
-        再確認／重送成績
-      </button>
-      <button class="btn" id="download">
-        下載個人錯題 CSV
-      </button>
-      <button class="btn" id="print">列印</button>
-      <button class="btn" id="restart">重新作答</button>
-    </div>
+    <section class="card" id="quizPanel">
+      <span class="tag" id="skill"></span>
+      <span class="tag" id="qtype"></span>
+      <h2 id="questionTitle"></h2>
+      <div class="stem" id="questionStem"></div>
+      <div id="options"></div>
+      <div class="actions">
+        <button class="btn" id="prev">上一題</button>
+        <button class="btn" id="clear">清除此題</button>
+        <button class="btn primary" id="next">下一題</button>
+        <button class="btn primary" id="submit">
+          交卷並記錄成績
+        </button>
+      </div>
+    </section>
 
-    <h3>逐題解析</h3>
-    <div id="reviews"></div>
-  </section>
+    <section class="card hidden" id="resultPanel">
+      <h2>化學概念診斷報告</h2>
+      <div id="saveStatus" class="notice warn"></div>
+      <p id="studentLabel"></p>
+      <div class="bigscore" id="totalScore"></div>
+      <div class="metrics" id="metrics"></div>
+      <h3>五大概念分析</h3>
+      <div id="skillStats"></div>
+      <div class="notice" id="advice"></div>
+      <div class="actions">
+        <button id="retry" class="btn primary">
+          再確認／重送成績
+        </button>
+        <button id="download" class="btn">
+          下載錯題 CSV
+        </button>
+        <button id="print" class="btn">列印</button>
+        <button id="restart" class="btn">重新作答</button>
+      </div>
+      <h3>逐題解析</h3>
+      <div id="reviews"></div>
+    </section>
+  </div>
 </div>
-</div>
 
-<!-- 教師後台 -->
 <div id="teacherApp" class="hidden">
 
-<section class="panel teacherHeading">
-  <h2>教師錯題分析後台</h2>
-  <button class="btn" id="logout">登出</button>
-</section>
+  <section class="card">
+    <div class="teacherHeading">
+      <h2>教師錯題分析後台</h2>
+      <button class="btn" id="logout">登出</button>
+    </div>
+    <div id="teacherStatus" class="notice">
+      正在讀取成績……
+    </div>
+  </section>
 
-<div class="notice" id="teacherStatus">
-  正在讀取教師資料……
-</div>
+  <div id="teacherContent" class="hidden">
 
-<div id="teacherContent" class="hidden">
+    <section class="card">
+      <div class="teacherCards" id="teacherMetrics"></div>
 
-<section class="panel">
-  <div class="teacherCards" id="teacherCards"></div>
+      <h2>第 1～15 題完全答對率</h2>
 
-  <h2>第 1～15 題完全答對率</h2>
+      <div class="chartControls">
+        <label>統計範圍
+          <select id="accuracyScope">
+            <option value="all">整體</option>
+            <option value="class">班級</option>
+            <option value="student">個人</option>
+          </select>
+        </label>
 
-  <div class="chartControls">
-    <label>統計範圍
-      <select id="accuracyScope">
-        <option value="all">整體</option>
-        <option value="class">班級</option>
-        <option value="student">學生個人</option>
-      </select>
-    </label>
+        <label id="accuracyClassWrap" class="hidden">
+          選擇班級
+          <select id="accuracyClass"></select>
+        </label>
 
-    <label id="accuracyClassWrap" class="hidden">
-      選擇班級
-      <select id="accuracyClass"></select>
-    </label>
+        <label id="accuracyStudentWrap" class="hidden">
+          選擇學生
+          <select id="accuracyStudent"></select>
+        </label>
+      </div>
 
-    <label id="accuracyStudentWrap" class="hidden">
-      選擇學生
-      <select id="accuracyStudent"></select>
-    </label>
+      <p class="chartNote">
+        每題滿分 2 分才算完全答對。
+        每位學生只統計最新一份答卷。
+        點題號可在該題下方展開完整題目。
+      </p>
+
+      <div id="accuracySummary" class="chartNote"></div>
+      <div id="accuracyChart"></div>
+    </section>
+
+    <section class="card">
+      <div class="filtergrid">
+        <label>班級
+          <select id="classFilter">
+            <option value="">全部班級</option>
+          </select>
+        </label>
+        <label>姓名／座號
+          <input id="studentSearch"
+            type="text" placeholder="搜尋學生">
+        </label>
+        <label>題號
+          <select id="questionFilter">
+            <option value="">全部題目</option>
+          </select>
+        </label>
+        <label>得分狀態
+          <select id="scoreFilter">
+            <option value="">全部未全對</option>
+            <option value="zero">零分／未答</option>
+            <option value="partial">部分給分</option>
+          </select>
+        </label>
+      </div>
+      <div class="actions">
+        <button class="btn" id="refresh">重新整理</button>
+        <button class="btn" id="exportTeacher">
+          匯出錯題 CSV
+        </button>
+      </div>
+    </section>
+
+    <div class="teacherTabs">
+      <button class="btn active" id="tabQuestions">
+        各題錯誤率
+      </button>
+      <button class="btn" id="tabStudents">
+        學生成績
+      </button>
+      <button class="btn" id="tabWrong">
+        學生錯題
+      </button>
+    </div>
+
+    <section class="card" id="questionSection">
+      <h2>各題未全對率</h2>
+      <div class="tablewrap" id="questionTable"></div>
+    </section>
+
+    <section class="card hidden" id="studentSection">
+      <h2>學生作答成績</h2>
+      <div class="tablewrap" id="studentTable"></div>
+    </section>
+
+    <section class="card hidden" id="wrongSection">
+      <h2>學生錯題明細</h2>
+      <p id="wrongCount"></p>
+      <div id="wrongList"></div>
+    </section>
+
   </div>
-
-  <p class="chartNote">
-    每題滿分 2 分才算完全答對。
-    每位學生僅統計最新一份答卷。
-    點擊題號可以在該題下方展開題目。
-  </p>
-
-  <div id="accuracySummary" class="chartNote"></div>
-  <div id="accuracyChart"></div>
-</section>
-
-<section class="panel">
-  <h2>成績與錯題篩選</h2>
-
-  <div class="filtergrid">
-    <label>班級
-      <select id="classFilter">
-        <option value="">全部班級</option>
-      </select>
-    </label>
-    <label>姓名／座號
-      <input id="studentSearch" type="text"
-        placeholder="搜尋學生">
-    </label>
-    <label>題號
-      <select id="questionFilter">
-        <option value="">全部題目</option>
-      </select>
-    </label>
-    <label>得分狀態
-      <select id="scoreFilter">
-        <option value="">全部未全對</option>
-        <option value="zero">零分／未答</option>
-        <option value="partial">部分給分</option>
-      </select>
-    </label>
-  </div>
-
-  <div class="actions">
-    <button class="btn" id="refresh">重新整理</button>
-    <button class="btn" id="exportTeacher">
-      匯出錯題 CSV
-    </button>
-  </div>
-</section>
-
-<div class="teacherTabs">
-  <button class="btn active" id="tabQuestions">
-    各題錯誤率
-  </button>
-  <button class="btn" id="tabStudents">
-    學生成績
-  </button>
-  <button class="btn" id="tabWrong">
-    學生錯題
-  </button>
-</div>
-
-<section class="panel" id="questionSection">
-  <h2>各題未全對率</h2>
-  <div class="tablewrap" id="questionTable"></div>
-</section>
-
-<section class="panel hidden" id="studentSection">
-  <h2>學生作答成績</h2>
-  <div class="tablewrap" id="studentTable"></div>
-</section>
-
-<section class="panel hidden" id="wrongSection">
-  <h2>學生錯題明細</h2>
-  <p id="wrongCount"></p>
-  <div id="wrongList"></div>
-</section>
-
-</div>
 </div>
 
 </main>
 
 <footer>
-  化學鍵與物質結構｜學生診斷與教師錯題分析系統
+  化學鍵與物質結構｜學生診斷與教師分析系統
 </footer>
 
-<iframe name="uploadFrame" id="uploadFrame"
-  hidden title="成績與登入傳送"></iframe>
+<iframe name="uploadFrame" hidden title="資料上傳"></iframe>
 
 <script>
 'use strict';
 
 // ==================================================
-// 目前最新 Apps Script 部署網址
+// Google Apps Script
 // ==================================================
 
 const GAS_URL =
@@ -811,11 +848,11 @@ const QUESTIONS=[
  title:'電子組態與化學鍵',
  stem:'X 的電子層分布為 2、8、2；Y 的電子層分布為 2、6。X 和 Y 形成穩定化合物 Z，下列何者正確？',
  options:[
-  'Z 的化學式為 XY₂，屬於共價化合物。',
-  'X 與 Y 各共用兩對電子形成雙鍵。',
-  'Z 的化學式為 XY，主要由正、負離子間的靜電吸引力維繫。',
-  'Z 中 X 為 −2 價、Y 為 +2 價。',
-  'Z 為金屬晶體，可藉自由電子導電。'
+ 'Z 的化學式為 XY₂，屬於共價化合物。',
+ 'X 與 Y 各共用兩對電子形成雙鍵。',
+ 'Z 的化學式為 XY，主要由正、負離子間的靜電吸引力維繫。',
+ 'Z 中 X 為 −2 價、Y 為 +2 價。',
+ 'Z 為金屬晶體，可藉自由電子導電。'
  ],
  answer:'C',
  explain:'X 是 Mg，Y 是 O；化合物為 MgO，屬於離子晶體。'
@@ -826,11 +863,11 @@ const QUESTIONS=[
  title:'路易斯結構與鍵結電子對',
  stem:'氧氣 O₂ 和乙炔根 C₂²⁻ 的化學鍵敘述，哪些正確？',
  options:[
-  'O₂ 中兩個氧原子之間具有兩對鍵結電子對。',
-  'C₂²⁻ 中兩個碳原子間具有三對鍵結電子對。',
-  'C₂²⁻ 的總價電子數為 8 個。',
-  'C₂²⁻ 中每個碳原子各具有一對孤電子對。',
-  'O₂ 和 C₂²⁻ 的鍵級相同。'
+ 'O₂ 中兩個氧原子之間具有兩對鍵結電子對。',
+ 'C₂²⁻ 中兩個碳原子間具有三對鍵結電子對。',
+ 'C₂²⁻ 的總價電子數為 8 個。',
+ 'C₂²⁻ 中每個碳原子各具有一對孤電子對。',
+ 'O₂ 和 C₂²⁻ 的鍵級相同。'
  ],
  answer:'ABD',
  explain:'O₂ 為雙鍵；C₂²⁻ 有 10 個價電子，碳碳間為三鍵且兩端各有一對孤電子對。'
@@ -841,11 +878,11 @@ const QUESTIONS=[
  title:'離子化合物一定只有離子鍵嗎？',
  stem:'分析 MgO、CaC₂、NaOH、NH₄Cl 與 H₂O 的鍵結，哪些正確？',
  options:[
-  'MgO 是由獨立 MgO 分子組成。',
-  'CaC₂ 是具有共價鍵的離子化合物。',
-  'NaOH 內只有離子鍵，完全沒有共價鍵。',
-  'NH₄Cl 中 NH₄⁺ 內部具有 N—H 共價鍵。',
-  'H₂O 中 O—H 鍵為極性共價鍵。'
+ 'MgO 是由獨立 MgO 分子組成。',
+ 'CaC₂ 是具有共價鍵的離子化合物。',
+ 'NaOH 內只有離子鍵，完全沒有共價鍵。',
+ 'NH₄Cl 中 NH₄⁺ 內部具有 N—H 共價鍵。',
+ 'H₂O 中 O—H 鍵為極性共價鍵。'
  ],
  answer:'BDE',
  explain:'CaC₂ 的 C₂²⁻、NaOH 的 OH⁻ 及 NH₄Cl 的 NH₄⁺ 內部均有共價鍵；離子之間有靜電吸引力。'
@@ -856,11 +893,11 @@ const QUESTIONS=[
  title:'晶體性質與導電性',
  stem:'比較 NaCl、MgO、O₂、Au 的導電性與物理性質，何者正確？',
  options:[
-  '固態 NaCl 可藉自由移動的 Na⁺ 導電。',
-  '熔融態 MgO 可藉由移動的正、負離子導電。',
-  '固態 O₂ 高熔點，因氧分子間有離子鍵。',
-  '固態 Au 因電子固定而無法導電。',
-  '固態 MgO 具有延展性，可拉成細線。'
+ '固態 NaCl 可藉自由移動的 Na⁺ 導電。',
+ '熔融態 MgO 可藉由移動的正、負離子導電。',
+ '固態 O₂ 高熔點，因氧分子間有離子鍵。',
+ '固態 Au 因電子固定而無法導電。',
+ '固態 MgO 具有延展性，可拉成細線。'
  ],
  answer:'B',
  explain:'熔融態離子化合物的離子可移動；固態離子晶體通常不導電，金屬則藉離域電子導電。'
@@ -871,11 +908,11 @@ const QUESTIONS=[
  title:'氧與硫的鍵結與電解質',
  stem:'氧與硫均屬第 16 族，下列哪些敘述正確？',
  options:[
-  '氧與硫原子的價電子數皆為 6。',
-  'S₈ 固體主要由 S²⁻ 與正離子間的離子鍵維繫。',
-  'S₈ 分子內相鄰硫原子以共價鍵結合。',
-  '稀硫酸是非電解質，不產生離子。',
-  '稀硫酸水溶液可導電，因為含有可移動離子。'
+ '氧與硫原子的價電子數皆為 6。',
+ 'S₈ 固體主要由 S²⁻ 與正離子間的離子鍵維繫。',
+ 'S₈ 分子內相鄰硫原子以共價鍵結合。',
+ '稀硫酸是非電解質，不產生離子。',
+ '稀硫酸水溶液可導電，因為含有可移動離子。'
  ],
  answer:'ACE',
  explain:'O 與 S 皆有 6 個價電子；S₈ 為共價分子，硫酸溶液含離子而能導電。'
@@ -886,11 +923,11 @@ const QUESTIONS=[
  title:'碳化鈣反應式配平',
  stem:'磺火捕魚使用 CaC₂ 與水產生乙炔：CaC₂＋xH₂O → Ca(OH)₂＋yC₂H₂。平衡後 x、y 分別為何？',
  options:[
-  'x＝1，y＝1',
-  'x＝2，y＝1',
-  'x＝2，y＝2',
-  'x＝1，y＝2',
-  'x＝3，y＝1'
+ 'x＝1，y＝1',
+ 'x＝2，y＝1',
+ 'x＝2，y＝2',
+ 'x＝1，y＝2',
+ 'x＝3，y＝1'
  ],
  answer:'B',
  explain:'正確反應式為 CaC₂＋2H₂O → Ca(OH)₂＋C₂H₂。'
@@ -901,11 +938,11 @@ const QUESTIONS=[
  title:'碳化鈣與莫耳計量',
  stem:'將純 CaC₂ 12.8 g 加入足量水。CaC₂ 式量為 64；NTP 氣體莫耳體積 24.5 L/mol。哪些正確？',
  options:[
-  '原本 CaC₂ 為 0.20 mol。',
-  '理論上產生 0.40 mol 乙炔。',
-  '乙炔在 NTP 下體積為 4.90 L。',
-  '理論上生成 Ca(OH)₂ 0.20 mol。',
-  '每 1 mol CaC₂ 可生成 2 mol 乙炔。'
+ '原本 CaC₂ 為 0.20 mol。',
+ '理論上產生 0.40 mol 乙炔。',
+ '乙炔在 NTP 下體積為 4.90 L。',
+ '理論上生成 Ca(OH)₂ 0.20 mol。',
+ '每 1 mol CaC₂ 可生成 2 mol 乙炔。'
  ],
  answer:'ACD',
  explain:'CaC₂ 是 0.20 mol，與乙炔、Ca(OH)₂ 的莫耳比皆為 1：1；乙炔體積 0.20×24.5＝4.90 L。'
@@ -916,11 +953,11 @@ const QUESTIONS=[
  title:'乙炔的路易斯結構',
  stem:'依照八隅體規則分析乙炔 C₂H₂，下列何者正確？',
  options:[
-  '兩碳之間為單鍵，各有三對孤電子對。',
-  '兩碳之間為雙鍵，每碳各連一氫且滿足八隅體。',
-  '兩碳之間為三鍵，每碳各與一氫形成單鍵。',
-  '乙炔由 C²⁺ 與 H⁻ 組成，屬離子化合物。',
-  '乙炔分子內沒有共價鍵。'
+ '兩碳之間為單鍵，各有三對孤電子對。',
+ '兩碳之間為雙鍵，每碳各連一氫且滿足八隅體。',
+ '兩碳之間為三鍵，每碳各與一氫形成單鍵。',
+ '乙炔由 C²⁺ 與 H⁻ 組成，屬離子化合物。',
+ '乙炔分子內沒有共價鍵。'
  ],
  answer:'C',
  explain:'乙炔的結構為 H—C≡C—H，碳碳三鍵，每個碳另與氫形成單鍵。'
@@ -931,11 +968,11 @@ const QUESTIONS=[
  title:'KOH 的離子鍵與共價鍵',
  stem:'某學生認為「KOH 是離子化合物，所以裡面只有離子鍵」。哪些敘述正確？',
  options:[
-  'KOH 溶於水時須先打斷 OH⁻ 內的 O—H 鍵。',
-  '固態 KOH 有 K⁺ 與 OH⁻ 間的靜電吸引力。',
-  'OH⁻ 內部的 O—H 鍵是共價鍵。',
-  'KOH 溶液稀釋後 H⁺ 濃度下降。',
-  '25°C 時，鹼性 KOH 溶液稀釋後 K⁺ 濃度下降、H⁺ 濃度上升。'
+ 'KOH 溶於水時須先打斷 OH⁻ 內的 O—H 鍵。',
+ '固態 KOH 有 K⁺ 與 OH⁻ 間的靜電吸引力。',
+ 'OH⁻ 內部的 O—H 鍵是共價鍵。',
+ 'KOH 溶液稀釋後 H⁺ 濃度下降。',
+ '25°C 時，鹼性 KOH 溶液稀釋後 K⁺ 濃度下降、H⁺ 濃度上升。'
  ],
  answer:'BCE',
  explain:'K⁺ 與 OH⁻ 間屬離子作用，OH⁻ 內的 O—H 為共價鍵；鹼液稀釋時 H⁺ 濃度增加。'
@@ -946,11 +983,11 @@ const QUESTIONS=[
  title:'KOH 的 pH 計算',
  stem:'25°C 下把 0.056 g KOH 配成 100 mL 溶液，已知 KOH 莫耳質量為 56 g/mol 且完全解離。何者正確？',
  options:[
-  'pH＝2',
-  'pOH＝12',
-  '[H⁺]＝10⁻² M',
-  'pH＝12',
-  '溶液中的 K⁺ 與 OH⁻ 重新形成中性分子，所以不導電。'
+ 'pH＝2',
+ 'pOH＝12',
+ '[H⁺]＝10⁻² M',
+ 'pH＝12',
+ '溶液中的 K⁺ 與 OH⁻ 重新形成中性分子，所以不導電。'
  ],
  answer:'D',
  explain:'[OH⁻]＝(0.056÷56)÷0.1＝0.01 M；pOH＝2，pH＝12。'
@@ -961,11 +998,11 @@ const QUESTIONS=[
  title:'奈米金的氧化還原與鍵結',
  stem:'利用 HAuCl₄ 與檸檬酸鈉製作金奈米粒子，哪些敘述正確？',
  options:[
-  'Au(III) 得電子成 Au(0)，屬還原。',
-  '檸檬酸鈉將 Au(III) 氧化成 Au(0)，所以是氧化劑。',
-  '金屬金的原子間主要以金屬鍵維繫。',
-  '奈米金的顏色與局域表面電漿共振有關。',
-  '金奈米粒子一定不能通過普通濾紙。'
+ 'Au(III) 得電子成 Au(0)，屬還原。',
+ '檸檬酸鈉將 Au(III) 氧化成 Au(0)，所以是氧化劑。',
+ '金屬金的原子間主要以金屬鍵維繫。',
+ '奈米金的顏色與局域表面電漿共振有關。',
+ '金奈米粒子一定不能通過普通濾紙。'
  ],
  answer:'ACD',
  explain:'檸檬酸鈉提供還原作用使 Au(III) 還原成 Au(0)；金屬有金屬鍵，奈米金顏色與表面電漿共振有關。'
@@ -976,7 +1013,7 @@ const QUESTIONS=[
  title:'奈米金原子數估算',
  stem:'球形金奈米粒子直徑 30 nm，金原子半徑 0.15 nm；忽略排列空隙，約有多少金原子？',
  options:[
-  '10²','10³','10⁴','10⁶','10⁹'
+ '10²','10³','10⁴','10⁶','10⁹'
  ],
  answer:'D',
  explain:'半徑比 15÷0.15＝100；體積比為 100³＝10⁶。'
@@ -987,11 +1024,11 @@ const QUESTIONS=[
  title:'四種物質的導電機制',
  stem:'甲：Mg；乙：MgO；丙：O₂；丁：KOH 水溶液。哪些敘述正確？',
  options:[
-  '固態 Mg 主要靠離域電子導電。',
-  '固態 MgO 可直接靠移動的 Mg²⁺ 導電。',
-  '熔融態 MgO 可靠正負離子移動導電。',
-  '氧氣分子有共價鍵，所以一般氧氣必定導電。',
-  'KOH 水溶液能藉可移動離子導電。'
+ '固態 Mg 主要靠離域電子導電。',
+ '固態 MgO 可直接靠移動的 Mg²⁺ 導電。',
+ '熔融態 MgO 可靠正負離子移動導電。',
+ '氧氣分子有共價鍵，所以一般氧氣必定導電。',
+ 'KOH 水溶液能藉可移動離子導電。'
  ],
  answer:'ACE',
  explain:'金屬靠離域電子；熔融離子晶體與電解質水溶液則靠可移動離子導電。'
@@ -1002,11 +1039,11 @@ const QUESTIONS=[
  title:'分子與離子晶體比較',
  stem:'比較 O₂、S₈、MgO、CaC₂，哪些敘述正確？',
  options:[
-  'O₂ 與 S₈ 都是分子物質。',
-  'MgO 與 CaC₂ 都由獨立分子組成。',
-  'S₈ 固體熔化必先破壞全部 S—S 共價鍵。',
-  'CaC₂ 的 C₂²⁻ 含碳碳三鍵。',
-  '離子化合物內部不可能有共價鍵。'
+ 'O₂ 與 S₈ 都是分子物質。',
+ 'MgO 與 CaC₂ 都由獨立分子組成。',
+ 'S₈ 固體熔化必先破壞全部 S—S 共價鍵。',
+ 'CaC₂ 的 C₂²⁻ 含碳碳三鍵。',
+ '離子化合物內部不可能有共價鍵。'
  ],
  answer:'AD',
  explain:'O₂、S₈ 為分子物質；CaC₂ 是含有 C₂²⁻（碳碳三鍵）的離子化合物。'
@@ -1017,11 +1054,11 @@ const QUESTIONS=[
  title:'化學鍵綜合實驗',
  stem:'甲：MgO 0.10 mol；乙：CaC₂ 0.10 mol。乙與足量水完全反應，哪些正確？',
  options:[
-  '0.10 mol MgO 是 0.10 mol 獨立 MgO 分子。',
-  '0.10 mol CaC₂ 可生成 0.10 mol 乙炔。',
-  '0.10 mol MgO 含 Mg²⁺、O²⁻ 各 0.10 mol。',
-  'CaC₂ 內完全沒有共價鍵。',
-  'MgO 與 CaC₂ 晶體皆有正負離子的靜電吸引力。'
+ '0.10 mol MgO 是 0.10 mol 獨立 MgO 分子。',
+ '0.10 mol CaC₂ 可生成 0.10 mol 乙炔。',
+ '0.10 mol MgO 含 Mg²⁺、O²⁻ 各 0.10 mol。',
+ 'CaC₂ 內完全沒有共價鍵。',
+ 'MgO 與 CaC₂ 晶體皆有正負離子的靜電吸引力。'
  ],
  answer:'BCE',
  explain:'MgO 沒有獨立分子；0.10 mol MgO 含正負離子各 0.10 mol；CaC₂ 與乙炔為 1：1 且兼具離子作用與共價鍵。'
@@ -1029,29 +1066,29 @@ const QUESTIONS=[
 ];
 
 // ==================================================
-// 第 1～15 題應具備的能力
+// 應具備能力
 // ==================================================
 
 const ABILITIES=[
  '判斷電子組態與離子鍵形成',
  '繪製路易斯結構與判斷鍵級',
- '區分離子化合物中的共價鍵',
+ '辨認離子化合物中的共價鍵',
  '比較晶體導電條件與機制',
- '判讀價電子與電解質性質',
+ '理解價電子、分子鍵與電解質',
  '配平化學反應式',
- '利用莫耳比計算產物體積',
- '判斷三鍵與八隅體結構',
- '辨認 KOH 內部的化學鍵',
- '計算強鹼 pH 與 pOH',
- '辨認氧化還原及奈米金性質',
- '以體積比估算原子數',
- '比較金屬與電解質導電機制',
+ '運用莫耳比計算氣體體積',
+ '判斷乙炔三鍵與八隅體',
+ '區分 KOH 內的離子鍵與共價鍵',
+ '計算強鹼濃度與 pH',
+ '辨認氧化還原與奈米金性質',
+ '利用體積比估算原子數',
+ '比較不同物質導電機制',
  '區分分子物質與離子晶體',
- '整合化學鍵與反應計量'
+ '整合化學鍵與化學計量'
 ];
 
 // ==================================================
-// 工具函式
+// 基本工具
 // ==================================================
 
 const $=id=>document.getElementById(id);
@@ -1059,11 +1096,109 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
 function newId(){
  if(crypto.randomUUID)return crypto.randomUUID();
- const bytes=new Uint8Array(16);
- crypto.getRandomValues(bytes);
- return 'q_'+[...bytes]
+ const b=new Uint8Array(16);
+ crypto.getRandomValues(b);
+ return 'q_'+[...b]
    .map(x=>x.toString(16).padStart(2,'0'))
    .join('');
+}
+
+function postForm(payload){
+ const f=document.createElement('form');
+ f.method='POST';
+ f.action=GAS_URL;
+ f.target='uploadFrame';
+ f.hidden=true;
+
+ const h=document.createElement('input');
+ h.type='hidden';
+ h.name='payload';
+ h.value=JSON.stringify(payload);
+
+ f.appendChild(h);
+ document.body.appendChild(f);
+ f.submit();
+ f.remove();
+}
+
+function apiGet(action,params={},retries=2){
+ return new Promise((resolve,reject)=>{
+  let attempt=0;
+  const run=()=>{
+   attempt++;
+   const cb='cb_'+Date.now()+'_'+
+     Math.random().toString(36).slice(2);
+
+   const url=new URL(GAS_URL);
+   url.searchParams.set('action',action);
+   url.searchParams.set('callback',cb);
+
+   Object.entries(params).forEach(([k,v])=>
+     url.searchParams.set(k,String(v))
+   );
+
+   const script=document.createElement('script');
+   let finished=false;
+
+   const cleanup=()=>{
+    clearTimeout(timer);
+    script.remove();
+    try{delete window[cb]}catch(e){}
+   };
+
+   const fail=err=>{
+    if(finished)return;
+    finished=true;
+    cleanup();
+    if(attempt<retries){
+     setTimeout(run,700);
+    }else{
+     reject(err);
+    }
+   };
+
+   window[cb]=data=>{
+    if(finished)return;
+    finished=true;
+    cleanup();
+    resolve(data);
+   };
+
+   script.onerror=()=>fail(
+     new Error('Apps Script 連線失敗')
+   );
+
+   const timer=setTimeout(()=>
+    fail(new Error('Apps Script 查詢逾時')),
+    16000
+   );
+
+   script.src=url.toString();
+   document.head.appendChild(script);
+  };
+
+  run();
+ });
+}
+
+function downloadCSV(rows,filename){
+ const csv='\ufeff'+rows.map(r=>
+  r.map(v=>'"'+String(v??'')
+    .replace(/"/g,'""')+'"').join(',')
+ ).join('\r\n');
+
+ const url=URL.createObjectURL(
+  new Blob([csv],{
+   type:'text/csv;charset=utf-8'
+  })
+ );
+
+ const a=document.createElement('a');
+ a.href=url;
+ a.download=filename;
+ a.click();
+
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
 function escapeHTML(v){
@@ -1076,121 +1211,50 @@ function escapeHTML(v){
  }[c]));
 }
 
-function downloadCSV(rows,filename){
- const csv='\ufeff'+rows.map(row=>
-  row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"')
-     .join(',')
- ).join('\r\n');
+// ==================================================
+// 身分選擇
+// ==================================================
 
- const url=URL.createObjectURL(
-  new Blob([csv],{type:'text/csv;charset=utf-8'})
+let teacherToken='';
+let teacherData=null;
+let studentReady=false;
+
+function showMode(mode){
+ $('roles').classList.toggle(
+  'hidden',mode!=='roles'
  );
- const a=document.createElement('a');
- a.href=url;
- a.download=filename;
- a.click();
- setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-
-// ==================================================
-// Apps Script POST
-// ==================================================
-
-function postForm(payload){
- const form=document.createElement('form');
- form.method='POST';
- form.action=GAS_URL;
- form.target='uploadFrame';
- form.style.display='none';
-
- const input=document.createElement('input');
- input.type='hidden';
- input.name='payload';
- input.value=JSON.stringify(payload);
-
- form.appendChild(input);
- document.body.appendChild(form);
- form.submit();
- form.remove();
-}
-
-// ==================================================
-// Apps Script GET：JSONP + 自動重試
-// ==================================================
-
-function jsonpOnce(action,params={},timeout=12000){
- return new Promise((resolve,reject)=>{
-  const callback='cb_'+Date.now()+'_'+
-    Math.random().toString(36).slice(2);
-
-  const url=new URL(GAS_URL);
-  url.searchParams.set('action',action);
-  url.searchParams.set('callback',callback);
-  url.searchParams.set('_t',String(Date.now()));
-
-  Object.entries(params).forEach(([key,value])=>{
-   url.searchParams.set(key,String(value));
-  });
-
-  const script=document.createElement('script');
-  script.async=true;
-
-  let settled=false;
-  let timer;
-
-  const finish=(error,data)=>{
-   if(settled)return;
-   settled=true;
-   clearTimeout(timer);
-   script.remove();
-   delete window[callback];
-
-   if(error)reject(error);
-   else resolve(data);
-  };
-
-  window[callback]=data=>finish(null,data);
-
-  script.onerror=()=>{
-   finish(new Error('Apps Script 跨網站讀取失敗'));
-  };
-
-  timer=setTimeout(()=>{
-   finish(new Error('Apps Script 回應逾時'));
-  },timeout);
-
-  script.src=url.toString();
-  document.head.appendChild(script);
- });
-}
-
-async function apiGet(action,params={},maxAttempts=3){
- let lastError=null;
-
- for(let attempt=1;attempt<=maxAttempts;attempt++){
-  try{
-   return await jsonpOnce(action,params);
-  }catch(error){
-   lastError=error;
-   console.warn(
-    'API '+action+' 第 '+attempt+' 次失敗',
-    error.message
-   );
-
-   if(attempt<maxAttempts){
-    await sleep(500*attempt);
-   }
-  }
- }
-
- throw new Error(
-  (lastError?.message||'連線失敗')+
-  '（已重試 '+maxAttempts+' 次）'
+ $('studentApp').classList.toggle(
+  'hidden',mode!=='student'
  );
+ $('teacherLoginPanel').classList.toggle(
+  'hidden',mode!=='login'
+ );
+ $('teacherApp').classList.toggle(
+  'hidden',mode!=='teacher'
+ );
+ $('modebar').classList.toggle(
+  'hidden',mode==='roles'
+ );
+
+ $('modeLabel').textContent=
+  mode==='student'?'學生測驗':
+  mode==='teacher'?'教師錯題分析':'教師登入';
+
+ window.scrollTo(0,0);
+}
+
+function showLogin(message=''){
+ showMode('login');
+ $('teacherPassword').value='';
+ $('loginMsg').textContent=message;
+ $('loginMsg').classList.toggle(
+  'hidden',!message
+ );
+ $('loginBtn').disabled=false;
 }
 
 // ==================================================
-// 學生測驗狀態
+// 學生作答與計分
 // ==================================================
 
 const state={
@@ -1203,9 +1267,7 @@ const state={
  uploading:false
 };
 
-let studentReady=false;
-
-function studentInfo(){
+function who(){
  return {
   className:$('className').value.trim(),
   seat:$('seat').value.trim(),
@@ -1219,74 +1281,81 @@ function picked(q){
 
 function saveLocal(){
  try{
-  localStorage.setItem(STORAGE_KEY,JSON.stringify({
-   version:QUIZ_VERSION,
-   index:state.index,
-   answers:state.answers,
-   id:state.id,
-   submitted:state.submitted,
-   confirmed:state.confirmed,
-   snapshot:state.snapshot,
-   info:studentInfo()
-  }));
+  localStorage.setItem(
+   STORAGE_KEY,
+   JSON.stringify({
+    version:QUIZ_VERSION,
+    index:state.index,
+    answers:state.answers,
+    id:state.id,
+    submitted:state.submitted,
+    confirmed:state.confirmed,
+    snapshot:state.snapshot,
+    identity:who()
+   })
+  );
  }catch(e){console.warn(e)}
 }
 
 function restoreLocal(){
  try{
-  const previous=JSON.parse(
+  const old=JSON.parse(
    localStorage.getItem(STORAGE_KEY)||'null'
   );
 
-  if(!previous||previous.version!==QUIZ_VERSION)return;
+  if(!old||old.version!==QUIZ_VERSION)return;
 
-  state.index=Math.max(0,Math.min(14,Number(previous.index)||0));
-  state.answers=previous.answers||{};
-  state.id=/^[A-Za-z0-9_-]{15,100}$/.test(previous.id||'')
-   ?previous.id:state.id;
+  state.index=Math.max(
+   0,Math.min(14,Number(old.index)||0)
+  );
+  state.answers=old.answers||{};
+  state.id=/^[A-Za-z0-9_-]{15,100}$/.test(
+   old.id||''
+  )?old.id:state.id;
 
-  state.submitted=!!previous.submitted;
-  state.confirmed=!!previous.confirmed;
-  state.snapshot=previous.snapshot||null;
+  state.submitted=!!old.submitted;
+  state.confirmed=!!old.confirmed;
+  state.snapshot=old.snapshot||null;
 
   if(state.submitted&&!state.snapshot){
    state.submitted=false;
    state.confirmed=false;
   }
 
-  $('className').value=previous.info?.className||'';
-  $('seat').value=previous.info?.seat||'';
-  $('studentName').value=previous.info?.name||'';
+  $('className').value=
+   old.identity?.className||'';
+  $('seat').value=old.identity?.seat||'';
+  $('studentName').value=
+   old.identity?.name||'';
+
  }catch(e){console.warn(e)}
 }
 
 function renderNav(){
+ let count=0;
  $('numbergrid').replaceChildren();
- let completed=0;
 
- QUESTIONS.forEach((q,index)=>{
-  const yes=picked(q).length>0;
-  if(yes)completed++;
+ QUESTIONS.forEach((q,i)=>{
+  const done=picked(q).length>0;
+  if(done)count++;
 
-  const button=document.createElement('button');
-  button.className='num'+
-    (yes?' done':'')+
-    (index===state.index?' active':'');
+  const b=document.createElement('button');
+  b.className='num'+
+   (done?' done':'')+
+   (i===state.index?' active':'');
+  b.textContent=q.id;
+  b.disabled=state.submitted;
 
-  button.textContent=q.id;
-  button.disabled=state.submitted;
-
-  button.onclick=()=>{
-   state.index=index;
+  b.onclick=()=>{
+   state.index=i;
    saveLocal();
    renderQuestion();
   };
-
-  $('numbergrid').appendChild(button);
+  $('numbergrid').appendChild(b);
  });
 
- $('progressText').textContent=completed+' / 15';
- $('progressFill').style.width=(completed/15*100)+'%';
+ $('progressText').textContent=count+' / 15';
+ $('progressFill').style.width=count/15*100+'%';
 }
 
 function renderQuestion(){
@@ -1296,23 +1365,26 @@ function renderQuestion(){
  $('resultPanel').classList.add('hidden');
 
  $('skill').textContent=q.skill;
- $('qtype').textContent=q.type==='single'?'單選':'多選';
- $('questionTitle').textContent='第 '+q.id+' 題｜'+q.title;
+ $('qtype').textContent=
+  q.type==='single'?'單選題':'多選題';
+ $('questionTitle').textContent=
+  '第 '+q.id+' 題｜'+q.title;
  $('questionStem').textContent=q.stem;
 
  $('options').replaceChildren();
 
- q.options.forEach((text,index)=>{
-  const letter=LETTERS[index];
-  const selected=picked(q).includes(letter);
+ q.options.forEach((text,i)=>{
+  const letter=LETTERS[i];
+  const chosen=picked(q).includes(letter);
 
   const label=document.createElement('label');
-  label.className='option'+(selected?' checked':'');
+  label.className='option'+
+   (chosen?' checked':'');
 
   const input=document.createElement('input');
   input.type=q.type==='single'?'radio':'checkbox';
   input.name='q'+q.id;
-  input.checked=selected;
+  input.checked=chosen;
 
   input.onchange=()=>{
    if(q.type==='single'){
@@ -1322,7 +1394,6 @@ function renderQuestion(){
      ?[...new Set([...picked(q),letter])]
      :picked(q).filter(x=>x!==letter);
    }
-
    saveLocal();
    renderQuestion();
   };
@@ -1336,21 +1407,20 @@ function renderQuestion(){
 
  $('prev').disabled=state.index===0;
  $('next').disabled=state.index===14;
-
  renderNav();
 }
 
-function scoreOne(q,answers){
- if(!answers.length)return 0;
+function scoreOne(q,ans){
+ if(!ans.length)return 0;
 
- const errors=LETTERS.filter(c=>
-  answers.includes(c)!==q.answer.includes(c)
+ const wrong=LETTERS.filter(c=>
+  ans.includes(c)!==q.answer.includes(c)
  ).length;
 
- if(errors===0)return 2;
+ if(wrong===0)return 2;
  if(q.type==='single')return 0;
- if(errors===1)return 1.2;
- if(errors===2)return 0.4;
+ if(wrong===1)return 1.2;
+ if(wrong===2)return 0.4;
  return 0;
 }
 
@@ -1362,8 +1432,7 @@ function grade(){
  }));
 
  const skills={};
- let full=0;
- let partial=0;
+ let full=0,partial=0;
 
  details.forEach(d=>{
   if(d.points===2)full++;
@@ -1376,12 +1445,13 @@ function grade(){
   skills[d.q.skill].score=+(
    skills[d.q.skill].score+d.points
   ).toFixed(1);
-
   skills[d.q.skill].max+=2;
  });
 
  return {
-  total:+details.reduce((s,d)=>s+d.points,0).toFixed(1),
+  total:+details.reduce(
+   (s,d)=>s+d.points,0
+  ).toFixed(1),
   full,
   partial,
   zero:15-full-partial,
@@ -1396,39 +1466,41 @@ function buildSnapshot(){
  return {
   submissionId:state.id,
   version:QUIZ_VERSION,
-  ...studentInfo(),
+  ...who(),
   answers:Object.fromEntries(
    QUESTIONS.map(q=>[
-    String(q.id),
-    [...picked(q)].sort()
+    String(q.id),[...picked(q)].sort()
    ])
   ),
-  wrong:g.details.filter(d=>d.points<2).map(d=>({
-   id:d.q.id,
-   title:d.q.title,
-   skill:d.q.skill,
-   stem:d.q.stem,
-   options:d.q.options,
-   selected:d.selected,
-   explain:d.q.explain
-  })),
+  wrong:g.details
+   .filter(d=>d.points<2)
+   .map(d=>({
+    id:d.q.id,
+    title:d.q.title,
+    skill:d.q.skill,
+    stem:d.q.stem,
+    options:d.q.options,
+    selected:d.selected,
+    explain:d.q.explain
+   })),
   clientScore:g.total
  };
 }
 
 function renderResults(status,confirmed){
  const g=grade();
- const info=state.snapshot;
+ const person=state.snapshot;
 
  $('quizPanel').classList.add('hidden');
  $('resultPanel').classList.remove('hidden');
 
- $('saveStatus').className='notice '+(confirmed?'':'warning');
+ $('saveStatus').className=
+  'notice '+(confirmed?'':'warn');
  $('saveStatus').textContent=status;
 
  $('studentLabel').textContent=
-  info.className+' 班 '+info.seat+' 號 '+info.name;
-
+  person.className+' 班 '+
+  person.seat+' 號 '+person.name;
  $('totalScore').textContent=g.total+' / 30 分';
 
  $('metrics').replaceChildren();
@@ -1438,46 +1510,47 @@ function renderResults(status,confirmed){
   ['部分給分',g.partial],
   ['零分／未答',g.zero]
  ].forEach(([label,value])=>{
-  const div=document.createElement('div');
-  div.className='metric';
+  const d=document.createElement('div');
+  d.className='metric';
 
-  const strong=document.createElement('strong');
-  strong.textContent=value;
+  const b=document.createElement('strong');
+  b.textContent=value;
 
-  div.append(strong,document.createTextNode(label));
-  $('metrics').appendChild(div);
+  d.append(b,document.createTextNode(label));
+  $('metrics').appendChild(d);
  });
 
  $('skillStats').replaceChildren();
 
- Object.entries(g.skills).forEach(([name,s])=>{
-  const div=document.createElement('div');
-  div.className='skill';
+ Object.entries(g.skills).forEach(([key,s])=>{
+  const d=document.createElement('div');
+  d.className='skill';
 
-  const label=document.createElement('div');
-  label.textContent=name+'：'+s.score+' / '+s.max;
+  const t=document.createElement('div');
+  t.textContent=key+'：'+s.score+' / '+s.max;
 
-  const track=document.createElement('div');
-  track.className='track';
+  const bar=document.createElement('div');
+  bar.className='track';
 
   const fill=document.createElement('div');
-  fill.style.width=(s.score/s.max*100)+'%';
+  fill.style.width=s.score/s.max*100+'%';
 
-  track.appendChild(fill);
-  div.append(label,track);
-  $('skillStats').appendChild(div);
+  bar.appendChild(fill);
+  d.append(t,bar);
+  $('skillStats').appendChild(d);
  });
 
  const weak=Object.entries(g.skills)
   .filter(([,s])=>s.score/s.max<.8)
   .sort((a,b)=>
-   a[1].score/a[1].max-b[1].score/b[1].max
+   a[1].score/a[1].max-
+   b[1].score/b[1].max
   );
 
  $('advice').textContent=weak.length
-  ?'建議優先複習：'+weak.slice(0,3)
-    .map(x=>x[0]).join('、')
-  :'五大概念得分率均達 80% 以上。';
+  ?'建議優先複習：'+
+    weak.slice(0,3).map(x=>x[0]).join('、')
+  :'所有概念得分率均達 80% 以上。';
 
  $('reviews').replaceChildren();
 
@@ -1485,98 +1558,99 @@ function renderResults(status,confirmed){
   const box=document.createElement('article');
   box.className='review';
 
-  const title=document.createElement('h3');
-  title.textContent='第 '+d.q.id+' 題｜'+d.q.title;
+  const h=document.createElement('h3');
+  h.textContent='第 '+d.q.id+' 題｜'+d.q.title;
 
-  const result=document.createElement('p');
-  result.className=d.points===2?'correct':'wrong';
-  result.textContent=
-   '得分：'+d.points+'/2；作答：'+
+  const p=document.createElement('p');
+  p.className=d.points===2?'correct':'wrong';
+  p.textContent=
+   '得分 '+d.points+'/2｜學生作答：'+
    (d.selected.join('、')||'未作答')+
-   '；正解：'+d.q.answer.split('').join('、');
+   '｜正解：'+d.q.answer.split('').join('、');
 
-  const explain=document.createElement('div');
-  explain.className='explain';
-  explain.textContent='解析：'+d.q.explain;
+  const ex=document.createElement('div');
+  ex.className='explain';
+  ex.textContent='解析：'+d.q.explain;
 
   const detail=document.createElement('details');
   const summary=document.createElement('summary');
   summary.textContent='查看完整題目與選項';
-
   detail.appendChild(summary);
 
   const stem=document.createElement('p');
   stem.textContent=d.q.stem;
   detail.appendChild(stem);
 
-  d.q.options.forEach((text,i)=>{
-   const p=document.createElement('p');
-   p.textContent='('+LETTERS[i]+') '+text;
+  d.q.options.forEach((opt,i)=>{
+   const letter=LETTERS[i];
+   const item=document.createElement('p');
 
-   if(d.q.answer.includes(LETTERS[i])){
-    p.className='correct';
+   item.textContent='('+letter+') '+opt;
+
+   if(d.q.answer.includes(letter)){
+    item.className='correct';
+   }else if(d.selected.includes(letter)){
+    item.className='wrong';
    }
 
-   detail.appendChild(p);
+   detail.appendChild(item);
   });
 
-  box.append(title,result,explain,detail);
+  box.append(h,p,ex,detail);
   $('reviews').appendChild(box);
  });
 
- $('retry').classList.toggle('hidden',confirmed);
+ $('retry').classList.toggle(
+  'hidden',confirmed
+ );
 }
 
 async function verifySave(){
  for(let i=0;i<8;i++){
-  await sleep(i===0?1300:1500);
-
+  await sleep(i===0?1400:1600);
   try{
-   const result=await apiGet(
-    'status',
-    {id:state.id},
-    2
-   );
-
-   if(result.ok&&result.recorded)return true;
-  }catch(e){
-   console.warn('成績確認失敗',e.message);
-  }
+   const r=await apiGet('status',{
+    id:state.id
+   });
+   if(r.ok&&r.recorded)return true;
+  }catch(e){console.warn(e)}
  }
-
  return false;
 }
 
 async function upload(){
- if(state.uploading||state.confirmed||!state.snapshot)return;
+ if(state.uploading||
+    state.confirmed||
+    !state.snapshot)return;
 
  state.uploading=true;
  $('retry').disabled=true;
 
- renderResults('正在上傳並確認成績……',false);
+ renderResults(
+  '正在上傳並確認成績……',false
+ );
 
  try{
   postForm(state.snapshot);
+  const ok=await verifySave();
 
-  const saved=await verifySave();
-
-  if(saved){
+  if(ok){
    state.confirmed=true;
    saveLocal();
-
    renderResults(
     '成績已確認寫入 Google 試算表。',
     true
    );
   }else{
    renderResults(
-    '測驗已計分，但尚未確認上傳成功。請再次確認或重送。',
+    '已完成計分，但尚未確認寫入。請再次重送或通知教師。',
     false
    );
   }
-
  }catch(e){
-  renderResults('上傳異常：'+e.message,false);
+  renderResults(
+   '上傳失敗：'+e.message,false
+  );
  }finally{
   state.uploading=false;
   $('retry').disabled=false;
@@ -1586,40 +1660,41 @@ async function upload(){
 function submitQuiz(){
  if(state.submitted)return;
 
- const info=studentInfo();
+ const person=who();
 
- if(!info.className||!info.seat||!info.name){
-  $('studentNotice').textContent=
-   '請先填寫班級、座號與姓名。';
+ if(!person.className||
+    !person.seat||
+    !person.name){
   $('studentNotice').className='notice error';
+  $('studentNotice').textContent=
+   '請先填寫班級、座號及姓名。';
   return;
  }
 
- const missing=QUESTIONS.filter(q=>
-  !picked(q).length
- ).map(q=>q.id);
+ const missing=QUESTIONS
+  .filter(q=>!picked(q).length)
+  .map(q=>q.id);
 
- const text=missing.length
+ const msg=missing.length
   ?'第 '+missing.join('、')+
-   ' 題尚未作答，將以 0 分計算。確定交卷？'
+   ' 題未作答，將以 0 分計算。確定交卷？'
   :'確定交卷並上傳成績？';
 
- if(!confirm(text))return;
+ if(!confirm(msg))return;
 
  state.submitted=true;
  state.confirmed=false;
  state.snapshot=buildSnapshot();
 
- ['className','seat','studentName'].forEach(id=>{
-  $(id).disabled=true;
- });
+ ['className','seat','studentName']
+  .forEach(id=>$(id).disabled=true);
 
  saveLocal();
  upload();
 }
 
-function restartQuiz(){
- if(!confirm('確定重新作答？會建立新的成績紀錄。'))return;
+function restart(){
+ if(!confirm('確定重新作答並建立新紀錄？'))return;
 
  state.index=0;
  state.answers={};
@@ -1628,58 +1703,32 @@ function restartQuiz(){
  state.confirmed=false;
  state.snapshot=null;
 
- ['className','seat','studentName'].forEach(id=>{
-  $(id).disabled=false;
- });
+ ['className','seat','studentName']
+  .forEach(id=>$(id).disabled=false);
 
  saveLocal();
  renderQuestion();
 }
 
-function exportPersonal(){
+function downloadPersonal(){
  const g=grade();
- const info=state.snapshot;
+ const p=state.snapshot;
 
  const rows=[[
-  '班級','座號','姓名','題號',
-  '概念','作答','正解','得分','題目'
+  '班級','座號','姓名','題號','概念',
+  '學生答案','正解','得分','題目'
  ]];
 
- g.details.filter(d=>d.points<2)
+ g.details
+  .filter(d=>d.points<2)
   .forEach(d=>rows.push([
-   info.className,
-   info.seat,
-   info.name,
-   d.q.id,
-   d.q.skill,
+   p.className,p.seat,p.name,
+   d.q.id,d.q.skill,
    d.selected.join(''),
-   d.q.answer,
-   d.points,
-   d.q.stem
+   d.q.answer,d.points,d.q.stem
   ]));
 
  downloadCSV(rows,'化學鍵個人錯題.csv');
-}
-
-function startStudent(){
- restoreLocal();
-
- if(state.submitted){
-  ['className','seat','studentName'].forEach(id=>{
-   $(id).disabled=true;
-  });
-
-  renderNav();
-  renderResults(
-   state.confirmed
-    ?'這份答卷已確認儲存。'
-    :'這份答卷尚未確認上傳，可重新送出。',
-   state.confirmed
-  );
-
- }else{
-  renderQuestion();
- }
 }
 
 $('prev').onclick=()=>{
@@ -1689,7 +1738,6 @@ $('prev').onclick=()=>{
   renderQuestion();
  }
 };
-
 $('next').onclick=()=>{
  if(state.index<14){
   state.index++;
@@ -1697,7 +1745,6 @@ $('next').onclick=()=>{
   renderQuestion();
  }
 };
-
 $('clear').onclick=()=>{
  delete state.answers[
   String(QUESTIONS[state.index].id)
@@ -1705,143 +1752,88 @@ $('clear').onclick=()=>{
  saveLocal();
  renderQuestion();
 };
-
 $('submit').onclick=submitQuiz;
 $('retry').onclick=upload;
-$('restart').onclick=restartQuiz;
-$('download').onclick=exportPersonal;
+$('restart').onclick=restart;
+$('download').onclick=downloadPersonal;
 $('print').onclick=()=>window.print();
 
-['className','seat','studentName'].forEach(id=>{
- $(id).addEventListener('input',saveLocal);
-});
+['className','seat','studentName'].forEach(id=>
+ $(id).addEventListener('input',saveLocal)
+);
 
 // ==================================================
-// 身分切換與教師登入
+// 教師登入
 // ==================================================
-
-let teacherToken='';
-let teacherData=null;
-let currentTab='question';
-
-function showMode(mode){
- $('roles').classList.toggle('hidden',mode!=='roles');
- $('studentApp').classList.toggle('hidden',mode!=='student');
- $('teacherLoginPanel').classList.toggle(
-  'hidden',mode!=='login'
- );
- $('teacherApp').classList.toggle('hidden',mode!=='teacher');
- $('modebar').classList.toggle('hidden',mode==='roles');
-
- $('modeLabel').textContent=
-  mode==='student'?'學生測驗':
-  mode==='teacher'?'教師錯題分析':
-  '教師登入';
-
- window.scrollTo(0,0);
-}
-
-function showLogin(text=''){
- showMode('login');
- $('teacherPassword').value='';
- $('loginMsg').textContent=text;
- $('loginMsg').classList.toggle('hidden',!text);
- $('loginBtn').disabled=false;
-}
-
-function loginNotice(text,error=false){
- $('loginMsg').textContent=text;
- $('loginMsg').className=
-  'notice '+(error?'error':'warning');
- $('loginMsg').classList.remove('hidden');
-}
 
 async function loginTeacher(){
  const password=$('teacherPassword').value;
 
  if(!password){
-  loginNotice('請輸入教師密碼。',true);
+  $('loginMsg').textContent=
+   '請輸入教師密碼。';
+  $('loginMsg').classList.remove('hidden');
   return;
  }
 
  $('teacherPassword').value='';
  $('loginBtn').disabled=true;
+ $('loginMsg').classList.remove('hidden');
+ $('loginMsg').textContent=
+  '正在驗證教師密碼……';
 
  const loginId=newId();
- let networkFailures=0;
 
  try{
-  loginNotice('步驟 1／3：正在連接 Google 服務……');
-
-  // 先確認後端 GET 可連線
-  const health=await apiGet('health',{},3);
-
-  if(!health.ok){
-   throw new Error('後端健康檢查未通過。');
-  }
-
-  loginNotice('步驟 2／3：正在送出教師驗證資料……');
-
   postForm({
    action:'teacherLogin',
    loginId,
    password
   });
 
-  let answer=null;
+  let result=null;
 
-  // 輪詢登入結果
   for(let i=0;i<12;i++){
-   await sleep(i===0?1600:1400);
-
-   loginNotice(
-    '步驟 3／3：等待登入結果（第 '+(i+1)+' 次）……'
-   );
+   await sleep(i===0?1200:1300);
 
    try{
-    const result=await apiGet(
+    const r=await apiGet(
      'loginStatus',
      {id:loginId},
      2
     );
 
-    if(result.found||result.ok===false){
-     answer=result;
+    if(r.found||r.ok===false){
+     result=r;
      break;
     }
-
    }catch(e){
-    networkFailures++;
-    console.warn('登入結果讀取失敗',e.message);
+    if(i===11)throw e;
    }
   }
 
-  if(!answer){
+  if(!result){
    throw new Error(
-    networkFailures
-    ?'登入結果查詢多次連線失敗，請改用 Chrome 開啟網頁後重試。'
-    :'Google 尚未收到登入結果。請查看 Apps Script 的 doPost 執行紀錄。'
+    '尚未收到登入結果，請檢查 Apps Script 部署。'
    );
   }
 
-  if(!answer.ok||
-     !answer.authenticated||
-     !answer.token){
+  if(!result.ok||
+     !result.authenticated||
+     !result.token){
    throw new Error(
-    answer.error||'教師密碼錯誤或驗證失敗。'
+    result.error||'教師密碼錯誤'
    );
   }
 
-  teacherToken=answer.token;
-
+  teacherToken=result.token;
   showMode('teacher');
   await refreshTeacher();
 
  }catch(e){
-  if(!teacherToken){
-   showMode('login');
-   loginNotice('登入失敗：'+e.message,true);
-  }
+  $('loginMsg').textContent=
+   '登入失敗：'+e.message;
+  $('loginMsg').classList.remove('hidden');
  }finally{
   $('loginBtn').disabled=false;
  }
@@ -1852,13 +1844,14 @@ function logoutTeacher(){
 
  teacherToken='';
  teacherData=null;
+ expandedQuestion=null;
 
  $('teacherContent').classList.add('hidden');
-
- [
-  'teacherCards','accuracyChart',
-  'questionTable','studentTable','wrongList'
- ].forEach(id=>$(id).replaceChildren());
+ $('teacherMetrics').replaceChildren();
+ $('accuracyChart').replaceChildren();
+ $('questionTable').replaceChildren();
+ $('studentTable').replaceChildren();
+ $('wrongList').replaceChildren();
 
  if(token){
   postForm({
@@ -1871,93 +1864,81 @@ function logoutTeacher(){
 }
 
 // ==================================================
-// 教師資料、篩選及統計
+// 教師資料處理
 // ==================================================
 
-function currentFilters(){
+function teacherFilters(){
  return {
   cls:$('classFilter').value,
-  search:$('studentSearch').value.toLowerCase().trim(),
+  search:$('studentSearch').value
+   .trim().toLowerCase(),
   qid:$('questionFilter').value,
   score:$('scoreFilter').value
  };
 }
 
 function matchWrong(w,f){
- return (
-  (!f.cls||w.className===f.cls) &&
-  (!f.search||[w.name,w.seat].some(x=>
-   String(x).toLowerCase().includes(f.search)
-  )) &&
-  (!f.qid||String(w.questionId)===f.qid) &&
-  (!f.score||(
+ return (!f.cls||w.className===f.cls)
+  &&(!f.search||[w.name,w.seat].some(x=>
+   String(x).toLowerCase().includes(f.search)))
+  &&(!f.qid||
+   String(w.questionId)===f.qid)
+  &&(!f.score||(
    f.score==='zero'
     ?w.points===0
     :w.points>0&&w.points<2
-  ))
- );
+  ));
 }
 
-function renderTeacherCards(){
+function renderMetrics(){
  const o=teacherData.overview;
-
- $('teacherCards').replaceChildren();
+ $('teacherMetrics').replaceChildren();
 
  [
   ['交卷人次',o.attempts],
   ['不同學生',o.uniqueStudents],
   ['平均分數',o.average]
  ].forEach(([label,value])=>{
-  const card=document.createElement('div');
-  card.className='teacherCard';
+  const div=document.createElement('div');
+  div.className='teacherCard';
 
-  const strong=document.createElement('strong');
-  strong.textContent=value;
+  const n=document.createElement('strong');
+  n.textContent=value;
 
-  const span=document.createElement('span');
-  span.textContent=label;
+  const t=document.createElement('span');
+  t.textContent=label;
 
-  card.append(strong,span);
-  $('teacherCards').appendChild(card);
+  div.append(n,t);
+  $('teacherMetrics').appendChild(div);
  });
 }
 
-function fillTeacherFilters(){
- const classSelect=$('classFilter');
- classSelect.replaceChildren();
-
- const all=document.createElement('option');
- all.value='';
- all.textContent='全部班級';
- classSelect.appendChild(all);
+function fillFilters(){
+ const cf=$('classFilter');
+ cf.innerHTML='<option value="">全部班級</option>';
 
  teacherData.classes.forEach(cls=>{
-  const o=document.createElement('option');
-  o.value=cls;
-  o.textContent=cls;
-  classSelect.appendChild(o);
+  const option=document.createElement('option');
+  option.value=cls;
+  option.textContent=cls;
+  cf.appendChild(option);
  });
 
- const questionSelect=$('questionFilter');
- questionSelect.replaceChildren();
-
- const q0=document.createElement('option');
- q0.value='';
- q0.textContent='全部題目';
- questionSelect.appendChild(q0);
+ const qf=$('questionFilter');
+ qf.innerHTML='<option value="">全部題目</option>';
 
  QUESTIONS.forEach(q=>{
-  const o=document.createElement('option');
-  o.value=q.id;
-  o.textContent='第 '+q.id+' 題 '+q.title;
-  questionSelect.appendChild(o);
+  const option=document.createElement('option');
+  option.value=q.id;
+  option.textContent='第 '+q.id+' 題 '+q.title;
+  qf.appendChild(option);
  });
 
  fillAccuracyFilters();
 }
 
 // ==================================================
-// 15 題答對率長條圖
+// 長條圖：整體、班級、個人
 // ==================================================
 
 function accuracyPeople(){
@@ -1972,21 +1953,19 @@ function fillAccuracyFilters(){
   people.map(p=>p.className)
  )].sort();
 
- const classSelect=$('accuracyClass');
- const oldClass=classSelect.value;
+ const select=$('accuracyClass');
+ const old=select.value;
 
- classSelect.replaceChildren();
+ select.replaceChildren();
 
  classes.forEach(cls=>{
-  const o=document.createElement('option');
-  o.value=cls;
-  o.textContent=cls;
-  classSelect.appendChild(o);
+  const option=document.createElement('option');
+  option.value=cls;
+  option.textContent=cls;
+  select.appendChild(option);
  });
 
- if(classes.includes(oldClass)){
-  classSelect.value=oldClass;
- }
+ if(classes.includes(old))select.value=old;
 
  fillAccuracyStudents();
 }
@@ -1994,8 +1973,9 @@ function fillAccuracyFilters(){
 function fillAccuracyStudents(){
  const people=accuracyPeople();
  const cls=$('accuracyClass').value;
+
  const select=$('accuracyStudent');
- const previous=select.value;
+ const old=select.value;
 
  select.replaceChildren();
 
@@ -2006,33 +1986,113 @@ function fillAccuracyStudents(){
    String(b.seat),'zh-Hant',{numeric:true}
   )
  ).forEach(p=>{
-  const o=document.createElement('option');
-  o.value=[p.className,p.seat,p.name].join('|');
-  o.textContent=
-   p.className+' 班 '+p.seat+' 號 '+p.name;
-  select.appendChild(o);
+  const option=document.createElement('option');
+  option.value=[
+   p.className,p.seat,p.name
+  ].join('|');
+
+  option.textContent=
+   p.className+' 班 '+
+   p.seat+' 號 '+p.name;
+
+  select.appendChild(option);
  });
 
- if([...select.options].some(o=>o.value===previous)){
-  select.value=previous;
+ if([...select.options].some(x=>x.value===old)){
+  select.value=old;
  }
 
  drawAccuracy();
 }
 
+function selectedPeople(){
+ const scope=$('accuracyScope').value;
+
+ let people=accuracyPeople();
+
+ if(scope!=='all'){
+  people=people.filter(p=>
+   p.className===$('accuracyClass').value
+  );
+ }
+
+ if(scope==='student'){
+  const id=$('accuracyStudent').value;
+  people=people.filter(p=>
+   [p.className,p.seat,p.name].join('|')===id
+  );
+ }
+
+ return people;
+}
+
+// ==================================================
+// 學生選項比對
+//
+// 現有後端 chartAttempts 有逐題得分，
+// 錯題明細有學生實際選項。
+// 利用最新答卷 ID 找到對應錯題。
+// ==================================================
+
+function latestAttemptFor(person){
+ if(!teacherData||!person)return null;
+
+ const list=teacherData.attempts||[];
+
+ return list.find(a=>
+  String(a.className)===String(person.className) &&
+  String(a.seat)===String(person.seat) &&
+  String(a.name)===String(person.name)
+ )||null;
+}
+
+function actualStudentAnswer(person,questionId){
+ if(!person)return null;
+
+ const attempt=latestAttemptFor(person);
+
+ if(!attempt)return null;
+
+ const q=QUESTIONS.find(x=>x.id===questionId);
+ if(!q)return null;
+
+ const score=Number(
+  person.scores?.[questionId-1]
+ );
+
+ // 完全正確時，作答集合等於標準答案。
+ if(score===2){
+  return q.answer.split('');
+ }
+
+ const wrong=(teacherData.wrong||[]).find(w=>
+  String(w.id)===String(attempt.id) &&
+  Number(w.questionId)===questionId
+ );
+
+ if(!wrong)return null;
+
+ return String(wrong.selected||'')
+  .toUpperCase()
+  .split('')
+  .filter(x=>LETTERS.includes(x));
+}
+
+// ==================================================
+// 題目在長條圖下方展開
+// ==================================================
+
 let expandedQuestion=null;
 
 function hideExpandedQuestion(){
- const open=$('accuracyChart')
+ const detail=$('accuracyChart')
   .querySelector('.questionDetail');
 
- if(open)open.remove();
+ if(detail)detail.remove();
 
- $('accuracyChart').querySelectorAll('.qButton')
-  .forEach(b=>{
-   b.classList.remove('open');
-   b.setAttribute('aria-expanded','false');
-  });
+ $('accuracyChart')
+  .querySelectorAll('.qButton')
+  .forEach(b=>b.classList.remove('open'));
 
  expandedQuestion=null;
 }
@@ -2044,13 +2104,24 @@ function showQuestionDetail(id,row,button){
  }
 
  hideExpandedQuestion();
-
  expandedQuestion=id;
  button.classList.add('open');
- button.setAttribute('aria-expanded','true');
 
  const q=QUESTIONS.find(x=>x.id===id);
  if(!q)return;
+
+ const scope=$('accuracyScope').value;
+ const people=selectedPeople();
+
+ const person=
+  scope==='student'&&people.length===1
+  ?people[0]:null;
+
+ const studentAnswers=person
+  ?actualStudentAnswer(person,id)
+  :null;
+
+ const correctAnswers=q.answer.split('');
 
  const detail=document.createElement('div');
  detail.className='questionDetail';
@@ -2059,7 +2130,8 @@ function showQuestionDetail(id,row,button){
  top.className='qdTop';
 
  const heading=document.createElement('h3');
- heading.textContent='第 '+id+' 題｜'+q.title;
+ heading.textContent=
+  '第 '+id+' 題｜'+q.title;
 
  const close=document.createElement('button');
  close.className='qdClose';
@@ -2069,9 +2141,10 @@ function showQuestionDetail(id,row,button){
 
  top.append(heading,close);
 
- const ability=document.createElement('div');
+ const ability=document.createElement('p');
  ability.className='small';
- ability.textContent='應具備能力：'+ABILITIES[id-1];
+ ability.textContent=
+  '應具備能力：'+ABILITIES[id-1];
 
  const stem=document.createElement('p');
  stem.className='qdStem';
@@ -2079,29 +2152,128 @@ function showQuestionDetail(id,row,button){
 
  detail.append(top,ability,stem);
 
+ // 個別學生的作答資訊
+ if(person){
+  const info=document.createElement('div');
+  info.className='qdAnswer';
+
+  const whoText=document.createElement('div');
+  whoText.textContent=
+   person.className+' 班 '+
+   person.seat+' 號 '+person.name;
+  info.appendChild(whoText);
+
+  const answer=document.createElement('div');
+  const label=document.createElement('strong');
+  label.textContent='學生作答：';
+
+  const value=document.createElement('span');
+  value.textContent=studentAnswers===null
+   ?'原始選項紀錄未取得'
+   :(studentAnswers.join('、')||'未作答');
+
+  if(studentAnswers!==null){
+   const exact=studentAnswers.length===
+    correctAnswers.length &&
+    studentAnswers.every(x=>
+     correctAnswers.includes(x)
+    );
+
+   value.className=exact
+    ?'answerRight':'answerWrong';
+  }else{
+   value.className='answerMissing';
+  }
+
+  answer.append(label,value);
+  info.appendChild(answer);
+
+  const points=document.createElement('div');
+  points.textContent=
+   '本題得分：'+
+   Number(person.scores?.[id-1]||0)+
+   ' / 2 分';
+  info.appendChild(points);
+
+  detail.appendChild(info);
+
+  if(studentAnswers===null){
+   const warn=document.createElement('p');
+   warn.className='qdWarning';
+   warn.textContent=
+    '目前能讀到本題得分，但沒有取得這份最新答卷的原始選項，故不標示學生誤選內容。';
+   detail.appendChild(warn);
+  }
+
+ }else{
+  const note=document.createElement('p');
+  note.className='chartNote';
+  note.textContent=
+   '目前為整體／班級統計。切換至「個人」後可查看該學生的作答選項。';
+  detail.appendChild(note);
+ }
+
+ // 五個選項及顏色
  q.options.forEach((text,index)=>{
   const letter=LETTERS[index];
 
-  const div=document.createElement('div');
-  div.className='qdOption'+
-   (q.answer.includes(letter)?' correct':'');
+  const isCorrect=
+   correctAnswers.includes(letter);
 
-  div.textContent='('+letter+') '+text;
-  detail.appendChild(div);
+  const isChosen=
+   studentAnswers!==null &&
+   studentAnswers.includes(letter);
+
+  const option=document.createElement('div');
+  option.className='qdOption';
+
+  // 正確選項綠色
+  if(isCorrect){
+   option.classList.add('isCorrect');
+  }
+
+  // 學生選了錯誤選項：紅色
+  if(isChosen&&!isCorrect){
+   option.classList.add('isWrong');
+  }
+
+  const content=document.createElement('div');
+  content.textContent='('+letter+') '+text;
+  option.appendChild(content);
+
+  if(isChosen||isCorrect){
+   const tag=document.createElement('span');
+   tag.className='qdTag';
+
+   if(isChosen&&!isCorrect){
+    tag.classList.add('red');
+    tag.textContent='學生誤選';
+   }else if(isChosen&&isCorrect){
+    tag.classList.add('green');
+    tag.textContent='學生選對';
+   }else if(isCorrect){
+    tag.classList.add('green');
+    tag.textContent='正確選項';
+   }
+
+   option.appendChild(tag);
+  }
+
+  detail.appendChild(option);
  });
 
- const answer=document.createElement('p');
- answer.className='correct';
- answer.textContent=
-  '正確答案：'+q.answer.split('').join('、');
+ const correct=document.createElement('p');
+ correct.className='answerRight';
+ correct.textContent=
+  '正確答案：'+correctAnswers.join('、');
 
  const explain=document.createElement('div');
  explain.className='qdExplain';
  explain.textContent='解析：'+q.explain;
 
- detail.append(answer,explain);
+ detail.append(correct,explain);
 
- // 插入在被點擊的長條圖那一列下方
+ // 題目直接放在目前長條圖下方
  row.appendChild(detail);
 }
 
@@ -2119,21 +2291,7 @@ function drawAccuracy(){
   'hidden',scope!=='student'
  );
 
- let people=accuracyPeople();
-
- if(scope!=='all'){
-  const cls=$('accuracyClass').value;
-
-  people=people.filter(p=>p.className===cls);
- }
-
- if(scope==='student'){
-  const id=$('accuracyStudent').value;
-
-  people=people.filter(p=>
-   [p.className,p.seat,p.name].join('|')===id
-  );
- }
+ const people=selectedPeople();
 
  $('accuracyChart').replaceChildren();
 
@@ -2144,7 +2302,7 @@ function drawAccuracy(){
 
  if(!people.length){
   $('accuracyChart').textContent=
-   '此範圍目前沒有可統計的作答紀錄。';
+   '此範圍目前沒有作答紀錄。';
   return;
  }
 
@@ -2163,14 +2321,11 @@ function drawAccuracy(){
   label.className='chartLabel';
 
   const button=document.createElement('button');
-  button.type='button';
   button.className='qButton';
   button.textContent='第 '+q.id+' 題';
-  button.setAttribute('aria-expanded','false');
 
-  button.onclick=()=>{
+  button.onclick=()=>
    showQuestionDetail(q.id,row,button);
-  };
 
   const ability=document.createElement('small');
   ability.className='ability';
@@ -2184,7 +2339,6 @@ function drawAccuracy(){
   const fill=document.createElement('div');
   fill.className='chartFill';
   fill.style.width=rate+'%';
-
   track.appendChild(fill);
 
   const value=document.createElement('div');
@@ -2199,22 +2353,19 @@ function drawAccuracy(){
  });
 }
 
-// 點題目之外的空白處，收合
-document.addEventListener('click',event=>{
+// 點題目外面收合
+document.addEventListener('click',e=>{
  if(expandedQuestion===null)return;
 
- if(event.target.closest('.questionDetail')||
-    event.target.closest('.qButton')){
+ if(e.target.closest('.questionDetail')||
+    e.target.closest('.qButton')){
   return;
  }
-
  hideExpandedQuestion();
 });
 
-document.addEventListener('keydown',event=>{
- if(event.key==='Escape'){
-  hideExpandedQuestion();
- }
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape')hideExpandedQuestion();
 });
 
 $('accuracyScope').onchange=drawAccuracy;
@@ -2222,11 +2373,11 @@ $('accuracyClass').onchange=fillAccuracyStudents;
 $('accuracyStudent').onchange=drawAccuracy;
 
 // ==================================================
-// 教師錯題表格
+// 教師各題統計
 // ==================================================
 
 function renderQuestionTable(){
- const f=currentFilters();
+ const f=teacherFilters();
 
  const rows=teacherData.questions.filter(q=>
   !f.qid||String(q.id)===f.qid
@@ -2250,27 +2401,27 @@ function renderQuestionTable(){
    '</tr>';
  });
 
- html+='</tbody></table>';
- $('questionTable').innerHTML=html;
+ $('questionTable').innerHTML=
+  html+'</tbody></table>';
 }
 
 function renderStudentTable(){
- const f=currentFilters();
+ const f=teacherFilters();
 
  const rows=teacherData.attempts.filter(s=>
-  (!f.cls||s.className===f.cls) &&
+  (!f.cls||s.className===f.cls)&&
   (!f.search||[s.name,s.seat].some(x=>
    String(x).toLowerCase().includes(f.search)
-  )) &&
+  ))&&
   (!f.qid||String(s.wrongIds||'')
-    .split(',').includes(f.qid))
+   .split(',').includes(f.qid))
  );
 
  let html='<table><thead><tr>'+
   '<th>時間</th><th>班級</th><th>座號</th>'+
-  '<th>姓名</th><th>總分</th><th>全對題數</th>'+
-  '<th>部分得分</th><th>錯題號</th>'+
-  '</tr></thead><tbody>';
+  '<th>姓名</th><th>總分</th>'+
+  '<th>完全正確</th><th>部分給分</th>'+
+  '<th>錯題號</th></tr></thead><tbody>';
 
  rows.forEach(s=>{
   html+='<tr>'+
@@ -2281,37 +2432,40 @@ function renderStudentTable(){
    '<td>'+s.score+'/30</td>'+
    '<td>'+s.full+'</td>'+
    '<td>'+s.partial+'</td>'+
-   '<td>'+escapeHTML(s.wrongIds||'無')+'</td>'+
-   '</tr>';
+   '<td>'+escapeHTML(s.wrongIds||'無')+
+   '</td></tr>';
  });
 
- html+='</tbody></table>';
- $('studentTable').innerHTML=html;
+ $('studentTable').innerHTML=
+  html+'</tbody></table>';
 }
 
-function renderWrongList(){
- const f=currentFilters();
+// ==================================================
+// 教師錯題明細：錯選紅色，正解綠色
+// ==================================================
 
- const records=teacherData.wrong.filter(w=>
+function renderWrongList(){
+ const f=teacherFilters();
+
+ const rows=teacherData.wrong.filter(w=>
   matchWrong(w,f)
  );
 
  $('wrongCount').textContent=
-  '符合條件的錯題：'+records.length+' 筆';
+  '符合條件的錯題：'+rows.length+' 筆';
 
  $('wrongList').replaceChildren();
 
- records.forEach(w=>{
+ rows.forEach(w=>{
   const detail=document.createElement('details');
   detail.className='detail';
 
   const summary=document.createElement('summary');
   summary.textContent=
-   w.className+' 班 '+w.seat+' 號 '+w.name+
+   w.className+' 班 '+w.seat+
+   ' 號 '+w.name+
    '｜第 '+w.questionId+' 題 '+w.title+
    '｜'+w.points+'/2 分';
-
-  detail.appendChild(summary);
 
   const info=document.createElement('p');
   info.textContent=
@@ -2322,17 +2476,46 @@ function renderWrongList(){
   const stem=document.createElement('p');
   stem.textContent=w.stem;
 
-  detail.append(info,stem);
+  detail.append(summary,info,stem);
+
+  const chosen=String(w.selected||'')
+   .toUpperCase().split('');
+  const correct=String(w.correct||'')
+   .toUpperCase().split('');
 
   (w.options||[]).forEach((text,i)=>{
-   const p=document.createElement('p');
-   p.textContent='('+LETTERS[i]+') '+text;
+   const letter=LETTERS[i];
 
-   if(w.correct.includes(LETTERS[i])){
-    p.className='correct';
+   const option=document.createElement('div');
+   option.className='qdOption';
+
+   if(correct.includes(letter)){
+    option.classList.add('isCorrect');
+   }else if(chosen.includes(letter)){
+    option.classList.add('isWrong');
    }
 
-   detail.appendChild(p);
+   option.textContent='('+letter+') '+text;
+
+   if(chosen.includes(letter)){
+    const tag=document.createElement('span');
+    tag.className='qdTag';
+
+    if(correct.includes(letter)){
+     tag.classList.add('green');
+     tag.textContent='學生選對';
+    }else{
+     tag.classList.add('red');
+     tag.textContent='學生誤選';
+    }
+
+    option.appendChild(
+     document.createElement('br'),
+     tag
+    );
+   }
+
+   detail.appendChild(option);
   });
 
   const explain=document.createElement('div');
@@ -2343,7 +2526,7 @@ function renderWrongList(){
   $('wrongList').appendChild(detail);
  });
 
- if(!records.length){
+ if(!rows.length){
   $('wrongList').textContent=
    '目前沒有符合條件的錯題。';
  }
@@ -2352,73 +2535,76 @@ function renderWrongList(){
 function renderTeacher(){
  if(!teacherData)return;
 
- renderTeacherCards();
+ renderMetrics();
  renderQuestionTable();
  renderStudentTable();
  renderWrongList();
 }
 
-function openTeacherTab(name){
- currentTab=name;
+function openTab(name){
+ $('questionSection').classList.toggle(
+  'hidden',name!=='question'
+ );
+ $('studentSection').classList.toggle(
+  'hidden',name!=='student'
+ );
+ $('wrongSection').classList.toggle(
+  'hidden',name!=='wrong'
+ );
 
- [
-  ['question','questionSection','tabQuestions'],
-  ['student','studentSection','tabStudents'],
-  ['wrong','wrongSection','tabWrong']
- ].forEach(([key,section,button])=>{
-  $(section).classList.toggle('hidden',key!==name);
-  $(button).classList.toggle('active',key===name);
- });
+ $('tabQuestions').classList.toggle(
+  'active',name==='question'
+ );
+ $('tabStudents').classList.toggle(
+  'active',name==='student'
+ );
+ $('tabWrong').classList.toggle(
+  'active',name==='wrong'
+ );
 
  renderTeacher();
 }
 
 function exportTeacherCSV(){
- if(!teacherData)return;
-
  const rows=[[
-  '班級','座號','姓名','題號',
-  '題目','概念','學生答案',
-  '正解','得分','錯誤類型'
+  '班級','座號','姓名','題號','題目',
+  '概念','學生答案','正解','得分','錯誤類型'
  ]];
 
  teacherData.wrong.filter(w=>
-  matchWrong(w,currentFilters())
- ).forEach(w=>{
-  rows.push([
-   w.className,w.seat,w.name,w.questionId,
-   w.title,w.skill,w.selected,w.correct,
-   w.points,w.kind
-  ]);
- });
+  matchWrong(w,teacherFilters())
+ ).forEach(w=>rows.push([
+  w.className,w.seat,w.name,
+  w.questionId,w.title,w.skill,
+  w.selected,w.correct,w.points,w.kind
+ ]));
 
  downloadCSV(rows,'教師錯題分析.csv');
 }
 
 async function refreshTeacher(){
  if(!teacherToken){
-  showLogin('登入憑證不存在，請重新登入。');
+  showLogin('教師登入已過期。');
   return;
  }
 
- $('teacherStatus').classList.remove('hidden');
  $('teacherStatus').textContent=
-  '正在連接 Google 試算表……';
+  '正在讀取最新成績……';
+ $('teacherStatus').classList.remove('hidden');
 
  try{
-  const result=await apiGet(
-   'teacherData',
-   {token:teacherToken},
-   3
-  );
+  const r=await apiGet('teacherData',{
+   token:teacherToken
+  },3);
 
-  if(!result.ok){
-   throw new Error(result.error||'教師資料讀取失敗');
+  if(!r.ok){
+   throw new Error(
+    r.error||'教師資料讀取失敗'
+   );
   }
 
-  teacherData=result.report;
-
-  fillTeacherFilters();
+  teacherData=r.report;
+  fillFilters();
   renderTeacher();
 
   $('teacherStatus').classList.add('hidden');
@@ -2428,23 +2614,39 @@ async function refreshTeacher(){
   $('teacherStatus').textContent=
    '讀取失敗：'+e.message;
 
-  if(/憑證|登入|過期|授權/.test(e.message)){
+  if(/登入|憑證|過期|授權/.test(e.message)){
    teacherToken='';
    teacherData=null;
-   showLogin('教師登入已過期，請重新輸入密碼。');
+   showLogin('請重新輸入教師密碼。');
   }
  }
 }
 
 // ==================================================
-// 按鈕事件
+// 所有按鈕
 // ==================================================
 
 $('studentRole').onclick=()=>{
  if(!studentReady){
-  startStudent();
+  restoreLocal();
   studentReady=true;
+
+  if(state.submitted){
+   ['className','seat','studentName']
+    .forEach(id=>$(id).disabled=true);
+
+   renderNav();
+   renderResults(
+    state.confirmed
+     ?'這份答卷已確認儲存。'
+     :'這份答卷尚未確認上傳。',
+    state.confirmed
+   );
+  }else{
+   renderQuestion();
+  }
  }
+
  showMode('student');
 };
 
@@ -2466,20 +2668,20 @@ $('back').onclick=()=>{
 };
 
 $('loginBtn').onclick=loginTeacher;
-
-$('teacherPassword').addEventListener('keydown',e=>{
- if(e.key==='Enter'){
-  loginTeacher();
+$('teacherPassword').addEventListener(
+ 'keydown',e=>{
+  if(e.key==='Enter')loginTeacher();
  }
-});
+);
 
 $('logout').onclick=logoutTeacher;
+
 $('refresh').onclick=refreshTeacher;
 $('exportTeacher').onclick=exportTeacherCSV;
 
-$('tabQuestions').onclick=()=>openTeacherTab('question');
-$('tabStudents').onclick=()=>openTeacherTab('student');
-$('tabWrong').onclick=()=>openTeacherTab('wrong');
+$('tabQuestions').onclick=()=>openTab('question');
+$('tabStudents').onclick=()=>openTab('student');
+$('tabWrong').onclick=()=>openTab('wrong');
 
 ['classFilter','questionFilter','scoreFilter']
  .forEach(id=>{
